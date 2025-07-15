@@ -16,6 +16,9 @@ export default defineConfig({
             rollupOptions: {
               external: ['electron']
             }
+          },
+          define: {
+            'process.env.NODE_ENV': '"production"'
           }
         }
       },

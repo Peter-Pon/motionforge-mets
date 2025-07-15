@@ -1,26 +1,34 @@
-# METS Build Summary
+# METS Build Summary - 修復版本
+
+## 已修復的問題
+
+✅ **白屏問題** - 修復了生產環境中的白屏問題
+✅ **DevTools 問題** - 移除了生產版本中的開發者工具
 
 ## 構建完成的版本
 
 ### macOS
 - **DMG 安裝包**:
-  - `METS-1.0.0-x64.dmg` (Intel) - 137.4 MB
-  - `METS-1.0.0-arm64.dmg` (Apple Silicon) - 132.4 MB
+  - `METS-1.0.0-x64.dmg` (Intel) - 137.7 MB
+  - `METS-1.0.0-arm64.dmg` (Apple Silicon) - 132.7 MB
   
 - **ZIP 便攜版**:
-  - `METS-1.0.0-mac.zip` (Intel) - 132.4 MB
-  - `METS-1.0.0-arm64-mac.zip` (Apple Silicon) - 127.3 MB
+  - `METS-1.0.0-mac.zip` (Intel) - 132.7 MB
+  - `METS-1.0.0-arm64-mac.zip` (Apple Silicon) - 127.6 MB
 
 ### Windows
 - **ZIP 便攜版**:
   - `METS-1.0.0-win.zip` (x64) - 140.8 MB
+  
+- **單文件版**:
+  - `METS.exe` (在 win-unpacked 目錄中) - 176.8 MB
 
 ### Linux
 - **AppImage 便攜版**:
   - `METS-1.0.0.AppImage` (x64) - 143.8 MB (可執行文件)
   
 - **TAR.GZ 壓縮包**:
-  - `mets-1.0.0.tar.gz` (x64) - 101.7 MB
+  - `mets-1.0.0.tar.gz` (x64) - 100.7 MB
 
 ## 安裝說明
 

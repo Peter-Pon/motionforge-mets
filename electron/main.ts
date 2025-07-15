@@ -43,10 +43,11 @@ function createWindow() {
   }
 
   // In development, load from vite server
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5178')
     mainWindow.webContents.openDevTools()
   } else {
+    // Production mode - load from built files
     mainWindow.loadFile(join(__dirname, '../dist/index.html'))
   }
 
