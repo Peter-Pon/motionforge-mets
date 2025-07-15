@@ -23,6 +23,7 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "electron", "vite.config.ts"],
+  "include": ["src", "electron/**/*.ts", "vite.config.ts"],
+  "exclude": ["electron/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
