@@ -1,0 +1,243 @@
+{
+  "app": {
+    "title": "METS - メカニズムタイミングシミュレーション",
+    "description": "機構動作タイミング可視化ツール"
+  },
+  "menu": {
+    "file": {
+      "title": "ファイル",
+      "new": "新規プロジェクト",
+      "open": "プロジェクトを開く",
+      "save": "プロジェクトを保存",
+      "saveAs": "名前を付けて保存",
+      "import": "CSVをインポート",
+      "export": {
+        "title": "エクスポート",
+        "excel": "Excelとしてエクスポート",
+        "pdf": "PDFとしてエクスポート",
+        "png": "PNGとしてエクスポート",
+        "mp4": "MP4としてエクスポート"
+      },
+      "quit": "終了"
+    },
+    "edit": {
+      "title": "編集",
+      "undo": "元に戻す",
+      "redo": "やり直し",
+      "editParams": "パラメータを編集",
+      "clearCanvas": "キャンバスをクリア",
+      "resetAnimation": "アニメーションをリセット"
+    },
+    "view": {
+      "title": "表示",
+      "zoomIn": "拡大",
+      "zoomOut": "縮小",
+      "fitWindow": "ウィンドウに合わせる",
+      "showGrid": "グリッドを表示",
+      "showRuler": "ルーラーを表示",
+      "fullscreen": "フルスクリーン"
+    },
+    "animation": {
+      "title": "アニメーション",
+      "playPause": "再生/一時停止",
+      "stop": "停止",
+      "nextFrame": "次のフレーム",
+      "prevFrame": "前のフレーム",
+      "speedSettings": "速度設定",
+      "speedSettingsDescription": "アニメーション再生速度の調整",
+      "currentSpeed": "現在の速度",
+      "loopPlayback": "ループ再生"
+    },
+    "help": {
+      "title": "ヘルプ",
+      "about": "METSについて",
+      "userGuide": "ユーザーガイド",
+      "shortcuts": "キーボードショートカット"
+    },
+    "more": "その他のオプション"
+  },
+  "sidebar": {
+    "parameters": "パラメータ",
+    "noData": "データが読み込まれていません",
+    "module": "モジュール",
+    "stage": "ステージ",
+    "action": "動作説明",
+    "startPosition": "開始",
+    "moveCount": "格数",
+    "duration": "持続時間",
+    "items": "アイテム"
+  },
+  "toolbar": {
+    "importCSV": "CSVをインポート"
+  },
+  "timeline": {
+    "play": "再生",
+    "pause": "一時停止",
+    "stop": "停止",
+    "speed": "速度",
+    "reset": "リセット",
+    "scrub": "クリックまたはドラッグしてタイムラインを操作",
+    "loop": "ループ"
+  },
+  "shortcuts": {
+    "playPause": "再生/一時停止 (スペース)",
+    "stop": "停止 (S)",
+    "reset": "リセット (R)",
+    "importCSV": "CSVをインポート (Ctrl+I)",
+    "export": "エクスポート (Ctrl+E)",
+    "preferences": "設定 (Ctrl+,)",
+    "speedUp": "スピードアップ (+)",
+    "speedDown": "スピードダウン (-)",
+    "loadTestData": "テストデータを読み込む (Ctrl+T)",
+    "toggleCrosshair": "十字線を切り替え (C)",
+    "toggleLoop": "ループ再生の切り替え (Ctrl+L)",
+    "changeLanguage": "言語を変更"
+  },
+  "canvas": {
+    "placeholder": "キャンバスはここに表示されます"
+  },
+  "dialog": {
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "ok": "OK",
+    "save": "保存",
+    "discard": "破棄",
+    "unsavedChanges": "未保存の変更があります。保存しますか？"
+  },
+  "error": {
+    "fileNotFound": "ファイルが見つかりません",
+    "invalidFormat": "無効なファイル形式",
+    "importFailed": "インポートに失敗しました",
+    "exportFailed": "エクスポートに失敗しました",
+    "unknown": "不明なエラー"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "theme": "テーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "auto": "自動"
+  },
+  "preferences": {
+    "title": "設定",
+    "grid": {
+      "title": "グリッド設定",
+      "cellWidth": "セル幅",
+      "cellHeight": "セル高"
+    },
+    "animation": {
+      "title": "アニメーション設定",
+      "coloringMode": "色付け方式",
+      "gradual": "段階的色付け",
+      "instant": "瞬時色付けして待機"
+    },
+    "view": {
+      "title": "表示設定",
+      "crosshairEnabled": "十字線カーソルを表示",
+      "panEnabled": "パンナビゲーションを有効化",
+      "canvasTextDisplay": "キャンバステキスト表示",
+      "displayModule": "モジュール名を表示",
+      "displayStage": "ステージを表示",
+      "displayAction": "アクション説明を表示"
+    },
+    "resetDefaults": "デフォルトにリセット",
+    "save": "保存",
+    "cancel": "キャンセル"
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "apply": "適用"
+  },
+  "units": {
+    "ms": "ミリ秒",
+    "pixel": "ピクセル",
+    "cells": "マス"
+  },
+  "about": {
+    "title": "METSについて",
+    "version": "バージョン {{version}}",
+    "description": "METS（Mechanical Equipment Timing Simulator）は、機械設備の動作タイミングをシミュレートし、分析するためのプロフェッショナルな機構動作タイミング可視化ツールです。",
+    "copyright": "著作権 © 2024",
+    "developedBy": "Motionforge開発",
+    "license": "このソフトウェアは著作権で保護されています。すべての権利を保有しています。"
+  },
+  "help": {
+    "title": "キーボードショートカット",
+    "description": "以下のキーボードショートカットを使用して、METSをより効率的に操作できます",
+    "categories": {
+      "file": "ファイル操作",
+      "edit": "編集操作",
+      "view": "表示操作",
+      "animation": "アニメーション制御"
+    },
+    "shortcuts": {
+      "space": "スペースキー",
+      "escape": "Esc",
+      "rightArrow": "→",
+      "leftArrow": "←",
+      "speedUp": "スピードアップ",
+      "speedDown": "スピードダウン"
+    },
+    "tips": {
+      "title": "使用のヒント",
+      "tip1": "ツールバーをダブルクリックしてフルスクリーンモードを切り替えます",
+      "tip2": "CSVファイルをウィンドウにドラッグ＆ドロップして素早くインポート",
+      "tip3": "マウスホイールを使用してキャンバスをズーム",
+      "tip4": "Shiftを押しながらドラッグして複数のモジュールを選択"
+    }
+  },
+  "userGuide": {
+    "title": "ユーザーガイド",
+    "introduction": "METS は機械設備の運動タイミングをシミュレートおよび分析するための専門的な機構運動タイミング可視化ツールです。このガイドでは、METS の機能を素早く開始し、フルに活用する方法を説明します。",
+    "quickStart": {
+      "title": "クイックスタート",
+      "step1": "「テストデータを読み込む」ボタンをクリックするか、CSVファイルをインポートします",
+      "step2": "再生コントロールボタンを使用してアニメーションを開始します",
+      "step3": "最適なエクスペリエンスのためにスピードと表示設定を調整します"
+    },
+    "sections": {
+      "gettingStarted": {
+        "title": "はじめに",
+        "step1": "METS アプリケーションを起動すると、パラメータテーブル、キャンバス、ツールバーを含むメインの作業インターフェースが表示されます。",
+        "step2": "左側のパラメータテーブルには、モジュール名、アクション説明、タイミングパラメータなど、すべてのモジュールの詳細情報が表示されます。",
+        "step3": "右側のキャンバスエリアでは、機構運動のタイミング関係が視覚的に表示されます。",
+        "step4": "ツールバーでは、インポート、再生コントロール、エクスポート、設定などの主要機能に素早くアクセスできます。"
+      },
+      "importingData": {
+        "title": "データのインポート",
+        "csvFormat": "CSV形式のデータインポートをサポートしており、ファイルにはモジュール名、アクション説明、開始位置、セル数、継続時間などの列が含まれている必要があります。",
+        "requiredColumns": "必要な列：モジュール名、アクション説明、開始位置、セル数、継続時間、ステージ。",
+        "dragDrop": "CSVファイルをアプリケーションウィンドウに直接ドラッグ＆ドロップして素早くインポートできます。",
+        "testData": "「テストデータを読み込む」ボタンをクリックすると、テストと学習用のサンプルデータを読み込むことができます。"
+      },
+      "animationControls": {
+        "title": "アニメーション制御",
+        "playPause": "再生/一時停止ボタンまたはスペースキーを使用してアニメーションの再生を制御します。",
+        "stop": "停止ボタンでアニメーションを停止し、現在の位置を維持します。",
+        "reset": "リセットボタンでアニメーションを開始位置に戻します。",
+        "speed": "スピードコントロールを使用してアニメーションの再生速度を調整できます。0.1x から 4x の速度範囲をサポートしています。"
+      },
+      "visualization": {
+        "title": "可視化機能",
+        "modules": "各モジュールは異なる色のバーで表示され、長さは実行時間を表しています。",
+        "stages": "異なるステージのアクションは異なる色調で表示され、区別しやすくなっています。",
+        "timing": "タイミング関係は水平位置と長さで表現され、アクションの実行順序と重複関係を明確に示しています。",
+        "colors": "カラーコーディングにより、異なるモジュールとステージのアクションを素早く識別できます。"
+      },
+      "exporting": {
+        "title": "エクスポート機能",
+        "formats": "複数のエクスポート形式をサポート：Excel、PDF、PNG、MP4。",
+        "excel": "Excel エクスポートには、完全なパラメータテーブルと計算結果が含まれます。",
+        "pdf": "PDF エクスポートは高品質なレポート形式を提供します。",
+        "images": "PNG エクスポートで静止画像を生成し、MP4 エクスポートでアニメーション動画を生成できます。"
+      }
+    },
+    "additionalHelp": {
+      "title": "その他のヘルプ",
+      "shortcuts": "操作効率を向上させるためのキーボードショートカットを確認してください。",
+      "about": "アバウトページには、アプリケーションのバージョンと開発者情報が含まれています。",
+      "support": "技術サポートが必要な場合は、Motionforge チームにお問い合わせください。"
+    }
+  }
+}

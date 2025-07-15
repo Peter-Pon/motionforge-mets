@@ -1,0 +1,243 @@
+{
+  "app": {
+    "title": "METS - Mechanism Timing Simulation",
+    "description": "Mechanism Motion Timing Visualization Tool"
+  },
+  "menu": {
+    "file": {
+      "title": "File",
+      "new": "New Project",
+      "open": "Open Project",
+      "save": "Save Project",
+      "saveAs": "Save As",
+      "import": "Import CSV",
+      "export": {
+        "title": "Export",
+        "excel": "Export as Excel",
+        "pdf": "Export as PDF",
+        "png": "Export as PNG",
+        "mp4": "Export as MP4"
+      },
+      "quit": "Quit"
+    },
+    "edit": {
+      "title": "Edit",
+      "undo": "Undo",
+      "redo": "Redo",
+      "editParams": "Edit Parameters",
+      "clearCanvas": "Clear Canvas",
+      "resetAnimation": "Reset Animation"
+    },
+    "view": {
+      "title": "View",
+      "zoomIn": "Zoom In",
+      "zoomOut": "Zoom Out",
+      "fitWindow": "Fit to Window",
+      "showGrid": "Show Grid",
+      "showRuler": "Show Ruler",
+      "fullscreen": "Fullscreen"
+    },
+    "animation": {
+      "title": "Animation",
+      "playPause": "Play/Pause",
+      "stop": "Stop",
+      "nextFrame": "Next Frame",
+      "prevFrame": "Previous Frame",
+      "speedSettings": "Speed Settings",
+      "speedSettingsDescription": "Adjust animation playback speed",
+      "currentSpeed": "Current Speed",
+      "loopPlayback": "Loop Playback"
+    },
+    "help": {
+      "title": "Help",
+      "about": "About METS",
+      "userGuide": "User Guide",
+      "shortcuts": "Keyboard Shortcuts"
+    },
+    "more": "More Options"
+  },
+  "sidebar": {
+    "parameters": "Parameters",
+    "noData": "No data loaded",
+    "module": "Module",
+    "stage": "Stage",
+    "action": "Action Description",
+    "startPosition": "Start",
+    "moveCount": "Cells",
+    "duration": "Duration",
+    "items": "items"
+  },
+  "toolbar": {
+    "importCSV": "Import CSV"
+  },
+  "timeline": {
+    "play": "Play",
+    "pause": "Pause",
+    "stop": "Stop",
+    "speed": "Speed",
+    "reset": "Reset",
+    "scrub": "Click or drag to scrub timeline",
+    "loop": "Loop"
+  },
+  "shortcuts": {
+    "playPause": "Play/Pause (Space)",
+    "stop": "Stop (S)",
+    "reset": "Reset (R)",
+    "importCSV": "Import CSV (Ctrl+I)",
+    "export": "Export (Ctrl+E)",
+    "preferences": "Preferences (Ctrl+,)",
+    "speedUp": "Speed Up (+)",
+    "speedDown": "Speed Down (-)",
+    "loadTestData": "Load Test Data (Ctrl+T)",
+    "toggleCrosshair": "Toggle Crosshair (C)",
+    "toggleLoop": "Toggle Loop (Ctrl+L)",
+    "changeLanguage": "Change Language"
+  },
+  "canvas": {
+    "placeholder": "Canvas will appear here"
+  },
+  "dialog": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "save": "Save",
+    "discard": "Discard",
+    "unsavedChanges": "You have unsaved changes. Do you want to save?"
+  },
+  "error": {
+    "fileNotFound": "File not found",
+    "invalidFormat": "Invalid file format",
+    "importFailed": "Import failed",
+    "exportFailed": "Export failed",
+    "unknown": "Unknown error"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "Auto"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "grid": {
+      "title": "Grid Settings",
+      "cellWidth": "Cell Width",
+      "cellHeight": "Cell Height"
+    },
+    "animation": {
+      "title": "Animation Settings",
+      "coloringMode": "Coloring Mode",
+      "gradual": "Gradual Coloring",
+      "instant": "Instant Coloring then Wait"
+    },
+    "view": {
+      "title": "View Settings",
+      "crosshairEnabled": "Show Crosshair Cursor",
+      "panEnabled": "Enable Pan Navigation",
+      "canvasTextDisplay": "Canvas Text Display",
+      "displayModule": "Show Module Name",
+      "displayStage": "Show Stage",
+      "displayAction": "Show Action Description"
+    },
+    "resetDefaults": "Reset Defaults",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "apply": "Apply"
+  },
+  "units": {
+    "ms": "ms",
+    "pixel": "pixels",
+    "cells": "cells"
+  },
+  "about": {
+    "title": "About METS",
+    "version": "Version {{version}}",
+    "description": "METS (Mechanical Equipment Timing Simulator) is a professional mechanism motion timing visualization tool for simulating and analyzing the motion timing of mechanical equipment.",
+    "copyright": "Copyright © 2024",
+    "developedBy": "Developed by Motionforge",
+    "license": "This software is protected by copyright. All rights reserved."
+  },
+  "help": {
+    "title": "Keyboard Shortcuts",
+    "description": "Use the following keyboard shortcuts to operate METS more efficiently",
+    "categories": {
+      "file": "File Operations",
+      "edit": "Edit Operations",
+      "view": "View Operations",
+      "animation": "Animation Control"
+    },
+    "shortcuts": {
+      "space": "Space",
+      "escape": "Esc",
+      "rightArrow": "→",
+      "leftArrow": "←",
+      "speedUp": "Speed Up",
+      "speedDown": "Speed Down"
+    },
+    "tips": {
+      "title": "Usage Tips",
+      "tip1": "Double-click the toolbar to toggle fullscreen mode",
+      "tip2": "Drag and drop CSV files to the window for quick import",
+      "tip3": "Use mouse wheel to zoom the canvas",
+      "tip4": "Hold Shift while dragging to select multiple modules"
+    }
+  },
+  "userGuide": {
+    "title": "User Guide",
+    "introduction": "METS is a professional mechanism motion timing visualization tool for simulating and analyzing the motion timing of mechanical equipment. This guide will help you get started quickly and make full use of METS features.",
+    "quickStart": {
+      "title": "Quick Start",
+      "step1": "Click the 'Load Test Data' button or import a CSV file",
+      "step2": "Use the playback controls to start the animation",
+      "step3": "Adjust speed and view settings for the best experience"
+    },
+    "sections": {
+      "gettingStarted": {
+        "title": "Getting Started",
+        "step1": "After launching METS, you'll see the main interface with a parameter table, canvas, and toolbar.",
+        "step2": "The parameter table on the left shows detailed information for all modules, including module names, action descriptions, and timing parameters.",
+        "step3": "The canvas area on the right displays the mechanism motion timing relationships in a visual format.",
+        "step4": "The toolbar provides quick access to all main functions, including import, playback controls, export, and settings."
+      },
+      "importingData": {
+        "title": "Importing Data",
+        "csvFormat": "Supports CSV format data import. Files should contain columns for module name, action description, start position, cell count, and duration.",
+        "requiredColumns": "Required columns: Module Name, Action Description, Start Position, Cell Count, Duration, Stage.",
+        "dragDrop": "You can drag and drop CSV files directly into the application window for quick import.",
+        "testData": "Click the 'Load Test Data' button to load sample data for testing and learning functions."
+      },
+      "animationControls": {
+        "title": "Animation Controls",
+        "playPause": "Use the play/pause button or spacebar to control animation playback.",
+        "stop": "The stop button will halt the animation and maintain the current position.",
+        "reset": "The reset button will return the animation to the starting position.",
+        "speed": "Use speed controls to adjust animation playback speed, supporting 0.1x to 4x speed range."
+      },
+      "visualization": {
+        "title": "Visualization Features",
+        "modules": "Each module is represented by colored bars, with length representing execution time.",
+        "stages": "Actions in different stages are displayed with different color tones for easy differentiation.",
+        "timing": "Timing relationships are shown through horizontal position and length, clearly displaying action execution order and overlap relationships.",
+        "colors": "Color coding helps quickly identify actions from different modules and stages."
+      },
+      "exporting": {
+        "title": "Export Functions",
+        "formats": "Supports multiple export formats: Excel, PDF, PNG, and MP4.",
+        "excel": "Excel export includes complete parameter tables and calculation results.",
+        "pdf": "PDF export provides high-quality report format.",
+        "images": "PNG export can generate static images, MP4 export can generate animated videos."
+      }
+    },
+    "additionalHelp": {
+      "title": "Additional Help",
+      "shortcuts": "View keyboard shortcuts to improve operation efficiency.",
+      "about": "The About page contains application version and developer information.",
+      "support": "For technical support, please contact the Motionforge team."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+module,stage,action,startPosition,moveCount,duration
+模組A,A,水平移動,5,30,100
+模組B,A,垂直運動,10,25,120
+模組C,B,旋轉動作,20,20,150
+模組D,B,往復運動,15,35,80
+模組E,C,間歇動作,30,15,200

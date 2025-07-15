@@ -1,0 +1,243 @@
+{
+  "app": {
+    "title": "METS - 機構運動時序模擬",
+    "description": "機構運動時序視覺化工具"
+  },
+  "menu": {
+    "file": {
+      "title": "檔案",
+      "new": "新建專案",
+      "open": "開啟專案",
+      "save": "儲存專案",
+      "saveAs": "另存為",
+      "import": "匯入CSV",
+      "export": {
+        "title": "匯出",
+        "excel": "匯出為Excel",
+        "pdf": "匯出為PDF",
+        "png": "匯出為PNG",
+        "mp4": "匯出為MP4"
+      },
+      "quit": "退出"
+    },
+    "edit": {
+      "title": "編輯",
+      "undo": "撤銷",
+      "redo": "重做",
+      "editParams": "編輯參數",
+      "clearCanvas": "清空畫布",
+      "resetAnimation": "重置動畫"
+    },
+    "view": {
+      "title": "檢視",
+      "zoomIn": "放大",
+      "zoomOut": "縮小",
+      "fitWindow": "適應視窗",
+      "showGrid": "顯示網格",
+      "showRuler": "顯示標尺",
+      "fullscreen": "全螢幕"
+    },
+    "animation": {
+      "title": "動畫",
+      "playPause": "播放/暫停",
+      "stop": "停止",
+      "nextFrame": "下一幀",
+      "prevFrame": "上一幀",
+      "speedSettings": "速度設定",
+      "speedSettingsDescription": "調整動畫播放速度",
+      "currentSpeed": "當前速度",
+      "loopPlayback": "循環播放"
+    },
+    "help": {
+      "title": "幫助",
+      "about": "關於METS",
+      "userGuide": "使用指南",
+      "shortcuts": "快捷鍵"
+    },
+    "more": "更多選項"
+  },
+  "sidebar": {
+    "parameters": "參數",
+    "noData": "尚無資料載入",
+    "module": "模組",
+    "stage": "階段",
+    "action": "動作說明",
+    "startPosition": "起始",
+    "moveCount": "格數",
+    "duration": "持續時間",
+    "items": "項目"
+  },
+  "toolbar": {
+    "importCSV": "匯入CSV"
+  },
+  "timeline": {
+    "play": "播放",
+    "pause": "暫停",
+    "stop": "停止",
+    "speed": "速度",
+    "reset": "重置",
+    "scrub": "點擊或拖動以控制時間軸",
+    "loop": "循環"
+  },
+  "shortcuts": {
+    "playPause": "播放/暫停 (空格)",
+    "stop": "停止 (S)",
+    "reset": "重置 (R)",
+    "importCSV": "匯入CSV (Ctrl+I)",
+    "export": "匯出 (Ctrl+E)",
+    "preferences": "偏好設定 (Ctrl+,)",
+    "speedUp": "加速 (+)",
+    "speedDown": "減速 (-)",
+    "loadTestData": "載入測試數據 (Ctrl+T)",
+    "toggleCrosshair": "切換十字線 (C)",
+    "toggleLoop": "切換循環播放 (Ctrl+L)",
+    "changeLanguage": "切換語言"
+  },
+  "canvas": {
+    "placeholder": "畫布將顯示在這裡"
+  },
+  "dialog": {
+    "confirm": "確認",
+    "cancel": "取消",
+    "ok": "確定",
+    "save": "儲存",
+    "discard": "放棄",
+    "unsavedChanges": "您有未儲存的變更，是否要儲存？"
+  },
+  "error": {
+    "fileNotFound": "檔案未找到",
+    "invalidFormat": "檔案格式無效",
+    "importFailed": "匯入失敗",
+    "exportFailed": "匯出失敗",
+    "unknown": "未知錯誤"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "語言",
+    "theme": "主題",
+    "light": "亮色",
+    "dark": "暗色",
+    "auto": "自動"
+  },
+  "preferences": {
+    "title": "偏好設定",
+    "grid": {
+      "title": "網格設定",
+      "cellWidth": "單元格寬度",
+      "cellHeight": "單元格高度"
+    },
+    "animation": {
+      "title": "動畫設定",
+      "coloringMode": "著色方式",
+      "gradual": "逐漸著色",
+      "instant": "瞬間著色然後等待"
+    },
+    "view": {
+      "title": "檢視設定",
+      "crosshairEnabled": "顯示十字線游標",
+      "panEnabled": "啟用拖拽平移",
+      "canvasTextDisplay": "畫布文字顯示",
+      "displayModule": "顯示模組名稱",
+      "displayStage": "顯示階段",
+      "displayAction": "顯示動作說明"
+    },
+    "resetDefaults": "重置預設值",
+    "save": "儲存",
+    "cancel": "取消"
+  },
+  "common": {
+    "cancel": "取消",
+    "apply": "套用"
+  },
+  "units": {
+    "ms": "毫秒",
+    "pixel": "像素",
+    "cells": "格"
+  },
+  "about": {
+    "title": "關於 METS",
+    "version": "版本 {{version}}",
+    "description": "METS (Mechanical Equipment Timing Simulator) 是一個專業的機構運動時序視覺化工具，用於模擬和分析機械設備的運動時序。",
+    "copyright": "版權所有 © 2024",
+    "developedBy": "由 Motionforge 開發",
+    "license": "本軟體受版權保護，保留所有權利。"
+  },
+  "help": {
+    "title": "快捷鍵說明",
+    "description": "使用以下快捷鍵可以更高效地操作 METS",
+    "categories": {
+      "file": "檔案操作",
+      "edit": "編輯操作",
+      "view": "檢視操作",
+      "animation": "動畫控制"
+    },
+    "shortcuts": {
+      "space": "空格鍵",
+      "escape": "Esc",
+      "rightArrow": "→",
+      "leftArrow": "←",
+      "speedUp": "加速",
+      "speedDown": "減速"
+    },
+    "tips": {
+      "title": "使用提示",
+      "tip1": "雙擊工具列可切換全螢幕模式",
+      "tip2": "拖曳 CSV 檔案到視窗可快速匯入",
+      "tip3": "使用滑鼠滾輪可縮放畫布",
+      "tip4": "按住 Shift 拖曳可多選模組"
+    }
+  },
+  "userGuide": {
+    "title": "使用指南",
+    "introduction": "METS 是一個專業的機構運動時序視覺化工具，用於模擬和分析機械設備的運動時序。此指南將幫助您快速上手並充分使用 METS 的功能。",
+    "quickStart": {
+      "title": "快速開始",
+      "step1": "點擊『載入測試數據』按鈕或匯入 CSV 檔案",
+      "step2": "使用播放控制按鈕開始動畫",
+      "step3": "調整速度和檢視設定以最佳體驗"
+    },
+    "sections": {
+      "gettingStarted": {
+        "title": "開始使用",
+        "step1": "啟動 METS 應用程式後，您將看到主要的工作介面，包含參數表、畫布和工具列。",
+        "step2": "左側的參數表將顯示所有模組的詳細資訊，包括模組名稱、動作說明、時序參數等。",
+        "step3": "右側的畫布區域將以視覺化方式展示機構運動的時序關係。",
+        "step4": "工具列提供所有主要功能的快速存取，包括匯入、播放控制、匯出和設定。"
+      },
+      "importingData": {
+        "title": "資料匯入",
+        "csvFormat": "支援 CSV 格式的資料匯入，檔案應包含模組名稱、動作說明、起始位置、格數和持續時間等欄位。",
+        "requiredColumns": "必要欄位：模組名稱、動作說明、起始位置、格數、持續時間、階段。",
+        "dragDrop": "您可以直接拖曳 CSV 檔案到應用程式視窗中進行快速匯入。",
+        "testData": "點擊『載入測試數據』按鈕可以載入範例資料，用於測試和學習功能。"
+      },
+      "animationControls": {
+        "title": "動畫控制",
+        "playPause": "使用播放/暫停按鈕或空格鍵來控制動畫播放。",
+        "stop": "停止按鈕會停止動畫並保持當前位置。",
+        "reset": "重置按鈕會將動畫回到起始位置。",
+        "speed": "使用速度控制可以調整動畫播放的快慢，支援 0.1x 到 4x 的速度範圍。"
+      },
+      "visualization": {
+        "title": "視覺化功能",
+        "modules": "每個模組以不同顏色的條狀圖表示，長度代表執行時間。",
+        "stages": "不同階段的動作會以不同的色調顯示，方便區分。",
+        "timing": "時序關係通過水平位置和長度來表示，清楚顯示動作的執行順序和重疊關係。",
+        "colors": "顏色編碼幫助快速識別不同模組和階段的動作。"
+      },
+      "exporting": {
+        "title": "匯出功能",
+        "formats": "支援多種匯出格式：Excel、PDF、PNG 和 MP4。",
+        "excel": "Excel 匯出包含完整的參數表和計算結果。",
+        "pdf": "PDF 匯出提供高品質的報告格式。",
+        "images": "PNG 匯出可生成靜態圖片，MP4 匯出可生成動畫影片。"
+      }
+    },
+    "additionalHelp": {
+      "title": "其他說明",
+      "shortcuts": "檢視快捷鍵說明以提高操作效率。",
+      "about": "關於頁面包含應用程式版本和開發者資訊。",
+      "support": "如需技術支援，請聯絡 Motionforge 團隊。"
+    }
+  }
+}
