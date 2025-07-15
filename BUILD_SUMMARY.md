@@ -17,11 +17,14 @@
   - `METS-1.0.0-arm64-mac.zip` (Apple Silicon) - 127.6 MB
 
 ### Windows
-- **ZIP 便攜版**:
-  - `METS-1.0.0-win.zip` (x64) - 140.8 MB
+- **單文件便攜版** (推薦):
+  - `METS-Portable-1.0.0.exe` (x64) - 84.6 MB (雙擊即可運行，無需安裝)
   
-- **單文件版**:
-  - `METS.exe` (在 win-unpacked 目錄中) - 176.8 MB
+- **安裝程序**:
+  - `METS-Setup-1.0.0.exe` (x64) - 84.8 MB (標準安裝程序)
+  
+- **ZIP 完整版**:
+  - `METS-1.0.0-win.zip` (x64) - 140.8 MB (包含所有依賴文件)
 
 ### Linux
 - **AppImage 便攜版**:
@@ -37,7 +40,9 @@
 2. **ZIP 便攜版**：解壓後直接運行 METS.app
 
 ### Windows
-1. **ZIP 便攜版**：解壓後運行 METS.exe
+1. **單文件便攜版** (推薦)：直接雙擊 `METS-Portable-1.0.0.exe` 即可運行，無需安裝
+2. **安裝程序**：運行 `METS-Setup-1.0.0.exe` 進行標準安裝
+3. **ZIP 完整版**：解壓後運行 `METS.exe` (包含所有 DLL 依賴文件)
 
 ### Linux
 1. **AppImage**：下載後添加執行權限 (`chmod +x METS-1.0.0.AppImage`)，然後直接運行
