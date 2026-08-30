@@ -30,7 +30,7 @@ export function exportToCSV(modules: ModuleData[], options: ExportOptions = { fo
       quotes: true
     })
 
-    downloadFile(csv, 'mets-export.csv', 'text/csv')
+    downloadFile(csv, 'cycleview-export.csv', 'text/csv')
   } catch (error) {
     console.error('CSV export failed:', error)
     throw new Error('CSV export failed')
@@ -38,7 +38,7 @@ export function exportToCSV(modules: ModuleData[], options: ExportOptions = { fo
 }
 
 // Export canvas as PNG
-export function exportToPNG(canvasElement: HTMLCanvasElement, filename: string = 'mets-canvas.png'): void {
+export function exportToPNG(canvasElement: HTMLCanvasElement, filename: string = 'cycleview-canvas.png'): void {
   try {
     canvasElement.toBlob((blob) => {
       if (blob) {
@@ -56,7 +56,7 @@ export function exportToPNG(canvasElement: HTMLCanvasElement, filename: string =
 }
 
 // Export to Excel format (basic implementation)
-export async function exportToExcel(modules: ModuleData[], filename: string = 'mets-export.xlsx'): Promise<void> {
+export async function exportToExcel(modules: ModuleData[], filename: string = 'cycleview-export.xlsx'): Promise<void> {
   try {
     // For basic implementation, we'll export as CSV and let user convert
     // In future, we can use libraries like ExcelJS for native Excel export
@@ -103,20 +103,22 @@ function downloadFileFromUrl(url: string, filename: string): void {
   document.body.removeChild(link)
 }
 
-// Future: PDF export using jsPDF
-export async function exportToPDF(canvasElement: HTMLCanvasElement, _modules: ModuleData[], filename: string = 'mets-export.pdf'): Promise<void> {
+// PDF export lives in services/pdfExport.ts — it is a full report rendered
+// through Chromium's print pipeline, not a canvas snapshot.
+
+// Save an already-encoded binary blob (e.g. the MP4 produced by videoExport).
+export function downloadBlob(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob)
   try {
-    // For basic implementation, export canvas as PNG
-    // In future, we can use jsPDF to create proper PDF with data table
-    exportToPNG(canvasElement, filename.replace('.pdf', '.png'))
-  } catch (error) {
-    console.error('PDF export failed:', error)
-    throw new Error('PDF export failed')
+    downloadFileFromUrl(url, filename)
+  } finally {
+    // Revoke on the next tick: the click above starts the save asynchronously.
+    setTimeout(() => URL.revokeObjectURL(url), 10_000)
   }
 }
 
 // Export project data (complete state)
-export function exportProjectData(projectData: any, filename: string = 'mets-project.json'): void {
+export function exportProjectData(projectData: any, filename: string = 'cycleview-project.json'): void {
   try {
     const jsonContent = JSON.stringify(projectData, null, 2)
     downloadFile(jsonContent, filename, 'application/json')

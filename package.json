@@ -1,7 +1,7 @@
 {
-  "name": "mets",
+  "name": "dynmech-cycleview",
   "version": "1.0.0",
-  "description": "Mechanism Timing Simulation - A cross-platform desktop application for visualizing mechanism timing sequences",
+  "description": "DynMech CycleView - a free cross-platform desktop tool for visualising and analysing equipment motion timing (cycle time)",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
@@ -15,14 +15,17 @@
     "dist:linux": "npm run build -- --linux"
   },
   "keywords": [
-    "electron",
-    "mets",
-    "timing",
-    "simulation",
+    "dynmech",
+    "cycleview",
+    "cycle-time",
+    "timing-chart",
+    "gantt",
+    "automation",
     "mechanism"
   ],
-  "author": "Your Name",
-  "license": "MIT",
+  "author": "DynMech",
+  "license": "Apache-2.0",
+  "homepage": "https://dynmech.com",
   "devDependencies": {
     "@types/node": "^20.10.5",
     "@types/papaparse": "^5.3.16",
@@ -64,9 +67,9 @@
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-electron-fs-backend": "^3.0.3",
     "immer": "^10.0.3",
-    "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.298.0",
+    "mp4-muxer": "^5.2.2",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -80,58 +83,80 @@
     "zustand": "^4.4.7"
   },
   "build": {
-    "appId": "com.motionforge.mets",
-    "productName": "METS",
-    "copyright": "Copyright © 2024 Motionforge",
+    "appId": "com.dynmech.cycleview",
+    "productName": "DynMech CycleView",
+    "copyright": "Copyright © 2026 DynMech",
     "directories": {
       "output": "release"
     },
     "files": [
       "dist/**/*",
-      "dist-electron/**/*"
+      "dist-electron/**/*",
+      "assets/**/*"
     ],
     "mac": {
+      "icon": "assets/icon.png",
       "category": "public.app-category.productivity",
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ]
     },
     "win": {
+      "icon": "assets/icon.ico",
       "target": [
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ]
     },
     "linux": {
+      "icon": "assets/icon.png",
       "target": [
         {
           "target": "AppImage",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "deb",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "tar.gz",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "category": "Utility"
@@ -143,7 +168,7 @@
       "deleteAppDataOnUninstall": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "artifactName": "${productName}-Setup-${version}.${ext}"
+      "artifactName": "DynMech-CycleView-Setup-${version}.${ext}"
     },
     "dmg": {
       "contents": [
@@ -159,10 +184,10 @@
           "type": "file"
         }
       ],
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "DynMech-CycleView-${version}-${arch}.${ext}"
     },
     "portable": {
-      "artifactName": "${productName}-Portable-${version}.${ext}"
+      "artifactName": "DynMech-CycleView-Portable-${version}.${ext}"
     }
   }
 }

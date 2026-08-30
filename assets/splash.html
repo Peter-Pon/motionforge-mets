@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';
+               img-src data:; font-src 'self';" />
+<title>DynMech CycleView</title>
+<style>
+  /* ── Wordmark face ──────────────────────────────────────────────────────
+     The Dynmech VI lockups specify Archivo ExtraBold, but the shipped splash
+     artwork for DynMech Motion is NOT set in Archivo — measured against
+     dynmech-splash-*.png, its wordmark matches the Helvetica/Arial fallback
+     (same 62px cap height, wider tracking). The guide and the artwork
+     disagree; we match the sibling product, because a splash that differs
+     from Motion's is worse than one that differs from the guide.
+
+     The values below reproduce Motion's card to the pixel at 1120x600:
+     DYNMECH 465x62, product line 246x26.
+
+     To move the family onto Archivo instead: point --wordmark-family at the
+     Archivo stack, re-derive the four size/tracking values against the same
+     targets, and re-render Motion's card too. Archivo-ExtraBold.woff2 (OFL,
+     see brand/fonts/OFL.txt) already ships for that day. */
+  @font-face {
+    font-family: Archivo; font-weight: 800; font-style: normal; font-display: block;
+    src: local('Archivo ExtraBold'), local('Archivo'),
+         url('brand/fonts/Archivo-ExtraBold.woff2') format('woff2');
+  }
+  :root {
+    --wordmark-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    --wordmark-size: 85px;
+    --wordmark-tracking: -0.15px;
+    --productline-size: 37px;
+    --productline-tracking: 16.8px;
+  }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #12161B; }
+  svg { display: block; width: 100vw; height: 100vh; }
+  .wordmark    { font-family: var(--wordmark-family); font-weight: 800;
+                 font-size: var(--wordmark-size); letter-spacing: var(--wordmark-tracking); }
+  .productline { font-family: var(--wordmark-family); font-weight: 800;
+                 font-size: var(--productline-size); letter-spacing: var(--productline-tracking); }
+  .ui { font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB',
+        'Noto Sans CJK SC', 'Segoe UI', system-ui, sans-serif; }
+  /* Loading hairline: the single moving element. Rides the divider rule. */
+  #progress { animation: sweep 1.9s cubic-bezier(.45,.05,.55,.95) infinite; }
+  @keyframes sweep {
+    0%   { transform: translateX(0);     opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { transform: translateX(787px); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { #progress { animation: none; opacity: .55; } }
+</style>
+</head>
+<body>
+<!--
+  Splash card for DynMech CycleView. Geometry is lifted from the Dynmech
+  splash artwork (Dynmech 软件开机画面设计): 1120x600 authored at 2x, shown in a
+  560x300 frameless window, ink ground, 96px margins, wordmark baseline y=351,
+  product line y=406, tagline y=478, divider y=515, footer baseline y=558.
+  Motion carries a linkage as its right-hand motif; CycleView carries a timing
+  chart. One drive-blue accent per card, per the VI icon discipline.
+-->
+<svg viewBox="0 0 1120 600" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="DynMech CycleView">
+  <rect width="1120" height="600" fill="#12161B"></rect>
+
+  <!-- ── Right-hand motif: motion timing chart ───────────────────────── -->
+  <g opacity="0.95">
+    <!-- time gridlines, kept sparse and inset so the motif floats rather
+         than reading as a boxed panel -->
+    <g stroke="#1A2029" stroke-width="1">
+      <path d="M712 292V486M764 292V486M816 292V486M868 292V486M920 292V486M972 292V486"></path>
+    </g>
+    <!-- module bars: staggered starts, differing durations -->
+    <g fill="#232A35">
+      <rect x="660" y="292" width="260" height="20"></rect>
+      <rect x="738" y="332" width="234" height="20"></rect>
+      <rect x="790" y="372" width="104" height="20"></rect>
+      <rect x="868" y="412" width="156" height="20"></rect>
+      <rect x="686" y="452" width="156" height="20"></rect>
+    </g>
+    <!-- time axis -->
+    <path d="M660 496H1024" stroke="#232B36" stroke-width="1"></path>
+    <!-- playhead: the card's single blue accent -->
+    <path d="M855 282V492" stroke="#1F5FE8" stroke-width="2"
+          stroke-dasharray="2 8" stroke-linecap="round"></path>
+    <circle cx="855" cy="274" r="7" fill="#1F5FE8"></circle>
+  </g>
+
+  <!-- ── Dynmech mark (reversed), scaled to the splash lockup ────────── -->
+  <g transform="translate(113.38 132.32) scale(0.7019)">
+    <g transform="translate(60 60) scale(1.143) translate(-57.5 -74.95)">
+      <path d="M96 96 A72 72 0 0 0 86.4 60" fill="none" stroke="#1F5FE8" stroke-width="14"></path>
+      <rect x="12" y="84" width="24" height="24" fill="#FAF9F7"></rect>
+      <path d="M24 96 L77.5 47.8" fill="none" stroke="#FAF9F7" stroke-width="16"></path>
+      <circle cx="24" cy="96" r="4.5" fill="#12161B"></circle>
+    </g>
+  </g>
+
+  <!-- ── Lockup ───────────────────────────────────────────────────────── -->
+  <text class="wordmark" x="96" y="351" fill="#FAF9F7">DYNMECH</text>
+  <text class="productline" x="97" y="407" fill="#1F5FE8">CYCLEVIEW</text>
+  <text id="tagline" class="ui" x="96" y="478" font-size="20" fill="#7A828C">设备动作节拍可视化 · 免费工具</text>
+
+  <!-- ── Footer rule + status ─────────────────────────────────────────── -->
+  <path d="M96 515H1023" stroke="#232B36" stroke-width="1"></path>
+  <g clip-path="inset(0)">
+    <path id="progress" d="M96 515H236" stroke="#1F5FE8" stroke-width="2"></path>
+  </g>
+  <text id="status" class="ui" x="96" y="558" font-size="17" fill="#4A525C">正在启动...</text>
+  <text class="ui" x="1023" y="558" font-size="17" fill="#4A525C" text-anchor="end">© 2026 Dynmech</text>
+</svg>
+
+<script>
+  // Language comes in as a location hash from the main process
+  // (#zh-CN / #zh-TW / #en / #ja); anything else falls back to English,
+  // mirroring how Motion picks its splash artwork.
+  var COPY = {
+    'zh-CN': { tagline: '设备动作节拍可视化 · 免费工具',  status: '正在启动...',  lang: 'zh-CN' },
+    'zh-TW': { tagline: '設備動作節拍視覺化 · 免費工具',  status: '正在啟動...',  lang: 'zh-TW' },
+    'ja':    { tagline: '設備動作タクト可視化 · 無償ツール', status: '起動中...',   lang: 'ja'    },
+    'en':    { tagline: 'Equipment motion timing visualisation · Free tool',
+               status: 'Starting…', lang: 'en' }
+  };
+  var c = COPY[decodeURIComponent(location.hash.slice(1))] || COPY['en'];
+  document.getElementById('tagline').textContent = c.tagline;
+  document.getElementById('status').textContent = c.status;
+  document.documentElement.lang = c.lang;
+</script>
+</body>
+</html>

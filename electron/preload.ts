@@ -32,6 +32,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.removeAllListeners('menu:command')
   },
   
+  // PDF report export (rendered through Chromium's print pipeline in main)
+  exportPdf: (payload: { html: string; headerHtml: string; footerHtml: string; fileName: string }) =>
+    ipcRenderer.invoke('pdf:export', payload),
+
   // App info
   getAppVersion: () => ipcRenderer.invoke('app:get-version')
 })
@@ -53,6 +57,8 @@ declare global {
       isFullscreen: () => Promise<boolean>
       onMenuCommand: (callback: (command: string) => void) => (() => void)
       removeMenuCommand: (callback: (command: string) => void) => void
+      exportPdf: (payload: { html: string; headerHtml: string; footerHtml: string; fileName: string })
+        => Promise<{ success: boolean; canceled?: boolean; filePath?: string; error?: string }>
       getAppVersion: () => Promise<string>
     }
   }

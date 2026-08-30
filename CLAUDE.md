@@ -68,9 +68,82 @@ src/locales/
 - Test all languages during development
 - Handle missing translations gracefully with fallback
 
+## 5. Branding (DynMech CycleView)
+
+This project ships as **DynMech CycleView** — a free, no-licence-key tool in the
+DynMech product family alongside DynMech Motion and SolidPilot AI. It was
+originally published as METS (Mechanism Timing Simulation) by Motionforge; the
+derivation is recorded in `NOTICE` and must stay there.
+
+### Names
+- Product: **DynMech CycleView** (short form **CycleView**; never "METS")
+- Company in prose: **DynMech**. The splash card footer reads "Dynmech" because
+  that is verbatim what the Motion splash artwork uses — leave it alone.
+- Chinese product name: 节拍视图 / 節拍視圖; Japanese: タクトビュー
+- appId `com.dynmech.cycleview`, npm name `dynmech-cycleview`
+
+### Visual identity
+Ink `#12161B`, paper `#FAF9F7`, drive blue `#1F5FE8`. **One blue accent per
+surface** — on the splash that budget is spent on the playhead. Brand assets
+live in `assets/brand/`; the mark is copied verbatim from the Dynmech VI and
+must not be redrawn. `assets/splash.html` is the splash source (SVG, 1120x600
+at 2x, shown in a 560x300 frameless window); the PNGs under
+`assets/brand/splash/` are exports of it, re-render them if the card changes.
+
+The splash wordmark is set in the Helvetica/Arial stack, **not** Archivo, even
+though the VI lockups specify Archivo — because the shipped DynMech Motion
+splash artwork is not Archivo either (measured: 465x62 ink at 1120x600, which
+Arial Bold matches exactly and Archivo does not, at either weight). Matching the
+sibling product beats matching the guide. Do not "fix" this to Archivo unless
+Motion's card is re-rendered in the same pass; see
+`assets/brand/fonts/README.md`, which ships the font ready for that day.
+
+### Rendering and timing architecture
+Three modules, and the invariant is that nothing duplicates them:
+- `src/lib/timingModel.ts` — when each action starts and how long the cycle
+  runs. The timeline (App.tsx), the canvas overlay and the MP4 exporter all
+  read from here. This logic used to exist in two places and drifted.
+- `src/lib/canvasRenderer.ts` — all drawing. `renderTimingFrame` is called by
+  both the on-screen canvas and the video exporter, so the MP4 cannot look
+  different from the app.
+- `src/lib/drawSurface.ts` — the seam that lets one renderer paint to several
+  outputs: `CanvasSurface` (screen + video) and `SvgSurface` (PDF).
+- `src/services/videoExport.ts` — WebCodecs H.264 encode + mp4-muxer. Frames are
+  re-rendered offscreen at exact ms offsets; this is **not** a screen capture,
+  so output length is independent of machine speed and UI playback rate.
+- `src/services/pdfExport.ts` — the report document. Two rules learned the hard
+  way and easy to undo by accident:
+  1. **No JS PDF library.** Module names here are routinely CJK; jsPDF and
+     friends need megabytes of embedded font for that. The PDF comes from
+     `webContents.printToPDF` (`pdf:export` in main), so Chromium uses system
+     fonts and the output stays vector and searchable. jsPDF was removed.
+  2. **The running header/footer are `position: fixed` in the document**, not
+     printToPDF header/footer templates. Templates are rendered without the
+     page CSS and get scaled to fit; anything using flex, tables or `mm` units
+     collapses to an unreadable 0.75pt. Only the page number lives in a
+     template, as a single right-aligned block div. Verified across a 5-page
+     print.
+  The report uses `computeContentSize`, not `computeCanvasSize` — the latter's
+  800x600 floor is there to fill the app window and would leave a printed page
+  two thirds empty.
+
+### Compatibility invariants (do not "clean these up")
+1. `usePreferencesStore` reads `cycleview-preferences`, falling back **read-only**
+   to the legacy `mets-preferences` key.
+2. The project open dialog offers `.cvp` and still lists legacy `.mts`.
+3. `electron-builder.files` must keep `assets/**/*` — the splash and the runtime
+   window icon are loaded from there at `join(__dirname, '../assets/...')`.
+
+### Licensing
+Source is Apache-2.0 (`LICENSE`, `NOTICE`); binaries ship under `EULA.md`. The
+software is free, needs no key, and **makes no network requests** — the EULA
+says so explicitly, so any feature that would phone home (telemetry, update
+check, cloud export) requires the EULA and privacy wording to change first.
+
 ## Summary
 1. Large features: Plan → Develop → Test (with human verification)
 2. Small fixes: Direct implementation allowed
 3. Git commits: No AI markers, require explicit permission
 4. curl usage: Always use `--noproxy '*'` for internal network access
 5. i18n: All UI text must be internationalized, default language is zh-TW
+6. Branding: product is DynMech CycleView; keep the compat invariants in §5

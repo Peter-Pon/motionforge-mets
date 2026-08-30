@@ -40,9 +40,17 @@ export function AboutDialog({ isOpen, onClose }: AboutDialogProps) {
 
         {/* Content */}
         <div className="text-center">
-          {/* Logo/Icon */}
-          <div className="w-20 h-20 mx-auto mb-4 bg-blue-500 rounded-lg flex items-center justify-center">
-            <span className="text-white text-3xl font-bold">METS</span>
+          {/* Brand mark — Dynmech mark reversed on the ink ground, same
+              artwork as the app icon and the splash card. */}
+          <div className="w-20 h-20 mx-auto mb-4 rounded-lg overflow-hidden" style={{ backgroundColor: '#12161B' }}>
+            <svg viewBox="0 0 120 120" className="w-full h-full" role="img" aria-label="DynMech">
+              <g transform="translate(60 60) scale(1.143) translate(-57.5 -74.95)">
+                <path d="M96 96 A72 72 0 0 0 86.4 60" fill="none" stroke="#1F5FE8" strokeWidth="14" />
+                <rect x="12" y="84" width="24" height="24" fill="#FAF9F7" />
+                <path d="M24 96 L77.5 47.8" fill="none" stroke="#FAF9F7" strokeWidth="16" />
+                <circle cx="24" cy="96" r="4.5" fill="#12161B" />
+              </g>
+            </svg>
           </div>
 
           <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
@@ -64,13 +72,13 @@ export function AboutDialog({ isOpen, onClose }: AboutDialogProps) {
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {t('about.developedBy')}
             </p>
-            <a 
-              href="https://www.motionforge.com.tw" 
-              target="_blank" 
+            <a
+              href="https://dynmech.com"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
             >
-              www.motionforge.com.tw
+              dynmech.com
             </a>
           </div>
 

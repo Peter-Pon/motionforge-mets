@@ -3,6 +3,66 @@ import { join } from 'path'
 import { createMenu } from './menu'
 
 let mainWindow: BrowserWindow | null
+let splashWindow: BrowserWindow | null = null
+let splashShownAt = 0
+
+// The splash is authored at 1120x600 (2x) and shown at logical size, matching
+// the DynMech Motion splash card.
+const SPLASH_WIDTH = 560
+const SPLASH_HEIGHT = 300
+// Below this the card just flickers; hold it so the brand actually registers.
+const SPLASH_MIN_MS = 900
+// Backstop: never let a failed load leave an always-on-top card on screen.
+const SPLASH_MAX_MS = 12000
+
+/**
+ * Splash language. The renderer owns the UI language (localStorage), which the
+ * main process cannot read before the window exists, so the card follows the
+ * OS locale — the same four variants Motion ships, English for anything else.
+ */
+function splashLanguage(): string {
+  const locale = app.getLocale().toLowerCase()
+  if (locale.startsWith('zh')) {
+    return /(^|-)(tw|hk|mo|hant)(-|$)/.test(locale) ? 'zh-TW' : 'zh-CN'
+  }
+  if (locale.startsWith('ja')) return 'ja'
+  return 'en'
+}
+
+// package.json "name" is the npm id; the macOS application menu and the
+// About role should read the product name in dev as well as when packaged.
+app.setName('DynMech CycleView')
+
+function createSplash() {
+  splashWindow = new BrowserWindow({
+    width: SPLASH_WIDTH,
+    height: SPLASH_HEIGHT,
+    frame: false,
+    resizable: false,
+    movable: false,
+    center: true,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    show: false,
+    backgroundColor: '#12161B',
+    webPreferences: { contextIsolation: true, nodeIntegration: false }
+  })
+
+  splashWindow.loadFile(join(__dirname, '../assets/splash.html'), { hash: splashLanguage() })
+  splashWindow.once('ready-to-show', () => {
+    splashShownAt = Date.now()
+    splashWindow?.show()
+  })
+  splashWindow.on('closed', () => { splashWindow = null })
+
+  setTimeout(closeSplash, SPLASH_MAX_MS)
+}
+
+function closeSplash() {
+  if (!splashWindow || splashWindow.isDestroyed()) return
+  splashWindow.close()
+  splashWindow = null
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -19,16 +79,22 @@ function createWindow() {
     },
     icon: join(__dirname, '../assets/icon.png'),
     titleBarStyle: 'default',
-    title: 'METS - Mechanism Timing Simulation',
+    title: 'DynMech CycleView',
     show: false,  // 先不显示，等加载完成后再显示
     // 明确允许窗口操作
     frame: true,
     transparent: false
   })
 
-  // 窗口准备就绪后显示
+  // 窗口准备就绪后显示;开机画面至少停留 SPLASH_MIN_MS 再让位,避免一闪而过
   mainWindow.once('ready-to-show', () => {
-    mainWindow?.show()
+    const held = splashShownAt ? Date.now() - splashShownAt : SPLASH_MIN_MS
+    const wait = Math.max(0, SPLASH_MIN_MS - held)
+    setTimeout(() => {
+      closeSplash()
+      mainWindow?.show()
+      mainWindow?.focus()
+    }, wait)
   })
 
   // 添加双击标题栏全屏功能 (仅在macOS上需要)
@@ -71,6 +137,7 @@ function createWindow() {
 
 // App event handlers
 app.whenReady().then(() => {
+  createSplash()
   createWindow()
 
   app.on('activate', () => {
@@ -138,7 +205,8 @@ ipcMain.handle('dialog:openProject', async () => {
     const result = await dialog.showOpenDialog(mainWindow, {
       properties: ['openFile'],
       filters: [
-        { name: 'METS Project', extensions: ['mts'] },
+        { name: 'CycleView Project', extensions: ['cvp'] },
+        { name: 'METS Project (legacy)', extensions: ['mts'] },
         { name: 'All Files', extensions: ['*'] }
       ]
     })
@@ -171,7 +239,67 @@ ipcMain.handle('dialog:saveFile', async (_, options: any) => {
 })
 
 // File system operations
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile, unlink } from 'fs/promises'
+import { tmpdir } from 'os'
+
+/**
+ * PDF report export.
+ *
+ * The renderer hands over a finished HTML document; we print it through
+ * Chromium's own print pipeline in an offscreen window. Doing it this way
+ * rather than with a JS PDF library is what makes CJK module names work
+ * without embedding megabytes of font, and keeps the chart vector and the
+ * text selectable.
+ */
+ipcMain.handle('pdf:export', async (_, payload: {
+  html: string
+  headerHtml: string
+  footerHtml: string
+  fileName: string
+}) => {
+  if (!mainWindow) return { success: false, canceled: true }
+
+  const target = await dialog.showSaveDialog(mainWindow, {
+    defaultPath: payload.fileName,
+    filters: [{ name: 'PDF', extensions: ['pdf'] }]
+  })
+  if (target.canceled || !target.filePath) return { success: false, canceled: true }
+
+  // Unique temp name so two exports in flight cannot clobber each other.
+  const tempPath = join(tmpdir(), `cycleview-report-${Date.now()}-${process.pid}.html`)
+  let printWindow: BrowserWindow | null = null
+
+  try {
+    await writeFile(tempPath, payload.html, 'utf-8')
+
+    printWindow = new BrowserWindow({
+      show: false,
+      webPreferences: { contextIsolation: true, nodeIntegration: false, javascript: false }
+    })
+    await printWindow.loadFile(tempPath)
+
+    const pdf = await printWindow.webContents.printToPDF({
+      pageSize: 'A3',
+      landscape: true,
+      printBackground: true,
+      // The document's own @page box supplies the margins; the running header
+      // and footer are fixed elements inside it. Only the page number comes
+      // from a template.
+      preferCSSPageSize: true,
+      displayHeaderFooter: true,
+      headerTemplate: payload.headerHtml,
+      footerTemplate: payload.footerHtml
+    })
+
+    await writeFile(target.filePath, pdf)
+    return { success: true, filePath: target.filePath }
+  } catch (error: any) {
+    return { success: false, error: error?.message ?? String(error) }
+  } finally {
+    if (printWindow && !printWindow.isDestroyed()) printWindow.destroy()
+    await unlink(tempPath).catch(() => {})
+  }
+})
 
 ipcMain.handle('fs:readFile', async (_, filePath: string) => {
   try {

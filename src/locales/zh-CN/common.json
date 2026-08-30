@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "METS - 机构运动时序模拟",
-    "description": "机构运动时序可视化工具"
+    "title": "DynMech CycleView - 设备动作节拍可视化",
+    "description": "设备动作节拍可视化工具"
   },
   "menu": {
     "file": {
@@ -50,7 +50,7 @@
     },
     "help": {
       "title": "帮助",
-      "about": "关于METS",
+      "about": "关于 CycleView",
       "userGuide": "使用指南",
       "shortcuts": "快捷键"
     },
@@ -155,16 +155,64 @@
     "cells": "格"
   },
   "about": {
-    "title": "关于 METS",
+    "title": "关于 DynMech CycleView",
     "version": "版本 {{version}}",
-    "description": "METS (Mechanical Equipment Timing Simulator) 是一个专业的机构运动时序可视化工具，用于模拟和分析机械设备的运动时序。",
-    "copyright": "版权所有 © 2024",
-    "developedBy": "由 Motionforge 开发",
-    "license": "本软件受版权保护，保留所有权利。"
+    "description": "DynMech CycleView 是一款免费的设备动作节拍可视化工具，用于设计、核对和演示机械设备各机构的动作时序与整机节拍。",
+    "copyright": "版权所有 © 2026 DynMech",
+    "developedBy": "由 DynMech 开发",
+    "license": "本软件为免费软件，无需授权码即可使用；源代码以 Apache License 2.0 授权。"
+  },
+  "export": {
+    "action": "导出",
+    "exporting": "正在导出...",
+    "noData": "没有可导出的数据",
+    "csv": {
+      "description": "导出模块数据为 CSV 格式",
+      "includeCalculated": "包含计算位置信息"
+    },
+    "excel": {
+      "description": "导出详细模块数据"
+    },
+    "png": {
+      "description": "导出当前画布视图"
+    },
+    "pdf": {
+      "description": "导出节拍图 + 参数表的 PDF 报告,可直接发给没装本软件的人",
+      "unsupported": "PDF 报告需要在桌面版中导出",
+      "report": {
+        "chartPage": "节拍图",
+        "tablePage": "参数表",
+        "totalCycle": "总节拍",
+        "moduleCount": "机构数",
+        "exportedAt": "导出于",
+        "untitledProject": "未命名项目",
+        "columns": {
+          "module": "机构模块",
+          "action": "动作",
+          "stage": "阶段",
+          "startPosition": "起始格",
+          "moveCount": "移动格数",
+          "intervalTime": "每格 ms",
+          "startTime": "开始 ms",
+          "endTime": "结束 ms"
+        }
+      }
+    },
+    "mp4": {
+      "description": "把节拍动画导出为 MP4 视频",
+      "fps": "帧率",
+      "rendering": "正在渲染视频",
+      "cancel": "取消导出",
+      "unsupported": "当前系统不支持 H.264 编码，无法导出 MP4"
+    },
+    "project": {
+      "title": "项目文件",
+      "description": "导出完整项目配置"
+    }
   },
   "help": {
     "title": "快捷键说明",
-    "description": "使用以下快捷键可以更高效地操作 METS",
+    "description": "使用以下快捷键可以更高效地操作 CycleView",
     "categories": {
       "file": "文件操作",
       "edit": "编辑操作",
@@ -189,7 +237,7 @@
   },
   "userGuide": {
     "title": "使用指南",
-    "introduction": "METS 是一个专业的机构运动时序可视化工具，用于模拟和分析机械设备的运动时序。此指南将帮助您快速上手并充分使用 METS 的功能。",
+    "introduction": "CycleView 是一个专业的机构运动时序可视化工具，用于模拟和分析机械设备的运动时序。此指南将帮助您快速上手并充分使用 CycleView 的功能。",
     "quickStart": {
       "title": "快速开始",
       "step1": "点击\"加载测试数据\"按钮或导入 CSV 文件",
@@ -199,7 +247,7 @@
     "sections": {
       "gettingStarted": {
         "title": "开始使用",
-        "step1": "启动 METS 应用程序后，您将看到主要的工作界面，包含参数表、画布和工具栏。",
+        "step1": "启动 CycleView 应用程序后，您将看到主要的工作界面，包含参数表、画布和工具栏。",
         "step2": "左侧的参数表将显示所有模块的详细信息，包括模块名称、动作说明、时序参数等。",
         "step3": "右侧的画布区域将以可视化方式展示机构运动的时序关系。",
         "step4": "工具栏提供所有主要功能的快速访问，包括导入、播放控制、导出和设置。"
@@ -237,7 +285,7 @@
       "title": "其他说明",
       "shortcuts": "查看快捷键说明以提高操作效率。",
       "about": "关于页面包含应用程序版本和开发者信息。",
-      "support": "如需技术支持，请联系 Motionforge 团队。"
+      "support": "本软件为免费工具，不提供一对一技术支持。使用问题请查阅本指南，或访问 dynmech.com。"
     }
   }
 }

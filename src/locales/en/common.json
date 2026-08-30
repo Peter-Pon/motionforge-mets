@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "METS - Mechanism Timing Simulation",
-    "description": "Mechanism Motion Timing Visualization Tool"
+    "title": "DynMech CycleView - Equipment Motion Timing",
+    "description": "Equipment Motion Timing Visualisation Tool"
   },
   "menu": {
     "file": {
@@ -50,7 +50,7 @@
     },
     "help": {
       "title": "Help",
-      "about": "About METS",
+      "about": "About CycleView",
       "userGuide": "User Guide",
       "shortcuts": "Keyboard Shortcuts"
     },
@@ -155,16 +155,64 @@
     "cells": "cells"
   },
   "about": {
-    "title": "About METS",
+    "title": "About DynMech CycleView",
     "version": "Version {{version}}",
-    "description": "METS (Mechanical Equipment Timing Simulator) is a professional mechanism motion timing visualization tool for simulating and analyzing the motion timing of mechanical equipment.",
-    "copyright": "Copyright © 2024",
-    "developedBy": "Developed by Motionforge",
-    "license": "This software is protected by copyright. All rights reserved."
+    "description": "DynMech CycleView is a free tool for visualising equipment motion timing: design, check and present the action sequence of every mechanism on a machine and the cycle time they add up to.",
+    "copyright": "Copyright © 2026 DynMech",
+    "developedBy": "Developed by DynMech",
+    "license": "Free software, no licence key required. Source code is released under the Apache License 2.0."
+  },
+  "export": {
+    "action": "Export",
+    "exporting": "Exporting...",
+    "noData": "No data to export",
+    "csv": {
+      "description": "Export module data as CSV",
+      "includeCalculated": "Include calculated positions"
+    },
+    "excel": {
+      "description": "Export detailed module data"
+    },
+    "png": {
+      "description": "Export the current canvas view"
+    },
+    "pdf": {
+      "description": "A PDF report — chart plus parameter table — to hand to someone without CycleView",
+      "unsupported": "PDF report export requires the desktop app",
+      "report": {
+        "chartPage": "Timing chart",
+        "tablePage": "Parameters",
+        "totalCycle": "Cycle time",
+        "moduleCount": "Modules",
+        "exportedAt": "Exported",
+        "untitledProject": "Untitled project",
+        "columns": {
+          "module": "Module",
+          "action": "Action",
+          "stage": "Stage",
+          "startPosition": "Start cell",
+          "moveCount": "Cells",
+          "intervalTime": "ms/cell",
+          "startTime": "Start ms",
+          "endTime": "End ms"
+        }
+      }
+    },
+    "mp4": {
+      "description": "Export the timing animation as an MP4 video",
+      "fps": "Frame rate",
+      "rendering": "Rendering video",
+      "cancel": "Cancel export",
+      "unsupported": "H.264 encoding is unavailable on this system, so MP4 export is disabled"
+    },
+    "project": {
+      "title": "Project file",
+      "description": "Export the full project configuration"
+    }
   },
   "help": {
     "title": "Keyboard Shortcuts",
-    "description": "Use the following keyboard shortcuts to operate METS more efficiently",
+    "description": "Use the following keyboard shortcuts to operate CycleView more efficiently",
     "categories": {
       "file": "File Operations",
       "edit": "Edit Operations",
@@ -189,7 +237,7 @@
   },
   "userGuide": {
     "title": "User Guide",
-    "introduction": "METS is a professional mechanism motion timing visualization tool for simulating and analyzing the motion timing of mechanical equipment. This guide will help you get started quickly and make full use of METS features.",
+    "introduction": "CycleView is a professional mechanism motion timing visualization tool for simulating and analyzing the motion timing of mechanical equipment. This guide will help you get started quickly and make full use of CycleView features.",
     "quickStart": {
       "title": "Quick Start",
       "step1": "Click the 'Load Test Data' button or import a CSV file",
@@ -199,7 +247,7 @@
     "sections": {
       "gettingStarted": {
         "title": "Getting Started",
-        "step1": "After launching METS, you'll see the main interface with a parameter table, canvas, and toolbar.",
+        "step1": "After launching CycleView, you'll see the main interface with a parameter table, canvas, and toolbar.",
         "step2": "The parameter table on the left shows detailed information for all modules, including module names, action descriptions, and timing parameters.",
         "step3": "The canvas area on the right displays the mechanism motion timing relationships in a visual format.",
         "step4": "The toolbar provides quick access to all main functions, including import, playback controls, export, and settings."
@@ -237,7 +285,7 @@
       "title": "Additional Help",
       "shortcuts": "View keyboard shortcuts to improve operation efficiency.",
       "about": "The About page contains application version and developer information.",
-      "support": "For technical support, please contact the Motionforge team."
+      "support": "CycleView is a free tool and does not come with one-to-one technical support. Please consult this guide or visit dynmech.com."
     }
   }
 }

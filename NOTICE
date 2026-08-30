@@ -1,0 +1,21 @@
+DynMech CycleView
+Copyright 2026 DynMech (https://dynmech.com)
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product includes software originally published as METS (Mechanism Timing
+Simulation) by Motionforge, from which DynMech CycleView is derived.
+
+"DynMech", "CycleView" and the DynMech mark are trademarks of DynMech. The
+Apache License grants no trademark rights (section 6): forks and redistributions
+must not use the DynMech name, the DynMech mark, or the CycleView product name
+in a way that suggests they are the official build. See EULA.md.
+
+--------------------------------------------------------------------------------
+THIRD-PARTY ASSETS
+
+Archivo (assets/brand/fonts/Archivo-ExtraBold.woff2)
+Copyright 2020 The Archivo Project Authors
+(https://github.com/Omnibus-Type/Archivo)
+Licensed under the SIL Open Font License, Version 1.1 — see
+assets/brand/fonts/OFL.txt.

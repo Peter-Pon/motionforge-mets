@@ -171,7 +171,7 @@ export function createMenu(mainWindow: BrowserWindow): Menu {
       label: 'Help',
       submenu: [
         {
-          label: 'About METS',
+          label: 'About CycleView',
           click: () => {
             mainWindow.webContents.send('menu:command', 'about')
           }

@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "METS - メカニズムタイミングシミュレーション",
-    "description": "機構動作タイミング可視化ツール"
+    "title": "DynMech CycleView - 設備動作タクト可視化",
+    "description": "設備動作タクト可視化ツール"
   },
   "menu": {
     "file": {
@@ -50,7 +50,7 @@
     },
     "help": {
       "title": "ヘルプ",
-      "about": "METSについて",
+      "about": "CycleView について",
       "userGuide": "ユーザーガイド",
       "shortcuts": "キーボードショートカット"
     },
@@ -155,16 +155,64 @@
     "cells": "マス"
   },
   "about": {
-    "title": "METSについて",
+    "title": "DynMech CycleView について",
     "version": "バージョン {{version}}",
-    "description": "METS（Mechanical Equipment Timing Simulator）は、機械設備の動作タイミングをシミュレートし、分析するためのプロフェッショナルな機構動作タイミング可視化ツールです。",
-    "copyright": "著作権 © 2024",
-    "developedBy": "Motionforge開発",
-    "license": "このソフトウェアは著作権で保護されています。すべての権利を保有しています。"
+    "description": "DynMech CycleView は、機械設備の各機構の動作タイミングと全体のタクトタイムを設計・検証・提示するための無償の可視化ツールです。",
+    "copyright": "著作権 © 2026 DynMech",
+    "developedBy": "DynMech 開発",
+    "license": "本ソフトウェアは無償です。ライセンスキーは不要です。ソースコードは Apache License 2.0 で公開されています。"
+  },
+  "export": {
+    "action": "エクスポート",
+    "exporting": "エクスポート中...",
+    "noData": "エクスポートできるデータがありません",
+    "csv": {
+      "description": "モジュールデータを CSV 形式で出力",
+      "includeCalculated": "計算後の位置情報を含める"
+    },
+    "excel": {
+      "description": "詳細なモジュールデータを出力"
+    },
+    "png": {
+      "description": "現在のキャンバス表示を出力"
+    },
+    "pdf": {
+      "description": "タクトチャートとパラメータ表を 1 つの PDF レポートとして出力",
+      "unsupported": "PDF レポートの出力にはデスクトップ版が必要です",
+      "report": {
+        "chartPage": "タクトチャート",
+        "tablePage": "パラメータ表",
+        "totalCycle": "総タクト",
+        "moduleCount": "機構数",
+        "exportedAt": "出力日時",
+        "untitledProject": "無題のプロジェクト",
+        "columns": {
+          "module": "機構モジュール",
+          "action": "動作",
+          "stage": "ステージ",
+          "startPosition": "開始セル",
+          "moveCount": "セル数",
+          "intervalTime": "ms/セル",
+          "startTime": "開始 ms",
+          "endTime": "終了 ms"
+        }
+      }
+    },
+    "mp4": {
+      "description": "タクトアニメーションを MP4 動画として出力",
+      "fps": "フレームレート",
+      "rendering": "動画を描画中",
+      "cancel": "エクスポートを中止",
+      "unsupported": "このシステムでは H.264 エンコードが利用できないため、MP4 出力は無効です"
+    },
+    "project": {
+      "title": "プロジェクトファイル",
+      "description": "プロジェクト設定一式を出力"
+    }
   },
   "help": {
     "title": "キーボードショートカット",
-    "description": "以下のキーボードショートカットを使用して、METSをより効率的に操作できます",
+    "description": "以下のキーボードショートカットを使用して、CycleViewをより効率的に操作できます",
     "categories": {
       "file": "ファイル操作",
       "edit": "編集操作",
@@ -189,7 +237,7 @@
   },
   "userGuide": {
     "title": "ユーザーガイド",
-    "introduction": "METS は機械設備の運動タイミングをシミュレートおよび分析するための専門的な機構運動タイミング可視化ツールです。このガイドでは、METS の機能を素早く開始し、フルに活用する方法を説明します。",
+    "introduction": "CycleView は機械設備の運動タイミングをシミュレートおよび分析するための専門的な機構運動タイミング可視化ツールです。このガイドでは、CycleView の機能を素早く開始し、フルに活用する方法を説明します。",
     "quickStart": {
       "title": "クイックスタート",
       "step1": "「テストデータを読み込む」ボタンをクリックするか、CSVファイルをインポートします",
@@ -199,7 +247,7 @@
     "sections": {
       "gettingStarted": {
         "title": "はじめに",
-        "step1": "METS アプリケーションを起動すると、パラメータテーブル、キャンバス、ツールバーを含むメインの作業インターフェースが表示されます。",
+        "step1": "CycleView アプリケーションを起動すると、パラメータテーブル、キャンバス、ツールバーを含むメインの作業インターフェースが表示されます。",
         "step2": "左側のパラメータテーブルには、モジュール名、アクション説明、タイミングパラメータなど、すべてのモジュールの詳細情報が表示されます。",
         "step3": "右側のキャンバスエリアでは、機構運動のタイミング関係が視覚的に表示されます。",
         "step4": "ツールバーでは、インポート、再生コントロール、エクスポート、設定などの主要機能に素早くアクセスできます。"
@@ -237,7 +285,7 @@
       "title": "その他のヘルプ",
       "shortcuts": "操作効率を向上させるためのキーボードショートカットを確認してください。",
       "about": "アバウトページには、アプリケーションのバージョンと開発者情報が含まれています。",
-      "support": "技術サポートが必要な場合は、Motionforge チームにお問い合わせください。"
+      "support": "本ソフトウェアは無償ツールのため、個別の技術サポートは提供していません。本ガイドをご覧いただくか、dynmech.com をご参照ください。"
     }
   }
 }

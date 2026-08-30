@@ -1,4 +1,4 @@
-# METS Build Summary - 修復版本
+# DynMech CycleView Build Summary - 修復版本
 
 ## 已修復的問題
 
@@ -9,44 +9,44 @@
 
 ### macOS
 - **DMG 安裝包**:
-  - `METS-1.0.0-x64.dmg` (Intel) - 137.7 MB
-  - `METS-1.0.0-arm64.dmg` (Apple Silicon) - 132.7 MB
+  - `DynMech-CycleView-1.0.0-x64.dmg` (Intel) - 137.7 MB
+  - `DynMech-CycleView-1.0.0-arm64.dmg` (Apple Silicon) - 132.7 MB
   
 - **ZIP 便攜版**:
-  - `METS-1.0.0-mac.zip` (Intel) - 132.7 MB
-  - `METS-1.0.0-arm64-mac.zip` (Apple Silicon) - 127.6 MB
+  - `DynMech-CycleView-1.0.0-mac.zip` (Intel) - 132.7 MB
+  - `DynMech-CycleView-1.0.0-arm64-mac.zip` (Apple Silicon) - 127.6 MB
 
 ### Windows
 - **單文件便攜版** (推薦):
-  - `METS-Portable-1.0.0.exe` (x64) - 84.6 MB (雙擊即可運行，無需安裝)
+  - `DynMech-CycleView-Portable-1.0.0.exe` (x64) - 84.6 MB (雙擊即可運行，無需安裝)
   
 - **安裝程序**:
-  - `METS-Setup-1.0.0.exe` (x64) - 84.8 MB (標準安裝程序)
+  - `DynMech-CycleView-Setup-1.0.0.exe` (x64) - 84.8 MB (標準安裝程序)
   
 - **ZIP 完整版**:
-  - `METS-1.0.0-win.zip` (x64) - 140.8 MB (包含所有依賴文件)
+  - `DynMech-CycleView-1.0.0-win.zip` (x64) - 140.8 MB (包含所有依賴文件)
 
 ### Linux
 - **AppImage 便攜版**:
-  - `METS-1.0.0.AppImage` (x64) - 143.8 MB (可執行文件)
+  - `DynMech-CycleView-1.0.0.AppImage` (x64) - 143.8 MB (可執行文件)
   
 - **TAR.GZ 壓縮包**:
-  - `mets-1.0.0.tar.gz` (x64) - 100.7 MB
+  - `dynmech-cycleview-1.0.0.tar.gz` (x64) - 100.7 MB
 
 ## 安裝說明
 
 ### macOS
-1. **DMG 安裝**：下載 DMG 文件，雙擊打開，將 METS 拖到 Applications 文件夾
-2. **ZIP 便攜版**：解壓後直接運行 METS.app
+1. **DMG 安裝**：下載 DMG 文件，雙擊打開，將 DynMech CycleView 拖到 Applications 文件夾
+2. **ZIP 便攜版**：解壓後直接運行 DynMech CycleView.app
 
 ### Windows
-1. **單文件便攜版** (推薦)：直接雙擊 `METS-Portable-1.0.0.exe` 即可運行，無需安裝
-2. **安裝程序**：運行 `METS-Setup-1.0.0.exe` 進行標準安裝
-3. **ZIP 完整版**：解壓後運行 `METS.exe` (包含所有 DLL 依賴文件)
+1. **單文件便攜版** (推薦)：直接雙擊 `DynMech-CycleView-Portable-1.0.0.exe` 即可運行，無需安裝
+2. **安裝程序**：運行 `DynMech-CycleView-Setup-1.0.0.exe` 進行標準安裝
+3. **ZIP 完整版**：解壓後運行 `DynMech CycleView.exe` (包含所有 DLL 依賴文件)
 
 ### Linux
-1. **AppImage**：下載後添加執行權限 (`chmod +x METS-1.0.0.AppImage`)，然後直接運行
-2. **TAR.GZ**：解壓後運行 `./mets`
+1. **AppImage**：下載後添加執行權限 (`chmod +x DynMech-CycleView-1.0.0.AppImage`)，然後直接運行
+2. **TAR.GZ**：解壓後運行 `./dynmech-cycleview`
 
 ## 功能特點
 

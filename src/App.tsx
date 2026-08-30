@@ -12,6 +12,7 @@ import { ModuleData } from '@/types'
 import { FaPlay, FaPause, FaStop, FaRedo, FaCog, FaDownload } from 'react-icons/fa'
 import { PreferencesDialog } from '@/components/PreferencesDialog'
 import { ExportDialog } from '@/components/ExportDialog'
+import { computeTotalDurationMs } from '@/lib/timingModel'
 import { ShortcutsHelp } from '@/components/ShortcutsHelp'
 import { TooltipButton } from '@/components/ui/tooltip-button'
 import { usePreferencesStore } from '@/stores/usePreferencesStore'
@@ -378,61 +379,12 @@ function App() {
     
   }, [t, project, createNewProject])
 
-  // Calculate total frames based on modules with sequential execution within groups
+  // Calculate total frames from the shared timing model, so the timeline, the
+  // canvas overlay and the MP4 exporter all agree on how long a cycle runs.
   useEffect(() => {
-    if (project && project.modules.length > 0) {
-      // Group modules by name
-      const groups: { [key: string]: typeof project.modules } = {}
-      project.modules.forEach(module => {
-        if (!groups[module.moduleName]) {
-          groups[module.moduleName] = []
-        }
-        groups[module.moduleName].push(module)
-      })
-      
-      // Calculate max frames across all groups
-      let maxFrames = 0
-      Object.values(groups).forEach(groupModules => {
-        const sortedModules = [...groupModules]
-        const actionStartTimes: number[] = []
-        
-        // First pass: calculate all start times
-        sortedModules.forEach((module, index) => {
-          let actionStartTime = 0
-          
-          if (index > 0) {
-            const prevModule = sortedModules[index - 1]
-            const prevStartTime = actionStartTimes[index - 1]
-            
-            if (module.isSequentialAction) {
-              // For sequential actions, start when previous action completes
-              actionStartTime = prevStartTime + (prevModule.moveCount * prevModule.duration)
-            } else {
-              // For position-based actions, calculate based on positions
-              const currentStartX = module.calculatedStartX ?? module.startX
-              const prevStartX = prevModule.calculatedStartX ?? prevModule.startX
-              const cellsNeeded = Math.max(0, currentStartX - prevStartX)
-              actionStartTime = prevStartTime + (cellsNeeded * prevModule.duration)
-            }
-          }
-          
-          actionStartTimes.push(actionStartTime)
-        })
-        
-        // Second pass: calculate end times
-        sortedModules.forEach((module, index) => {
-          const actionStartTime = actionStartTimes[index]
-          const actionEndTime = actionStartTime + (module.moveCount * module.duration)
-          maxFrames = Math.max(maxFrames, actionEndTime)
-        })
-      })
-      
-      setTotalFrames(maxFrames)
-      setCalculatedTotalFrames(maxFrames)
-    } else {
-      setTotalFrames(0)
-      setCalculatedTotalFrames(0)
-    }
+    const totalMs = project ? computeTotalDurationMs(project.modules) : 0
+    setTotalFrames(totalMs)
+    setCalculatedTotalFrames(totalMs)
   }, [project, setTotalFrames])
 
   // Animation loop

@@ -12,10 +12,18 @@ interface PreferencesStore extends Preferences {
   savePreferences: () => void
 }
 
+const STORAGE_KEY = 'cycleview-preferences'
+// Pre-rebrand key. Read-only fallback: settings saved by a METS build are
+// picked up once and then re-saved under STORAGE_KEY.
+const LEGACY_STORAGE_KEY = 'mets-preferences'
+
+const readStoredPreferences = (): string | null =>
+  localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY)
+
 // Load initial preferences from localStorage
 const loadInitialPreferences = (): Preferences => {
   try {
-    const saved = localStorage.getItem('mets-preferences')
+    const saved = readStoredPreferences()
     if (saved) {
       const preferences = JSON.parse(saved) as Preferences
       return { ...DEFAULT_PREFERENCES, ...preferences }
@@ -68,7 +76,7 @@ export const usePreferencesStore = create<PreferencesStore>()(
 
     loadPreferences: () => {
       try {
-        const saved = localStorage.getItem('mets-preferences')
+        const saved = readStoredPreferences()
         if (saved) {
           const preferences = JSON.parse(saved) as Preferences
           set((state) => {
@@ -84,7 +92,7 @@ export const usePreferencesStore = create<PreferencesStore>()(
       try {
         const { updateGridPreferences, updateAnimationPreferences, updateUIPreferences, resetToDefaults, loadPreferences, savePreferences, ...preferences } = get()
         const preferencesToSave = JSON.stringify(preferences)
-        localStorage.setItem('mets-preferences', preferencesToSave)
+        localStorage.setItem(STORAGE_KEY, preferencesToSave)
       } catch (error) {
         console.warn('Failed to save preferences to localStorage:', error)
       }
