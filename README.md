@@ -2,6 +2,14 @@
 
 **简体中文** · [繁體中文](README.zh-TW.md) · [English](README.en.md)
 
+[![License](https://img.shields.io/badge/source-Apache--2.0-blue)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-555)](https://www.dynmech.com/zh-hans/download/)
+[![Free](https://img.shields.io/badge/price-free%20forever-1E9E6A)](https://www.dynmech.com/zh-hans/cycleview/)
+[![Website](https://img.shields.io/badge/www-dynmech.com-1F5FE8)](https://www.dynmech.com)
+
+官网与下载：**[dynmech.com](https://www.dynmech.com/zh-hans/cycleview/)**
+
+
 > 免费工具,无需授权码,完全离线。
 > 前身为 METS(Mechanism Timing Simulation),自 DynMech 发行起更名为 CycleView。
 

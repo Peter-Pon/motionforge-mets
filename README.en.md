@@ -2,6 +2,14 @@
 
 [简体中文](README.md) · [繁體中文](README.zh-TW.md) · **English**
 
+[![License](https://img.shields.io/badge/source-Apache--2.0-blue)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-555)](https://www.dynmech.com/zh-hans/download/)
+[![Free](https://img.shields.io/badge/price-free%20forever-1E9E6A)](https://www.dynmech.com/zh-hans/cycleview/)
+[![Website](https://img.shields.io/badge/www-dynmech.com-1F5FE8)](https://www.dynmech.com)
+
+Website & downloads: **[dynmech.com](https://www.dynmech.com/en/cycleview/)**
+
+
 > Free tool. No licence key. Fully offline.
 > Formerly METS (Mechanism Timing Simulation); renamed CycleView for the DynMech release.
 
