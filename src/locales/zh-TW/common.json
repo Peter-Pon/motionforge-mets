@@ -286,5 +286,20 @@
       "about": "關於頁面包含應用程式版本和開發者資訊。",
       "support": "本軟體為免費工具，不提供一對一技術支援。使用問題請查閱本指南，或造訪 dynmech.com。"
     }
+  },
+  "online": {
+    "downloadDesktop": "下載桌面版",
+    "share": "分享連結",
+    "shareCopied": "連結已複製，打開即可看到會動的節拍圖。",
+    "shareFallback": "無法存取剪貼簿，連結已放到網址列，請從那裡複製。",
+    "samples": "範例",
+    "sampleLoaded": "已載入範例 {{name}}",
+    "rowLimit": "線上版最多支援 {{limit}} 列，這份檔案有 {{count}} 列。完整規模請使用免費的桌面版。",
+    "readOnly": "線上版為唯讀預覽，編輯參數請使用桌面版。",
+    "exportTitle": "匯出是桌面版功能",
+    "exportBody": "MP4 跟隨播放影片、PDF 報告和 CSV 匯出都在免費的桌面版中提供，無需授權碼，完全離線。",
+    "banner": "想把這段演示放進方案裡？桌面版可匯出跟隨播放的 MP4 和 PDF 報告。",
+    "sharedFooter": "這是用 DYNMECH CycleView 分享的節拍圖。下載桌面版即可編輯並匯出。",
+    "dismiss": "關閉"
   }
 }

@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useProjectStore } from '@/stores/useProjectStore'
 import { usePreferencesStore } from '@/stores/usePreferencesStore'
 import { downloadBlob, exportToCSV } from '@/services/exportService'
+import { IS_ONLINE } from '@/lib/platform'
+import { DesktopOnlyExport } from '@/components/OnlineExtras'
 import { useUIStore } from '@/stores/useUIStore'
 import { useAnimationStore } from '@/stores/useAnimationStore'
 import { buildPdfReport } from '@/services/pdfExport'
@@ -68,6 +70,8 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
   })
 
   if (!isOpen) return null
+  // The online edition produces nothing downloadable; it points at the desktop app.
+  if (IS_ONLINE) return <DesktopOnlyExport onClose={onClose} />
 
   const videoSpeed = speed ?? (SPEED_CHOICES.includes(playbackSpeed) ? playbackSpeed : 1)
   const videoBaseZoom = followPlayback ? followBaseZoom : zoom

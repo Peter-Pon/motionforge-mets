@@ -6,6 +6,8 @@ import { useUIStore } from '@/stores/useUIStore'
 import { useAnimationStore } from '@/stores/useAnimationStore'
 import { computeActionStartTimes } from '@/lib/timingModel'
 import { hexToRgba } from '@/lib/canvasRenderer'
+import { IS_ONLINE } from '@/lib/platform'
+import { toast } from '@/components/ui/use-toast'
 import { ModuleData } from '@/types'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
@@ -107,6 +109,11 @@ export function ParameterTable() {
 
   // Handle cell double click to start editing
   const handleCellDoubleClick = (moduleId: string, field: keyof ModuleData, value: any) => {
+    // The online edition is a read-only preview.
+    if (IS_ONLINE) {
+      toast({ title: t('online.readOnly') })
+      return
+    }
     // Only allow editing certain fields
     if (['moduleName', 'actionDescription', 'startX', 'moveCount', 'duration', 'stage'].includes(field)) {
       setEditingCell({

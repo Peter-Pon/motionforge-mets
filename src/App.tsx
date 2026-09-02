@@ -8,7 +8,6 @@ import { FRAME_STEP_MS, useAnimationStore } from '@/stores/useAnimationStore'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 import { GridCanvas } from '@/components/Canvas/GridCanvas'
 import { ParameterTable } from '@/components/ParameterTable'
-import { ModuleData } from '@/types'
 import { FaPlay, FaPause, FaStop, FaRedo, FaCog, FaDownload } from 'react-icons/fa'
 import { ZoomIn, ZoomOut, Maximize, LocateFixed, FileUp, Loader2 } from 'lucide-react'
 import { useUIStore, MAX_ZOOM, MIN_ZOOM } from '@/stores/useUIStore'
@@ -26,10 +25,21 @@ import { HelpDialog } from '@/components/HelpDialog'
 import { UserGuideDialog } from '@/components/UserGuideDialog'
 import { DropdownMenu } from '@/components/DropdownMenu'
 import { SpeedSettingsDialog } from '@/components/SpeedSettingsDialog'
+import { IS_ONLINE, ONLINE_DISABLED_COMMANDS } from '@/lib/platform'
+import { readSharedCsv } from '@/lib/shareLink'
+import {
+  DownloadDesktopButton,
+  PlaybackEndBanner,
+  SampleGalleryButton,
+  ShareButton,
+  SharedFooter
+} from '@/components/OnlineExtras'
 
 function App() {
   const { t } = useTranslation()
-  const { handleImportCSV, isImporting } = useCSVImport()
+  const { handleImportCSV, importCSVText, isImporting } = useCSVImport()
+  // Online edition: opened from a share link (shows the footer prompt).
+  const [sharedMode, setSharedMode] = useState(false)
   const { project, createNewProject, updateModules } = useProjectStore()
   const { 
     isPlaying, 
@@ -48,7 +58,7 @@ function App() {
   } = useAnimationStore()
   const { ui, grid, updateUIPreferences } = usePreferencesStore()
   const { zoom, zoomIn, zoomOut, setZoom, resetZoom, followPlayback, toggleFollowPlayback } = useUIStore()
-  const { pushState, undo, redo, canUndo, canRedo } = useHistoryStore()
+  const { undo, redo } = useHistoryStore()
   const canvasContainerRef = useRef<HTMLDivElement>(null)
   // const animationRef = useRef<number | null>(null)
   const [calculatedTotalFrames, setCalculatedTotalFrames] = useState(0)
@@ -218,6 +228,20 @@ function App() {
     'user-guide': () => setUserGuideOpen(true),
     about: () => setAboutOpen(true)
   }
+  if (IS_ONLINE) {
+    for (const command of ONLINE_DISABLED_COMMANDS) delete commands[command]
+  }
+
+  // Online edition: a share link carries the CSV in the URL fragment.
+  const sharedImportDone = useRef(false)
+  useEffect(() => {
+    if (!IS_ONLINE || sharedImportDone.current) return
+    const csv = readSharedCsv()
+    if (!csv) return
+    sharedImportDone.current = true
+    setSharedMode(true)
+    importCSVText(csv, 'shared.csv')
+  }, [importCSVText])
 
   useKeyboardShortcuts(
     SHORTCUTS.flatMap(shortcut =>
@@ -290,7 +314,7 @@ function App() {
         <div className="flex-1 flex flex-col min-w-0 min-h-0">
           {/* Toolbar */}
           <div className="toolbar-area border-b px-4 py-2" onDoubleClick={handleToolbarDoubleClick}>
-            <div className="flex items-center justify-between no-drag">
+            <div className="flex flex-wrap items-center justify-between gap-y-2 no-drag">
               <div className="flex items-center gap-4">
                 <TooltipButton
                   className="p-2 text-sm border rounded hover:bg-accent disabled:opacity-50 transition-colors"
@@ -312,6 +336,16 @@ function App() {
                 >
                   <FaDownload />
                 </TooltipButton>
+                {IS_ONLINE && (
+                  <>
+                    <SampleGalleryButton
+                      onPick={(csv, name) => {
+                        importCSVText(csv, `${name}.csv`)
+                      }}
+                    />
+                    <ShareButton modules={project?.modules ?? []} />
+                  </>
+                )}
 
                 {/* Playback Controls */}
                 <div className="flex items-center gap-2 border-l pl-4">
@@ -402,13 +436,17 @@ function App() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <TooltipButton
-                  className="p-2 text-sm border rounded hover:bg-accent transition-colors"
-                  onClick={() => setPreferencesOpen(true)}
-                  tooltip={t('shortcuts.preferences')}
-                >
-                  <FaCog />
-                </TooltipButton>
+                {IS_ONLINE ? (
+                  <DownloadDesktopButton placement="toolbar" />
+                ) : (
+                  <TooltipButton
+                    className="p-2 text-sm border rounded hover:bg-accent transition-colors"
+                    onClick={() => setPreferencesOpen(true)}
+                    tooltip={t('shortcuts.preferences')}
+                  >
+                    <FaCog />
+                  </TooltipButton>
+                )}
                 <DropdownMenu 
                   onAbout={() => setAboutOpen(true)}
                   onShortcuts={() => setHelpOpen(true)}
@@ -420,8 +458,9 @@ function App() {
           </div>
           
           {/* Canvas */}
-          <div ref={canvasContainerRef} className="flex-1 min-h-0 bg-muted/20 overflow-hidden">
+          <div ref={canvasContainerRef} className="relative flex-1 min-h-0 bg-muted/20 overflow-hidden">
             <GridCanvas width={800} height={600} />
+            {IS_ONLINE && <PlaybackEndBanner />}
           </div>
           
           {/* Timeline Controls */}
@@ -464,8 +503,9 @@ function App() {
           </div>
         </div>
       </div>
+      {IS_ONLINE && sharedMode && <SharedFooter />}
       <Toaster />
-      <PreferencesDialog 
+      <PreferencesDialog
         isOpen={preferencesOpen} 
         onClose={() => setPreferencesOpen(false)} 
       />

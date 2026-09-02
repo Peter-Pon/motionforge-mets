@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaKeyboard } from 'react-icons/fa'
 import { displayKeys, SHORTCUTS } from '@/lib/shortcuts'
+import { IS_ONLINE, ONLINE_DISABLED_COMMANDS } from '@/lib/platform'
 
 const isMac = navigator.platform.includes('Mac')
 
@@ -24,6 +25,7 @@ export const ShortcutsHelp: React.FC = () => {
   const shortcuts = QUICK_COMMANDS
     .map(command => SHORTCUTS.find(s => s.command === command))
     .filter((s): s is NonNullable<typeof s> => Boolean(s && s.keys))
+    .filter(s => !(IS_ONLINE && ONLINE_DISABLED_COMMANDS.has(s.command)))
     .map(s => ({ key: localiseKeys(s.keys as string), description: t(s.labelKey) }))
 
   if (!isOpen) {

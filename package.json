@@ -5,8 +5,10 @@
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
+    "dev:web": "vite --config vite.web.config.ts --mode online",
     "start": "vite build && electron .",
     "build": "tsc && vite build && electron-builder",
+    "build:web": "tsc && vite build --config vite.web.config.ts --mode online",
     "preview": "vite preview",
     "electron": "electron .",
     "electron:dev": "vite",
@@ -69,6 +71,7 @@
     "immer": "^10.0.3",
     "lodash": "^4.17.21",
     "lucide-react": "^0.298.0",
+    "lz-string": "^1.5.0",
     "mp4-muxer": "^5.2.2",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useProjectStore } from '@/stores/useProjectStore'
 import { importCSVFile } from '@/services/csvImport'
 import { toast } from '@/components/ui/use-toast'
+import { IS_ONLINE, ONLINE_ROW_LIMIT } from '@/lib/platform'
 
 export function useCSVImport() {
   const { t } = useTranslation()
@@ -60,8 +61,15 @@ export function useCSVImport() {
     
     try {
       const result = await importCSVFile(file)
-      
-      if (result.success && result.data) {
+
+      if (result.success && result.data && IS_ONLINE && result.data.length > ONLINE_ROW_LIMIT) {
+        // The online edition is a preview; full-size projects are the desktop app's job.
+        toast({
+          variant: 'destructive',
+          title: t('error.importFailed'),
+          description: t('online.rowLimit', { limit: ONLINE_ROW_LIMIT, count: result.data.length })
+        })
+      } else if (result.success && result.data) {
         // Create new project if none exists
         if (!project) {
           createNewProject()
@@ -103,8 +111,14 @@ export function useCSVImport() {
     }
   }
 
+  /** Import CSV text that did not come from a file: a share link or a bundled sample. */
+  const importCSVText = async (csv: string, name: string) => {
+    await processCSVFile(new File([csv], name, { type: 'text/csv' }))
+  }
+
   return {
     handleImportCSV,
+    importCSVText,
     isImporting
   }
 }

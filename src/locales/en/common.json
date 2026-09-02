@@ -286,5 +286,20 @@
       "about": "The About page contains application version and developer information.",
       "support": "CycleView is a free tool and does not come with one-to-one technical support. Please consult this guide or visit dynmech.com."
     }
+  },
+  "online": {
+    "downloadDesktop": "Download desktop app",
+    "share": "Share link",
+    "shareCopied": "Link copied. Anyone who opens it sees the animated chart.",
+    "shareFallback": "Clipboard unavailable. The link is now in the address bar; copy it from there.",
+    "samples": "Samples",
+    "sampleLoaded": "Loaded sample {{name}}",
+    "rowLimit": "The online edition handles up to {{limit}} rows; this file has {{count}}. Use the free desktop app for full-size projects.",
+    "readOnly": "The online edition is a read-only preview. Edit parameters in the desktop app.",
+    "exportTitle": "Export is a desktop feature",
+    "exportBody": "The follow-playback MP4, the PDF report and CSV export are all in the free desktop app: no licence key, fully offline.",
+    "banner": "Want this in your proposal? The desktop app exports the follow-playback MP4 and a PDF report.",
+    "sharedFooter": "This chart was shared from DYNMECH CycleView. Download the desktop app to edit and export it.",
+    "dismiss": "Dismiss"
   }
 }

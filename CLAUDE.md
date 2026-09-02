@@ -154,3 +154,20 @@ check, cloud export) requires the EULA and privacy wording to change first.
 4. curl usage: Always use `--noproxy '*'` for internal network access
 5. i18n: All UI text must be internationalized, default language is zh-TW
 6. Branding: product is DYNMECH CycleView; keep the compat invariants in §5
+## 6. Online edition (cycleview_online)
+
+The web build is the same code with a build-time switch, not a fork:
+
+- `npm run build:web` / `npm run dev:web` use `vite.web.config.ts` (no Electron
+  plugin, output `dist-web/`) with `--mode online`, which loads `.env.online`
+  and sets `VITE_CYCLEVIEW_ONLINE=1`.
+- All gating reads `src/lib/platform.ts` (`IS_ONLINE`, `ONLINE_ROW_LIMIT`,
+  `desktopDownloadUrl`, `ONLINE_DISABLED_COMMANDS`). Online-only UI lives in
+  `src/components/OnlineExtras.tsx`; share links in `src/lib/shareLink.ts`.
+- The online edition is deliberately a **subset** that steers people to the
+  desktop download: read-only table, capped rows, exports replaced by a
+  download prompt, no preferences/undo/redo. Do not add output-producing
+  features to it. Its two extras are the sample gallery and share links (CSV
+  compressed into the URL fragment, which never reaches the server).
+- Deployment lives in the separate `cycleview_online` repository, which pulls
+  this one in as the `app/` git submodule and builds a static nginx image.

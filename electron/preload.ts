@@ -27,7 +27,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Return a cleanup function
     return () => ipcRenderer.removeListener('menu:command', handler)
   },
-  removeMenuCommand: (callback: (command: string) => void) => {
+  removeMenuCommand: () => {
     ipcRenderer.removeAllListeners('menu:command')
   },
   
@@ -60,7 +60,7 @@ declare global {
       toggleFullscreen: () => void
       isFullscreen: () => Promise<boolean>
       onMenuCommand: (callback: (command: string) => void) => (() => void)
-      removeMenuCommand: (callback: (command: string) => void) => void
+      removeMenuCommand: () => void
       exportPdf: (payload: { html: string; headerHtml: string; footerHtml: string; fileName: string })
         => Promise<{ success: boolean; canceled?: boolean; filePath?: string; error?: string }>
       setLanguage: (language: string) => void

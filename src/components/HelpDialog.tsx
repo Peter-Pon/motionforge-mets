@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { FaTimes } from 'react-icons/fa'
 import { displayKeys, SHORTCUT_CATEGORIES, SHORTCUTS } from '@/lib/shortcuts'
+import { IS_ONLINE, ONLINE_DISABLED_COMMANDS } from '@/lib/platform'
 
 interface HelpDialogProps {
   isOpen: boolean
@@ -25,7 +26,7 @@ export function HelpDialog({ isOpen, onClose }: HelpDialogProps) {
   // handler are built from, so this list is always what actually works.
   const categories = SHORTCUT_CATEGORIES.map(category => ({
     title: t(`help.categories.${category}`),
-    shortcuts: SHORTCUTS.filter(s => s.category === category && s.keys).map(s => ({
+    shortcuts: SHORTCUTS.filter(s => s.category === category && s.keys && !(IS_ONLINE && ONLINE_DISABLED_COMMANDS.has(s.command))).map(s => ({
       action: t(s.labelKey),
       keys: localiseKeys(s.keys as string)
     }))
