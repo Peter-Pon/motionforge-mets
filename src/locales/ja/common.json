@@ -1,21 +1,16 @@
 {
   "app": {
-    "title": "DynMech CycleView - 設備動作タクト可視化",
+    "title": "DYNMECH CycleView - 設備動作タクト可視化",
     "description": "設備動作タクト可視化ツール"
   },
   "menu": {
     "file": {
       "title": "ファイル",
-      "new": "新規プロジェクト",
-      "open": "プロジェクトを開く",
-      "save": "プロジェクトを保存",
-      "saveAs": "名前を付けて保存",
       "import": "CSVをインポート",
       "export": {
         "title": "エクスポート",
-        "excel": "Excelとしてエクスポート",
+        "csv": "CSVとしてエクスポート",
         "pdf": "PDFとしてエクスポート",
-        "png": "PNGとしてエクスポート",
         "mp4": "MP4としてエクスポート"
       },
       "quit": "終了"
@@ -24,29 +19,31 @@
       "title": "編集",
       "undo": "元に戻す",
       "redo": "やり直し",
-      "editParams": "パラメータを編集",
-      "clearCanvas": "キャンバスをクリア",
-      "resetAnimation": "アニメーションをリセット"
+      "preferences": "環境設定"
     },
     "view": {
       "title": "表示",
       "zoomIn": "拡大",
       "zoomOut": "縮小",
       "fitWindow": "ウィンドウに合わせる",
-      "showGrid": "グリッドを表示",
-      "showRuler": "ルーラーを表示",
-      "fullscreen": "フルスクリーン"
+      "actualSize": "実際のサイズ",
+      "fullscreen": "フルスクリーン",
+      "crosshair": "十字カーソル"
     },
     "animation": {
       "title": "アニメーション",
       "playPause": "再生/一時停止",
       "stop": "停止",
+      "reset": "アニメーションをリセット",
       "nextFrame": "次のフレーム",
       "prevFrame": "前のフレーム",
+      "speedUp": "速く",
+      "speedDown": "遅く",
       "speedSettings": "速度設定",
       "speedSettingsDescription": "アニメーション再生速度の調整",
       "currentSpeed": "現在の速度",
-      "loopPlayback": "ループ再生"
+      "loopPlayback": "ループ再生",
+      "followPlayback": "再生に追従"
     },
     "help": {
       "title": "ヘルプ",
@@ -54,7 +51,10 @@
       "userGuide": "ユーザーガイド",
       "shortcuts": "キーボードショートカット"
     },
-    "more": "その他のオプション"
+    "more": "その他のオプション",
+    "window": {
+      "title": "ウィンドウ"
+    }
   },
   "sidebar": {
     "parameters": "パラメータ",
@@ -68,7 +68,8 @@
     "items": "アイテム"
   },
   "toolbar": {
-    "importCSV": "CSVをインポート"
+    "importCSV": "CSVをインポート",
+    "importSuccess": "{{count}} 件のデータをインポートしました"
   },
   "timeline": {
     "play": "再生",
@@ -81,17 +82,21 @@
   },
   "shortcuts": {
     "playPause": "再生/一時停止 (スペース)",
-    "stop": "停止 (S)",
-    "reset": "リセット (R)",
+    "stop": "停止 (S / Esc)",
+    "reset": "リセット (R / Home)",
     "importCSV": "CSVをインポート (Ctrl+I)",
     "export": "エクスポート (Ctrl+E)",
     "preferences": "設定 (Ctrl+,)",
     "speedUp": "スピードアップ (+)",
     "speedDown": "スピードダウン (-)",
-    "loadTestData": "テストデータを読み込む (Ctrl+T)",
     "toggleCrosshair": "十字線を切り替え (C)",
     "toggleLoop": "ループ再生の切り替え (Ctrl+L)",
-    "changeLanguage": "言語を変更"
+    "changeLanguage": "言語を変更",
+    "zoomIn": "拡大 (Ctrl++)",
+    "zoomOut": "縮小 (Ctrl+-)",
+    "fitWindow": "ウィンドウに合わせる (Ctrl+0)",
+    "actualSize": "実際のサイズ (Ctrl+1)",
+    "followPlayback": "再生に追従 (F)"
   },
   "canvas": {
     "placeholder": "キャンバスはここに表示されます"
@@ -99,10 +104,7 @@
   "dialog": {
     "confirm": "確認",
     "cancel": "キャンセル",
-    "ok": "OK",
-    "save": "保存",
-    "discard": "破棄",
-    "unsavedChanges": "未保存の変更があります。保存しますか？"
+    "ok": "OK"
   },
   "error": {
     "fileNotFound": "ファイルが見つかりません",
@@ -155,11 +157,11 @@
     "cells": "マス"
   },
   "about": {
-    "title": "DynMech CycleView について",
+    "title": "DYNMECH CycleView について",
     "version": "バージョン {{version}}",
-    "description": "DynMech CycleView は、機械設備の各機構の動作タイミングと全体のタクトタイムを設計・検証・提示するための無償の可視化ツールです。",
-    "copyright": "著作権 © 2026 DynMech",
-    "developedBy": "DynMech 開発",
+    "description": "DYNMECH CycleView は、機械設備の各機構の動作タイミングと全体のタクトタイムを設計・検証・提示するための無償の可視化ツールです。",
+    "copyright": "著作権 © 2026 DYNMECH",
+    "developedBy": "DYNMECH 開発",
     "license": "本ソフトウェアは無償です。ライセンスキーは不要です。ソースコードは Apache License 2.0 で公開されています。"
   },
   "export": {
@@ -169,12 +171,6 @@
     "csv": {
       "description": "モジュールデータを CSV 形式で出力",
       "includeCalculated": "計算後の位置情報を含める"
-    },
-    "excel": {
-      "description": "詳細なモジュールデータを出力"
-    },
-    "png": {
-      "description": "現在のキャンバス表示を出力"
     },
     "pdf": {
       "description": "タクトチャートとパラメータ表を 1 つの PDF レポートとして出力",
@@ -199,15 +195,14 @@
       }
     },
     "mp4": {
-      "description": "タクトアニメーションを MP4 動画として出力",
+      "description": "チャートの追従再生動画（サイドバーなし）",
+      "resolution": "解像度",
+      "speed": "速度",
+      "zoomNote": "カメラは現在のズーム {{zoom}}% を基準に、必要なときだけ縮小します",
       "fps": "フレームレート",
+      "unsupported": "このシステムでは H.264 エンコードが利用できないため、MP4 出力は無効です",
       "rendering": "動画を描画中",
-      "cancel": "エクスポートを中止",
-      "unsupported": "このシステムでは H.264 エンコードが利用できないため、MP4 出力は無効です"
-    },
-    "project": {
-      "title": "プロジェクトファイル",
-      "description": "プロジェクト設定一式を出力"
+      "cancel": "エクスポートを中止"
     }
   },
   "help": {
@@ -217,7 +212,8 @@
       "file": "ファイル操作",
       "edit": "編集操作",
       "view": "表示操作",
-      "animation": "アニメーション制御"
+      "animation": "アニメーション制御",
+      "help": "ヘルプ"
     },
     "shortcuts": {
       "space": "スペースキー",
@@ -225,24 +221,26 @@
       "rightArrow": "→",
       "leftArrow": "←",
       "speedUp": "スピードアップ",
-      "speedDown": "スピードダウン"
+      "speedDown": "スピードダウン",
+      "home": "Home"
     },
     "tips": {
       "title": "使用のヒント",
       "tip1": "ツールバーをダブルクリックしてフルスクリーンモードを切り替えます",
-      "tip2": "CSVファイルをウィンドウにドラッグ＆ドロップして素早くインポート",
-      "tip3": "マウスホイールを使用してキャンバスをズーム",
-      "tip4": "Shiftを押しながらドラッグして複数のモジュールを選択"
-    }
+      "tip2": "パラメータ表のセルをダブルクリックすると編集できます",
+      "tip3": "Ctrl/Cmd を押しながらスクロールするとチャートをズームできます",
+      "tip4": "大きなチャートでは追従再生 (F) をオンにすると、動作中のモジュールが常に表示されます"
+    },
+    "inputNote": "表のセルを編集中はショートカットは無効です"
   },
   "userGuide": {
     "title": "ユーザーガイド",
     "introduction": "CycleView は機械設備の運動タイミングをシミュレートおよび分析するための専門的な機構運動タイミング可視化ツールです。このガイドでは、CycleView の機能を素早く開始し、フルに活用する方法を説明します。",
     "quickStart": {
       "title": "クイックスタート",
-      "step1": "「テストデータを読み込む」ボタンをクリックするか、CSVファイルをインポートします",
-      "step2": "再生コントロールボタンを使用してアニメーションを開始します",
-      "step3": "最適なエクスペリエンスのためにスピードと表示設定を調整します"
+      "step1": "インポートアイコン (Ctrl+I) をクリックして CSV ファイルを選択",
+      "step2": "スペースキーで再生。大きなチャートでは追従再生 (F) をオン",
+      "step3": "PDF レポートまたは追従再生の MP4 を書き出す (Ctrl+E)"
     },
     "sections": {
       "gettingStarted": {
@@ -250,35 +248,36 @@
         "step1": "CycleView アプリケーションを起動すると、パラメータテーブル、キャンバス、ツールバーを含むメインの作業インターフェースが表示されます。",
         "step2": "左側のパラメータテーブルには、モジュール名、アクション説明、タイミングパラメータなど、すべてのモジュールの詳細情報が表示されます。",
         "step3": "右側のキャンバスエリアでは、機構運動のタイミング関係が視覚的に表示されます。",
-        "step4": "ツールバーでは、インポート、再生コントロール、エクスポート、設定などの主要機能に素早くアクセスできます。"
+        "step4": "ツールバーにはインポート／エクスポート、再生（速度と追従を含む）、表示ズームがあり、右側に設定、ヘルプ、言語があります。"
       },
       "importingData": {
         "title": "データのインポート",
-        "csvFormat": "CSV形式のデータインポートをサポートしており、ファイルにはモジュール名、アクション説明、開始位置、セル数、継続時間などの列が含まれている必要があります。",
-        "requiredColumns": "必要な列：モジュール名、アクション説明、開始位置、セル数、継続時間、ステージ。",
-        "dragDrop": "CSVファイルをアプリケーションウィンドウに直接ドラッグ＆ドロップして素早くインポートできます。",
-        "testData": "「テストデータを読み込む」ボタンをクリックすると、テストと学習用のサンプルデータを読み込むことができます。"
+        "csvFormat": "ツールバーのアイコンまたは Ctrl+I で CSV をインポートします。列は module、action、startPosition、moveCount、duration。stage は任意です。",
+        "requiredColumns": "startPosition は開始セル、moveCount はセル数、duration はセルあたりのミリ秒です。旧ヘッダー intervalTime も受け付けます。",
+        "sequential": "同じモジュール内で startPosition が 0 の動作は前の動作の終了位置から始まるため、連続動作にオフセットを手入力する必要はありません。"
       },
       "animationControls": {
         "title": "アニメーション制御",
         "playPause": "再生/一時停止ボタンまたはスペースキーを使用してアニメーションの再生を制御します。",
-        "stop": "停止ボタンでアニメーションを停止し、現在の位置を維持します。",
-        "reset": "リセットボタンでアニメーションを開始位置に戻します。",
-        "speed": "スピードコントロールを使用してアニメーションの再生速度を調整できます。0.1x から 4x の速度範囲をサポートしています。"
+        "stop": "停止 (S または Esc) は再生を止めて先頭に戻します。",
+        "reset": "リセット (R または Home) は最初のフレームに戻ります。← と → で 1 フレームずつ移動します。",
+        "speed": "速度は 0.1x から 4x まで、ツールバーのセレクタまたは + / - で変更できます。ループ (Ctrl+L) は連続再生します。",
+        "follow": "追従再生 (F) はキャンバスを自動でスクロール・ズームし、動作中のモジュールを常に表示します。ステージ列は各動作の進捗を反映します。",
+        "view": "Ctrl++ / Ctrl+- または Ctrl+ホイールでズーム、Ctrl+0 でウィンドウに合わせ、Ctrl+1 で実際のサイズに戻します。表の行はチャートに合わせて拡縮します。"
       },
       "visualization": {
         "title": "可視化機能",
         "modules": "各モジュールは異なる色のバーで表示され、長さは実行時間を表しています。",
-        "stages": "異なるステージのアクションは異なる色調で表示され、区別しやすくなっています。",
+        "stages": "表のステージ列はリアルタイムに塗られます。動作ごとに 1 本のバーがあり、その動作が終わると満たされます。",
         "timing": "タイミング関係は水平位置と長さで表現され、アクションの実行順序と重複関係を明確に示しています。",
         "colors": "カラーコーディングにより、異なるモジュールとステージのアクションを素早く識別できます。"
       },
       "exporting": {
         "title": "エクスポート機能",
-        "formats": "複数のエクスポート形式をサポート：Excel、PDF、PNG、MP4。",
-        "excel": "Excel エクスポートには、完全なパラメータテーブルと計算結果が含まれます。",
+        "formats": "エクスポート形式：CSV、PDF、MP4。",
+        "csv": "CSV エクスポートはパラメータ表を書き出します。連続動作の計算済み開始位置を含めることもできます。",
         "pdf": "PDF エクスポートは高品質なレポート形式を提供します。",
-        "images": "PNG エクスポートで静止画像を生成し、MP4 エクスポートでアニメーション動画を生成できます。"
+        "video": "MP4 エクスポートは追従再生を動画として記録します。カメラが自動でスクロール・ズームし、動作中のモジュールを常に画面内に収めます。"
       }
     },
     "additionalHelp": {

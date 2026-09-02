@@ -4,19 +4,23 @@ import { Toaster } from '@/components/ui/toaster'
 import { LanguageSelector } from '@/components/LanguageSelector'
 import { useCSVImport } from '@/hooks/useCSVImport'
 import { useProjectStore } from '@/stores/useProjectStore'
-import { useAnimationStore } from '@/stores/useAnimationStore'
+import { FRAME_STEP_MS, useAnimationStore } from '@/stores/useAnimationStore'
 import { useHistoryStore } from '@/stores/useHistoryStore'
 import { GridCanvas } from '@/components/Canvas/GridCanvas'
 import { ParameterTable } from '@/components/ParameterTable'
 import { ModuleData } from '@/types'
 import { FaPlay, FaPause, FaStop, FaRedo, FaCog, FaDownload } from 'react-icons/fa'
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, FileUp, Loader2 } from 'lucide-react'
+import { useUIStore, MAX_ZOOM, MIN_ZOOM } from '@/stores/useUIStore'
+import { computeContentSize } from '@/lib/canvasRenderer'
 import { PreferencesDialog } from '@/components/PreferencesDialog'
 import { ExportDialog } from '@/components/ExportDialog'
 import { computeTotalDurationMs } from '@/lib/timingModel'
 import { ShortcutsHelp } from '@/components/ShortcutsHelp'
 import { TooltipButton } from '@/components/ui/tooltip-button'
 import { usePreferencesStore } from '@/stores/usePreferencesStore'
-import { useKeyboardShortcuts, COMMON_SHORTCUTS } from '@/hooks/useKeyboardShortcuts'
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts'
+import { SHORTCUTS } from '@/lib/shortcuts'
 import { AboutDialog } from '@/components/AboutDialog'
 import { HelpDialog } from '@/components/HelpDialog'
 import { UserGuideDialog } from '@/components/UserGuideDialog'
@@ -42,7 +46,8 @@ function App() {
     previousFrame,
     toggleLoop
   } = useAnimationStore()
-  const { ui, updateUIPreferences } = usePreferencesStore()
+  const { ui, grid, updateUIPreferences } = usePreferencesStore()
+  const { zoom, zoomIn, zoomOut, setZoom, resetZoom, followPlayback, toggleFollowPlayback } = useUIStore()
   const { pushState, undo, redo, canUndo, canRedo } = useHistoryStore()
   const canvasContainerRef = useRef<HTMLDivElement>(null)
   // const animationRef = useRef<number | null>(null)
@@ -93,11 +98,32 @@ function App() {
     stop()
   }
 
-  // Fullscreen toggle function
-  const handleToolbarDoubleClick = () => {
-    if (window.electronAPI && window.electronAPI.toggleFullscreen) {
+  // Fullscreen toggle: the native window in Electron, the document elsewhere.
+  const toggleFullscreen = () => {
+    if (window.electronAPI?.toggleFullscreen) {
       window.electronAPI.toggleFullscreen()
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen()
+    } else {
+      document.documentElement.requestFullscreen?.()
     }
+  }
+
+  const handleToolbarDoubleClick = toggleFullscreen
+
+  // View: zoom so the whole chart is visible. The content size is measured
+  // at zoom 1 and compared with the canvas viewport; small projects are
+  // allowed to grow but not past 2x, where the cells stop looking like a chart.
+  const fitToWindow = () => {
+    const container = canvasContainerRef.current
+    if (!container) return
+    const content = computeContentSize(project?.modules ?? [], grid.cellWidth, grid.cellHeight)
+    const margin = 16
+    const fit = Math.min(
+      (container.clientWidth - margin) / content.width,
+      (container.clientHeight - margin) / content.height
+    )
+    setZoom(Math.min(2, fit))
   }
 
   // Timeline drag functions
@@ -163,210 +189,60 @@ function App() {
     }
   }
 
-  // Load test data function
-  const loadTestData = () => {
-    const testModules: ModuleData[] = [
-      {
-        id: '1',
-        moduleName: 'Feeder_1',
-        actionDescription: 'material_loading',
-        startX: 0,
-        moveCount: 25,
-        duration: 100,
-        stage: 'A',
-        color: '#3b82f6'
-      },
-      {
-        id: '2',
-        moduleName: 'Feeder_1',
-        actionDescription: 'vibration_control',
-        startX: 0, // Sequential action (startX <= 0)
-        moveCount: 20,
-        duration: 120,
-        stage: 'A',
-        color: '#3b82f6',
-        isSequentialAction: true,
-        calculatedStartX: 25 // Will be auto-calculated
-      },
-      {
-        id: '3',
-        moduleName: 'Feeder_1',
-        actionDescription: 'flow_regulation',
-        startX: -1, // Sequential action (startX <= 0)
-        moveCount: 15,
-        duration: 150,
-        stage: 'B',
-        color: '#3b82f6',
-        isSequentialAction: true,
-        calculatedStartX: 45 // Will be auto-calculated
-      },
-      {
-        id: '4',
-        moduleName: 'Conveyor_1',
-        actionDescription: 'belt_operation',
-        startX: 10,
-        moveCount: 30,
-        duration: 100,
-        stage: 'A',
-        color: '#10b981'
-      },
-      {
-        id: '5',
-        moduleName: 'Conveyor_1',
-        actionDescription: 'speed_control',
-        startX: 0, // Sequential action
-        moveCount: 25,
-        duration: 110,
-        stage: 'B',
-        color: '#10b981',
-        isSequentialAction: true,
-        calculatedStartX: 40 // Will be auto-calculated
-      }
-    ]
-    updateModules(testModules)
-    
-    // Force re-render after data update
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'))
-    }, 50)
+  // Every shortcut comes from the registry (lib/shortcuts.ts); this one command
+  // table serves both the native menu (over IPC) and the key handler, so the
+  // menu, the keys and the help dialog cannot disagree.
+  const commands: Record<string, () => void> = {
+    'import-csv': () => { if (!isImporting) handleImportCSV() },
+    export: () => { if (project && project.modules.length > 0) setExportOpen(true) },
+    undo: handleUndo,
+    redo: handleRedo,
+    preferences: () => setPreferencesOpen(true),
+    'zoom-in': zoomIn,
+    'zoom-out': zoomOut,
+    'fit-window': fitToWindow,
+    'actual-size': resetZoom,
+    'toggle-crosshair': toggleCrosshair,
+    'toggle-fullscreen': toggleFullscreen,
+    'play-pause': togglePlayPause,
+    stop: stopAnimation,
+    'reset-animation': resetAnimation,
+    'next-frame': nextFrame,
+    'prev-frame': previousFrame,
+    'speed-up': speedUp,
+    'speed-down': speedDown,
+    'speed-settings': () => setSpeedSettingsOpen(true),
+    'toggle-loop': toggleLoop,
+    'toggle-follow': toggleFollowPlayback,
+    shortcuts: () => setHelpOpen(true),
+    'user-guide': () => setUserGuideOpen(true),
+    about: () => setAboutOpen(true)
   }
 
-  // Keyboard shortcuts configuration
-  useKeyboardShortcuts([
-    {
-      ...COMMON_SHORTCUTS.PLAY_PAUSE,
-      action: togglePlayPause
-    },
-    {
-      ...COMMON_SHORTCUTS.STOP,
-      action: stopAnimation
-    },
-    {
-      ...COMMON_SHORTCUTS.RESET,
-      action: resetAnimation
-    },
-    {
-      ...COMMON_SHORTCUTS.IMPORT_CSV,
-      action: () => !isImporting && handleImportCSV()
-    },
-    {
-      ...COMMON_SHORTCUTS.EXPORT,
-      action: () => project && project.modules.length > 0 && setExportOpen(true)
-    },
-    {
-      ...COMMON_SHORTCUTS.PREFERENCES,
-      action: () => setPreferencesOpen(true)
-    },
-    {
-      ...COMMON_SHORTCUTS.SPEED_UP,
-      action: speedUp
-    },
-    {
-      ...COMMON_SHORTCUTS.SPEED_DOWN,
-      action: speedDown
-    },
-    {
-      ...COMMON_SHORTCUTS.LOAD_TEST_DATA,
-      action: loadTestData
-    },
-    {
-      ...COMMON_SHORTCUTS.TOGGLE_CROSSHAIR,
-      action: toggleCrosshair
-    },
-    {
-      key: 'z',
-      ctrl: true,
-      action: handleUndo,
-      description: 'Undo'
-    },
-    {
-      key: 'z',
-      ctrl: true,
-      shift: true,
-      action: handleRedo,
-      description: 'Redo'
-    },
-    {
-      key: 'ArrowRight',
-      action: nextFrame,
-      description: 'Next Frame'
-    },
-    {
-      key: 'ArrowLeft',
-      action: previousFrame,
-      description: 'Previous Frame'
-    },
-    {
-      key: 'l',
-      action: toggleLoop,
-      description: 'Toggle Loop'
-    }
-  ])
+  useKeyboardShortcuts(
+    SHORTCUTS.flatMap(shortcut =>
+      (shortcut.bindings ?? []).map(binding => ({
+        ...binding,
+        action: commands[shortcut.command],
+        description: shortcut.command
+      }))
+    )
+  )
 
+  // Keep the native menu's checkboxes in step with the renderer.
   useEffect(() => {
-    // Listen for menu commands
-    if (window.electronAPI) {
-      const handleMenuCommand = (command: string) => {
-        // Handle menu commands here
-        switch (command) {
-          case 'import-csv':
-            handleImportCSV()
-            break
-          case 'about':
-            setAboutOpen(true)
-            break
-          case 'shortcuts':
-            setHelpOpen(true)
-            break
-          case 'user-guide':
-            setUserGuideOpen(true)
-            break
-          case 'preferences':
-            setPreferencesOpen(true)
-            break
-          case 'export-excel':
-          case 'export-pdf':
-          case 'export-png':
-          case 'export-mp4':
-            setExportOpen(true)
-            break
-          case 'undo':
-            handleUndo()
-            break
-          case 'redo':
-            handleRedo()
-            break
-          case 'reset-animation':
-            resetAnimation()
-            break
-          case 'play-pause':
-            togglePlayPause()
-            break
-          case 'stop':
-            stopAnimation()
-            break
-          case 'next-frame':
-            nextFrame()
-            break
-          case 'prev-frame':
-            previousFrame()
-            break
-          case 'toggle-loop':
-            toggleLoop()
-            break
-          case 'speed-settings':
-            setSpeedSettingsOpen(true)
-            break
-          // Add more cases as needed
-        }
-      }
-      
-      const cleanup = window.electronAPI.onMenuCommand(handleMenuCommand)
-      
-      // Cleanup function to remove the listener
-      return cleanup
-    }
-  }, [handleImportCSV, handleUndo, handleRedo, resetAnimation, togglePlayPause, stopAnimation, nextFrame, previousFrame, toggleLoop])
+    window.electronAPI?.setMenuState?.({ loop, follow: followPlayback, crosshair: ui.crosshairEnabled })
+  }, [loop, followPlayback, ui.crosshairEnabled])
+
+  // Menu commands arrive over IPC and go through the same table. The table is
+  // rebuilt every render, so the listener is re-attached every render too;
+  // that is cheap and keeps the closures fresh.
+  useEffect(() => {
+    if (!window.electronAPI?.onMenuCommand) return
+    return window.electronAPI.onMenuCommand((command: string) => {
+      commands[command]?.()
+    })
+  }, [commands])
 
   useEffect(() => {
     // Update document title with localized text
@@ -392,7 +268,7 @@ function App() {
     if (isPlaying && project && project.modules.length > 0) {
       const interval = setInterval(() => {
         nextFrame()
-      }, 16.67 / speed) // Adjust interval based on speed
+      }, FRAME_STEP_MS / speed) // Adjust interval based on speed
       
       return () => {
         clearInterval(interval)
@@ -402,36 +278,41 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      <div className="flex-1 flex">
+      <div className="flex-1 flex min-h-0">
         {/* Sidebar - Fixed width, always visible */}
         <div className="w-80 border-r bg-muted/50 overflow-hidden flex flex-col flex-shrink-0">
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 min-h-0 overflow-hidden">
             <ParameterTable />
           </div>
         </div>
         
         {/* Main Canvas Area */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0">
           {/* Toolbar */}
           <div className="toolbar-area border-b px-4 py-2" onDoubleClick={handleToolbarDoubleClick}>
             <div className="flex items-center justify-between no-drag">
               <div className="flex items-center gap-4">
-                <TooltipButton 
-                  className="px-3 py-1 text-sm border rounded hover:bg-accent disabled:opacity-50"
+                <TooltipButton
+                  className="p-2 text-sm border rounded hover:bg-accent disabled:opacity-50 transition-colors"
                   onClick={handleImportCSV}
                   disabled={isImporting}
                   tooltip={t('shortcuts.importCSV')}
+                  aria-label={t('toolbar.importCSV')}
                 >
-                  {isImporting ? 'Importing...' : t('toolbar.importCSV')}
+                  {isImporting
+                    ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    : <FileUp className="h-3.5 w-3.5" />}
                 </TooltipButton>
-                <TooltipButton 
-                  className="px-3 py-1 text-sm border rounded hover:bg-accent"
-                  onClick={loadTestData}
-                  tooltip={t('shortcuts.loadTestData')}
+                <TooltipButton
+                  className="p-2 text-sm border rounded hover:bg-accent disabled:opacity-50 transition-colors"
+                  onClick={() => setExportOpen(true)}
+                  disabled={!project || project.modules.length === 0}
+                  tooltip={t('shortcuts.export')}
+                  aria-label={t('menu.file.export.title')}
                 >
-                  Load Test Data
+                  <FaDownload />
                 </TooltipButton>
-                
+
                 {/* Playback Controls */}
                 <div className="flex items-center gap-2 border-l pl-4">
                   <TooltipButton
@@ -458,17 +339,69 @@ function App() {
                   >
                     <FaRedo />
                   </TooltipButton>
+                  <TooltipButton
+                    className={`p-2 text-sm border rounded transition-colors ${followPlayback ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'hover:bg-accent'}`}
+                    onClick={toggleFollowPlayback}
+                    tooltip={t('shortcuts.followPlayback')}
+                    aria-pressed={followPlayback}
+                  >
+                    <LocateFixed className="h-3.5 w-3.5" />
+                  </TooltipButton>
+                  <select
+                    className="h-8 text-sm border rounded px-1.5 bg-background hover:bg-accent transition-colors"
+                    value={speed}
+                    onChange={(e) => setSpeed(parseFloat(e.target.value))}
+                    title={`${t('timeline.speed')}: ${t('shortcuts.speedUp')} / ${t('shortcuts.speedDown')}`}
+                    aria-label={t('timeline.speed')}
+                  >
+                    <option value="0.1">0.1x</option>
+                    <option value="0.25">0.25x</option>
+                    <option value="0.5">0.5x</option>
+                    <option value="1">1x</option>
+                    <option value="2">2x</option>
+                    <option value="4">4x</option>
+                  </select>
+                </div>
+
+                {/* View Controls */}
+                <div className="flex items-center gap-2 border-l pl-4">
+                  <TooltipButton
+                    className="p-2 text-sm border rounded hover:bg-accent disabled:opacity-50 transition-colors"
+                    onClick={zoomOut}
+                    disabled={zoom <= MIN_ZOOM}
+                    tooltip={t('shortcuts.zoomOut')}
+                  >
+                    <ZoomOut className="h-3.5 w-3.5" />
+                  </TooltipButton>
+                  <span className="w-11 text-center text-xs tabular-nums text-muted-foreground select-none">
+                    {Math.round(zoom * 100)}%
+                  </span>
+                  <TooltipButton
+                    className="p-2 text-sm border rounded hover:bg-accent disabled:opacity-50 transition-colors"
+                    onClick={zoomIn}
+                    disabled={zoom >= MAX_ZOOM}
+                    tooltip={t('shortcuts.zoomIn')}
+                  >
+                    <ZoomIn className="h-3.5 w-3.5" />
+                  </TooltipButton>
+                  <TooltipButton
+                    className="p-2 text-sm border rounded hover:bg-accent transition-colors"
+                    onClick={fitToWindow}
+                    tooltip={t('shortcuts.fitWindow')}
+                  >
+                    <Maximize className="h-3.5 w-3.5" />
+                  </TooltipButton>
+                  <TooltipButton
+                    className="px-2 py-1.5 text-xs font-medium border rounded hover:bg-accent disabled:opacity-50 transition-colors tabular-nums"
+                    onClick={resetZoom}
+                    disabled={zoom === 1}
+                    tooltip={t('shortcuts.actualSize')}
+                  >
+                    1:1
+                  </TooltipButton>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <TooltipButton
-                  className="p-2 text-sm border rounded hover:bg-accent transition-colors"
-                  onClick={() => setExportOpen(true)}
-                  disabled={!project || project.modules.length === 0}
-                  tooltip={t('shortcuts.export')}
-                >
-                  <FaDownload />
-                </TooltipButton>
                 <TooltipButton
                   className="p-2 text-sm border rounded hover:bg-accent transition-colors"
                   onClick={() => setPreferencesOpen(true)}
@@ -487,7 +420,7 @@ function App() {
           </div>
           
           {/* Canvas */}
-          <div ref={canvasContainerRef} className="flex-1 bg-muted/20 overflow-hidden">
+          <div ref={canvasContainerRef} className="flex-1 min-h-0 bg-muted/20 overflow-hidden">
             <GridCanvas width={800} height={600} />
           </div>
           
@@ -519,22 +452,6 @@ function App() {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm text-muted-foreground">{t('timeline.speed')}:</label>
-                  <select 
-                    className="text-sm border rounded px-2 py-0.5"
-                    value={speed}
-                    onChange={(e) => setSpeed(parseFloat(e.target.value))}
-                    title={`${t('shortcuts.speedUp')} / ${t('shortcuts.speedDown')}`}
-                  >
-                    <option value="0.1">0.1x</option>
-                    <option value="0.25">0.25x</option>
-                    <option value="0.5">0.5x</option>
-                    <option value="1">1x</option>
-                    <option value="2">2x</option>
-                    <option value="4">4x</option>
-                  </select>
-                </div>
                 <TooltipButton
                   className={`px-2 py-0.5 text-sm border rounded transition-colors ${loop ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'}`}
                   onClick={toggleLoop}

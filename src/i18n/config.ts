@@ -7,6 +7,7 @@ import zhTW from '../locales/zh-TW/common.json'
 import zhCN from '../locales/zh-CN/common.json'
 import en from '../locales/en/common.json'
 import ja from '../locales/ja/common.json'
+import ko from '../locales/ko/common.json'
 
 export const defaultNS = 'common'
 export const resources = {
@@ -21,6 +22,9 @@ export const resources = {
   },
   ja: {
     common: ja
+  },
+  ko: {
+    common: ko
   }
 } as const
 
@@ -44,3 +48,8 @@ i18n
   })
 
 export default i18n
+// Keep the native application menu in the same language as the UI. The main
+// process cannot read localStorage, so the renderer tells it.
+const syncMenuLanguage = (language: string) => window.electronAPI?.setLanguage?.(language)
+syncMenuLanguage(i18n.language)
+i18n.on('languageChanged', syncMenuLanguage)

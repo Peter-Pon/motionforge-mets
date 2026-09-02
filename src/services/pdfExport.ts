@@ -160,7 +160,8 @@ export function buildPdfReport(input: PdfReportInput): PdfReportDocument {
     margin: 0;
     padding: 9mm 0 7mm;
     font: 10pt/1.5 "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB",
-          "Noto Sans CJK SC", "Segoe UI", system-ui, sans-serif;
+          "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans CJK SC", "Noto Sans CJK KR", "Segoe UI",
+          system-ui, sans-serif;
     color: #12161B;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -193,7 +194,7 @@ export function buildPdfReport(input: PdfReportInput): PdfReportDocument {
 </head>
 <body>
   <div class="run-header"><span>${escapeHtml(projectName)}</span><span>${meta}</span></div>
-  <div class="run-footer"><span>DynMech CycleView · dynmech.com</span><span></span></div>
+  <div class="run-footer"><span>DYNMECH CycleView · dynmech.com</span><span></span></div>
 
   <section class="chart-page">
     <h2>${escapeHtml(labels.chartPage)}</h2>

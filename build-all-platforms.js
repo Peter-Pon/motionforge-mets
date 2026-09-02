@@ -2,7 +2,7 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('=== DynMech CycleView Cross-Platform Build Script ===');
+console.log('=== DYNMECH CycleView Cross-Platform Build Script ===');
 
 // Check if we have the required files
 const requiredFiles = [

@@ -1,7 +1,45 @@
 import { Menu, MenuItemConstructorOptions, BrowserWindow, app } from 'electron'
+import { i18n } from './i18n'
+import { MenuState, SHORTCUTS, ShortcutCategory } from '../src/lib/shortcuts'
 
-export function createMenu(mainWindow: BrowserWindow): Menu {
+/**
+ * Application menu, generated from the shortcut registry (src/lib/shortcuts.ts)
+ * so every keyboard shortcut in the app appears here with its key, and the
+ * menu can never drift from what the renderer actually binds. Labels come
+ * from the same locale files the renderer uses; main.ts rebuilds the menu on
+ * language change and whenever a checkbox flag changes in the renderer.
+ *
+ * Single-key shortcuts have no accelerator (they would fire inside text
+ * fields), so their key is shown in the label instead.
+ */
+export function createMenu(mainWindow: BrowserWindow, state: MenuState): Menu {
   const isMac = process.platform === 'darwin'
+  const t = (key: string) => i18n.t(key)
+  const send = (command: string) => () => mainWindow.webContents.send('menu:command', command)
+
+  const itemsFor = (category: ShortcutCategory): MenuItemConstructorOptions[] =>
+    SHORTCUTS.filter(shortcut => shortcut.category === category).flatMap(shortcut => {
+      const items: MenuItemConstructorOptions[] = []
+      if (shortcut.separatorBefore) items.push({ type: 'separator' })
+
+      if (shortcut.command === 'toggle-fullscreen') {
+        // Electron's own role: correct accelerator and behaviour per platform.
+        items.push({ role: 'togglefullscreen' })
+        return items
+      }
+
+      const label = shortcut.accelerator || !shortcut.keys
+        ? t(shortcut.labelKey)
+        : `${t(shortcut.labelKey)}  (${shortcut.keys})`
+      const item: MenuItemConstructorOptions = { label, click: send(shortcut.command) }
+      if (shortcut.accelerator) item.accelerator = shortcut.accelerator
+      if (shortcut.checkbox) {
+        item.type = 'checkbox'
+        item.checked = state[shortcut.checkbox]
+      }
+      items.push(item)
+      return items
+    })
 
   const template: MenuItemConstructorOptions[] = [
     // App menu (macOS only)
@@ -19,141 +57,28 @@ export function createMenu(mainWindow: BrowserWindow): Menu {
         { role: 'quit' as const }
       ]
     }] : []),
-    
-    // File menu
+
     {
-      label: 'File',
+      label: t('menu.file.title'),
       submenu: [
-        {
-          label: 'Import CSV',
-          accelerator: 'CmdOrCtrl+Shift+O',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'import-csv')
-          }
-        },
-        { type: 'separator' },
-        {
-          label: 'Export',
-          submenu: [
-            {
-              label: 'Export as Excel',
-              accelerator: 'CmdOrCtrl+Shift+E',
-              click: () => {
-                mainWindow.webContents.send('menu:command', 'export-excel')
-              }
-            },
-            {
-              label: 'Export as PDF',
-              accelerator: 'CmdOrCtrl+Shift+P',
-              click: () => {
-                mainWindow.webContents.send('menu:command', 'export-pdf')
-              }
-            },
-            {
-              label: 'Export as PNG',
-              accelerator: 'CmdOrCtrl+Shift+I',
-              click: () => {
-                mainWindow.webContents.send('menu:command', 'export-png')
-              }
-            },
-            {
-              label: 'Export as MP4',
-              accelerator: 'CmdOrCtrl+Shift+M',
-              click: () => {
-                mainWindow.webContents.send('menu:command', 'export-mp4')
-              }
-            }
-          ]
-        },
-        { type: 'separator' },
-        ...(isMac ? [] : [{ role: 'quit' as const }])
+        ...itemsFor('file'),
+        ...(isMac ? [] : [{ type: 'separator' as const }, { role: 'quit' as const }])
       ]
     },
-    
-    // Edit menu
     {
-      label: 'Edit',
-      submenu: [
-        {
-          label: 'Undo',
-          accelerator: 'CmdOrCtrl+Z',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'undo')
-          }
-        },
-        {
-          label: 'Redo',
-          accelerator: 'CmdOrCtrl+Shift+Z',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'redo')
-          }
-        }
-      ]
+      label: t('menu.edit.title'),
+      submenu: itemsFor('edit')
     },
-    
-    // Animation menu
     {
-      label: 'Animation',
-      submenu: [
-        {
-          label: 'Play/Pause',
-          accelerator: 'Space',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'play-pause')
-          }
-        },
-        {
-          label: 'Stop',
-          accelerator: 'Escape',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'stop')
-          }
-        },
-        {
-          label: 'Reset Animation',
-          accelerator: 'Home',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'reset-animation')
-          }
-        },
-        { type: 'separator' },
-        {
-          label: 'Next Frame',
-          accelerator: 'Right',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'next-frame')
-          }
-        },
-        {
-          label: 'Previous Frame',
-          accelerator: 'Left',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'prev-frame')
-          }
-        },
-        { type: 'separator' },
-        {
-          label: 'Speed Settings',
-          accelerator: 'CmdOrCtrl+Shift+S',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'speed-settings')
-          }
-        },
-        {
-          label: 'Loop Playback',
-          accelerator: 'CmdOrCtrl+L',
-          type: 'checkbox',
-          checked: false,
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'toggle-loop')
-          }
-        }
-      ]
+      label: t('menu.view.title'),
+      submenu: itemsFor('view')
     },
-    
-    // Window menu
     {
-      label: 'Window',
+      label: t('menu.animation.title'),
+      submenu: itemsFor('animation')
+    },
+    {
+      label: t('menu.window.title'),
       submenu: [
         { role: 'minimize' },
         { role: 'close' },
@@ -165,30 +90,9 @@ export function createMenu(mainWindow: BrowserWindow): Menu {
         ] : [])
       ]
     },
-    
-    // Help menu
     {
-      label: 'Help',
-      submenu: [
-        {
-          label: 'About CycleView',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'about')
-          }
-        },
-        {
-          label: 'User Guide',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'user-guide')
-          }
-        },
-        {
-          label: 'Keyboard Shortcuts',
-          click: () => {
-            mainWindow.webContents.send('menu:command', 'shortcuts')
-          }
-        }
-      ]
+      label: t('menu.help.title'),
+      submenu: itemsFor('help')
     }
   ]
 

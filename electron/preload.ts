@@ -4,7 +4,6 @@ import { contextBridge, ipcRenderer } from 'electron'
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('electronAPI', {
   openFile: () => ipcRenderer.invoke('dialog:openFile'),
-  openProject: () => ipcRenderer.invoke('dialog:openProject'),
   saveFile: (options: any) => ipcRenderer.invoke('dialog:saveFile', options),
   
   // Platform information
@@ -36,6 +35,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
   exportPdf: (payload: { html: string; headerHtml: string; footerHtml: string; fileName: string }) =>
     ipcRenderer.invoke('pdf:export', payload),
 
+  // UI language, so the application menu can follow the renderer
+  setLanguage: (language: string) => ipcRenderer.send('i18n:set-language', language),
+  // Checkbox flags (loop / follow / crosshair) the menu mirrors
+  setMenuState: (state: { loop: boolean; follow: boolean; crosshair: boolean }) =>
+    ipcRenderer.send('menu:set-state', state),
+
   // App info
   getAppVersion: () => ipcRenderer.invoke('app:get-version')
 })
@@ -45,7 +50,6 @@ declare global {
   interface Window {
     electronAPI: {
       openFile: () => Promise<Electron.OpenDialogReturnValue>
-      openProject: () => Promise<Electron.OpenDialogReturnValue>
       saveFile: (options: any) => Promise<Electron.SaveDialogReturnValue>
       platform: NodeJS.Platform
       readFile: (filePath: string) => Promise<{ success: boolean; data?: string; error?: string }>
@@ -59,6 +63,8 @@ declare global {
       removeMenuCommand: (callback: (command: string) => void) => void
       exportPdf: (payload: { html: string; headerHtml: string; footerHtml: string; fileName: string })
         => Promise<{ success: boolean; canceled?: boolean; filePath?: string; error?: string }>
+      setLanguage: (language: string) => void
+      setMenuState: (state: { loop: boolean; follow: boolean; crosshair: boolean }) => void
       getAppVersion: () => Promise<string>
     }
   }

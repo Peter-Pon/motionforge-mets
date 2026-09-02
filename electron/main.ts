@@ -1,13 +1,18 @@
 import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron'
 import { join } from 'path'
 import { createMenu } from './menu'
+import { i18n } from './i18n'
+import { MenuState } from '../src/lib/shortcuts'
+
+// Checkbox flags the renderer owns; mirrored into the menu on every change.
+let menuState: MenuState = { loop: false, follow: false, crosshair: false }
 
 let mainWindow: BrowserWindow | null
 let splashWindow: BrowserWindow | null = null
 let splashShownAt = 0
 
 // The splash is authored at 1120x600 (2x) and shown at logical size, matching
-// the DynMech Motion splash card.
+// the DYNMECH Motion splash card.
 const SPLASH_WIDTH = 560
 const SPLASH_HEIGHT = 300
 // Below this the card just flickers; hold it so the brand actually registers.
@@ -19,19 +24,22 @@ const SPLASH_MAX_MS = 12000
  * Splash language. The renderer owns the UI language (localStorage), which the
  * main process cannot read before the window exists, so the card follows the
  * OS locale — the same four variants Motion ships, English for anything else.
+ * The menu starts from the same guess and is rebuilt once the renderer reports
+ * its real language (see the i18n:set-language handler).
  */
 function splashLanguage(): string {
-  const locale = app.getLocale().toLowerCase()
-  if (locale.startsWith('zh')) {
-    return /(^|-)(tw|hk|mo|hant)(-|$)/.test(locale) ? 'zh-TW' : 'zh-CN'
+  return i18n.getLanguage()
+}
+
+function applyMenu() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    Menu.setApplicationMenu(createMenu(mainWindow, menuState))
   }
-  if (locale.startsWith('ja')) return 'ja'
-  return 'en'
 }
 
 // package.json "name" is the npm id; the macOS application menu and the
 // About role should read the product name in dev as well as when packaged.
-app.setName('DynMech CycleView')
+app.setName('DYNMECH CycleView')
 
 function createSplash() {
   splashWindow = new BrowserWindow({
@@ -79,7 +87,7 @@ function createWindow() {
     },
     icon: join(__dirname, '../assets/icon.png'),
     titleBarStyle: 'default',
-    title: 'DynMech CycleView',
+    title: 'DYNMECH CycleView',
     show: false,  // 先不显示，等加载完成后再显示
     // 明确允许窗口操作
     frame: true,
@@ -108,9 +116,13 @@ function createWindow() {
     })
   }
 
-  // In development, load from vite server
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:5178')
+  // vite-plugin-electron sets VITE_DEV_SERVER_URL on the Electron process it
+  // spawns during `vite` (dev) and leaves it unset for a built bundle. This is
+  // a real environment variable, unlike NODE_ENV, which the main-process build
+  // hard-wires to "production" (see vite.config.ts) and so cannot signal dev.
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL
+  if (devServerUrl) {
+    mainWindow.loadURL(devServerUrl)
     mainWindow.webContents.openDevTools()
   } else {
     // Production mode - load from built files
@@ -118,8 +130,7 @@ function createWindow() {
   }
 
   // Set up menu
-  const menu = createMenu(mainWindow)
-  Menu.setApplicationMenu(menu)
+  applyMenu()
 
   // Handle focus events to prevent dialog issues
   mainWindow.on('focus', () => {
@@ -186,34 +197,6 @@ ipcMain.handle('dialog:openFile', async () => {
     return result
   } catch (error) {
     console.error('Error opening file dialog:', error)
-    return { canceled: true, filePaths: [] }
-  }
-})
-
-ipcMain.handle('dialog:openProject', async () => {
-  if (!mainWindow) return { canceled: true, filePaths: [] }
-  
-  try {
-    // Ensure window is focused before showing dialog
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore()
-    }
-    if (!mainWindow.isFocused()) {
-      mainWindow.focus()
-    }
-    
-    const result = await dialog.showOpenDialog(mainWindow, {
-      properties: ['openFile'],
-      filters: [
-        { name: 'CycleView Project', extensions: ['cvp'] },
-        { name: 'METS Project (legacy)', extensions: ['mts'] },
-        { name: 'All Files', extensions: ['*'] }
-      ]
-    })
-    
-    return result
-  } catch (error) {
-    console.error('Error opening project dialog:', error)
     return { canceled: true, filePaths: [] }
   }
 })
@@ -343,6 +326,23 @@ ipcMain.on('window:toggle-fullscreen', () => {
 
 ipcMain.handle('window:is-fullscreen', () => {
   return mainWindow?.isFullScreen() || false
+})
+
+// The renderer reports its UI language on boot and on every change; the menu
+// follows it so both halves of the app read in the same language.
+ipcMain.on('i18n:set-language', (_, language: string) => {
+  if (i18n.setLanguage(language)) applyMenu()
+})
+
+ipcMain.on('menu:set-state', (_, state: MenuState) => {
+  const next = {
+    loop: Boolean(state?.loop),
+    follow: Boolean(state?.follow),
+    crosshair: Boolean(state?.crosshair)
+  }
+  if (next.loop === menuState.loop && next.follow === menuState.follow && next.crosshair === menuState.crosshair) return
+  menuState = next
+  applyMenu()
 })
 
 // Get app version

@@ -1,4 +1,4 @@
-# DynMech CycleView(機構運動時序模擬系統) - 設計文檔
+# DYNMECH CycleView(機構運動時序模擬系統) - 設計文檔
 
 ## 1. 系統概述
 

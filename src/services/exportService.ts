@@ -2,7 +2,7 @@ import Papa from 'papaparse'
 import { ModuleData } from '@/types'
 
 export interface ExportOptions {
-  format: 'csv' | 'excel' | 'png' | 'pdf'
+  format: 'csv' | 'pdf'
   includeCalculatedPositions?: boolean
 }
 
@@ -34,54 +34,6 @@ export function exportToCSV(modules: ModuleData[], options: ExportOptions = { fo
   } catch (error) {
     console.error('CSV export failed:', error)
     throw new Error('CSV export failed')
-  }
-}
-
-// Export canvas as PNG
-export function exportToPNG(canvasElement: HTMLCanvasElement, filename: string = 'cycleview-canvas.png'): void {
-  try {
-    canvasElement.toBlob((blob) => {
-      if (blob) {
-        const url = URL.createObjectURL(blob)
-        downloadFileFromUrl(url, filename)
-        URL.revokeObjectURL(url)
-      } else {
-        throw new Error('Failed to create canvas blob')
-      }
-    }, 'image/png')
-  } catch (error) {
-    console.error('PNG export failed:', error)
-    throw new Error('PNG export failed')
-  }
-}
-
-// Export to Excel format (basic implementation)
-export async function exportToExcel(modules: ModuleData[], filename: string = 'cycleview-export.xlsx'): Promise<void> {
-  try {
-    // For basic implementation, we'll export as CSV and let user convert
-    // In future, we can use libraries like ExcelJS for native Excel export
-    const csvData = modules.map(module => ({
-      'Module Name': module.moduleName,
-      'Action Description': module.actionDescription,
-      'Start Position': module.startX,
-      'Calculated Position': module.calculatedStartX || module.startX,
-      'Move Count': module.moveCount,
-      'Duration (ms)': module.duration,
-      'Stage': module.stage || '',
-      'Color': module.color,
-      'Sequential Action': module.isSequentialAction ? 'Yes' : 'No'
-    }))
-
-    const csv = Papa.unparse(csvData, {
-      header: true,
-      delimiter: ',',
-      quotes: true
-    })
-
-    downloadFile(csv, filename.replace('.xlsx', '.csv'), 'text/csv')
-  } catch (error) {
-    console.error('Excel export failed:', error)
-    throw new Error('Excel export failed')
   }
 }
 
@@ -117,13 +69,3 @@ export function downloadBlob(blob: Blob, filename: string): void {
   }
 }
 
-// Export project data (complete state)
-export function exportProjectData(projectData: any, filename: string = 'cycleview-project.json'): void {
-  try {
-    const jsonContent = JSON.stringify(projectData, null, 2)
-    downloadFile(jsonContent, filename, 'application/json')
-  } catch (error) {
-    console.error('Project export failed:', error)
-    throw new Error('Project export failed')
-  }
-}

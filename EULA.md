@@ -1,9 +1,9 @@
-# DynMech CycleView 软件使用条款
+# DYNMECH CycleView 软件使用条款
 
 最后更新:2026-08-30
-适用版本:DynMech CycleView 1.0.0 及之后的免费发行版
+适用版本:DYNMECH CycleView 1.0.0 及之后的免费发行版
 
-> 本文件适用于 **DynMech 发行的可执行程序**(安装包、便携版、各平台构建产物)。
+> 本文件适用于 **DYNMECH 发行的可执行程序**(安装包、便携版、各平台构建产物)。
 > 本项目的**源代码**另以 Apache License 2.0 授权,见 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)。
 > 两者并行:源代码的开源授权不受本条款限制,本条款也不削减 Apache License 2.0 授予您的任何权利。
 
@@ -11,8 +11,8 @@
 
 ## 一、许可
 
-DynMech(以下称"我们")授予您**免费、非独占、无期限、无台数限制**的权利,
-用于安装和使用 DynMech CycleView(以下称"本软件"),包括在商业环境中使用。
+DYNMECH(以下称"我们")授予您**免费、非独占、无期限、无台数限制**的权利,
+用于安装和使用 DYNMECH CycleView(以下称"本软件"),包括在商业环境中使用。
 
 本软件**不需要授权码,不需要注册,不需要激活,不设试用期**。
 任何人以任何方式向您收取本软件的授权费用,均未获我们授权。
@@ -25,7 +25,7 @@ DynMech(以下称"我们")授予您**免费、非独占、无期限、无台数�
 您不得:
 
 1. 移除或篡改本软件中的版权声明、品牌标识与本条款;
-2. 使用 "DynMech"、"CycleView" 名称或 DynMech 标识发布您自行修改的版本,
+2. 使用 "DYNMECH"、"CycleView" 名称或 DYNMECH 标识发布您自行修改的版本,
    使他人误认为该版本由我们发行(Apache License 2.0 第 6 条同样不授予商标权限);
 3. 将本软件作为付费产品或付费服务的一部分转售,或以任何方式就本软件本身收费。
 
@@ -80,12 +80,12 @@ https://dynmech.com · support@dynmech.com
 <details>
 <summary>English summary (the Chinese text above is authoritative)</summary>
 
-DynMech CycleView is **free software**: no licence key, no registration, no
+DYNMECH CycleView is **free software**: no licence key, no registration, no
 activation, no trial period, no device limit, commercial use permitted. You may
 redistribute the unmodified installer at no charge.
 
 You may not remove the copyright or branding, ship a modified build under the
-DynMech or CycleView name, or resell the software.
+DYNMECH or CycleView name, or resell the software.
 
 **It runs fully offline** and transmits nothing — no telemetry, no files, no
 machine identifiers.

@@ -1,82 +1,44 @@
 import { useTranslation } from 'react-i18next'
 import { FaTimes } from 'react-icons/fa'
+import { displayKeys, SHORTCUT_CATEGORIES, SHORTCUTS } from '@/lib/shortcuts'
 
 interface HelpDialogProps {
   isOpen: boolean
   onClose: () => void
 }
 
-interface ShortcutCategory {
-  title: string
-  shortcuts: {
-    action: string
-    keys: string
-  }[]
-}
+const isMac = navigator.platform.includes('Mac')
 
 export function HelpDialog({ isOpen, onClose }: HelpDialogProps) {
   const { t } = useTranslation()
 
   if (!isOpen) return null
 
-  const categories: ShortcutCategory[] = [
-    {
-      title: t('help.categories.file'),
-      shortcuts: [
-        { action: t('menu.file.new'), keys: 'Ctrl/Cmd + N' },
-        { action: t('menu.file.open'), keys: 'Ctrl/Cmd + O' },
-        { action: t('menu.file.save'), keys: 'Ctrl/Cmd + S' },
-        { action: t('menu.file.saveAs'), keys: 'Ctrl/Cmd + Shift + S' },
-        { action: t('menu.file.import'), keys: 'Ctrl/Cmd + I' },
-        { action: t('menu.file.export.excel'), keys: 'Ctrl/Cmd + Shift + E' },
-        { action: t('menu.file.export.pdf'), keys: 'Ctrl/Cmd + Shift + P' },
-        { action: t('menu.file.export.png'), keys: 'Ctrl/Cmd + Shift + I' },
-        { action: t('menu.file.export.mp4'), keys: 'Ctrl/Cmd + Shift + M' },
-      ]
-    },
-    {
-      title: t('help.categories.edit'),
-      shortcuts: [
-        { action: t('menu.edit.undo'), keys: 'Ctrl/Cmd + Z' },
-        { action: t('menu.edit.redo'), keys: 'Ctrl/Cmd + Shift + Z' },
-        { action: t('menu.edit.editParams'), keys: 'F2' },
-        { action: t('menu.edit.clearCanvas'), keys: 'Delete' },
-        { action: t('menu.edit.resetAnimation'), keys: 'Home' },
-      ]
-    },
-    {
-      title: t('help.categories.view'),
-      shortcuts: [
-        { action: t('menu.view.zoomIn'), keys: 'Ctrl/Cmd + +' },
-        { action: t('menu.view.zoomOut'), keys: 'Ctrl/Cmd + -' },
-        { action: t('menu.view.fitWindow'), keys: 'Ctrl/Cmd + 0' },
-        { action: t('menu.view.showGrid'), keys: 'Ctrl/Cmd + G' },
-        { action: t('menu.view.showRuler'), keys: 'Ctrl/Cmd + R' },
-        { action: t('menu.view.fullscreen'), keys: 'F11' },
-      ]
-    },
-    {
-      title: t('help.categories.animation'),
-      shortcuts: [
-        { action: t('menu.animation.playPause'), keys: t('help.shortcuts.space') },
-        { action: t('menu.animation.stop'), keys: t('help.shortcuts.escape') },
-        { action: t('menu.animation.nextFrame'), keys: t('help.shortcuts.rightArrow') },
-        { action: t('menu.animation.prevFrame'), keys: t('help.shortcuts.leftArrow') },
-        { action: t('help.shortcuts.speedUp'), keys: '+' },
-        { action: t('help.shortcuts.speedDown'), keys: '-' },
-        { action: t('menu.animation.loopPlayback'), keys: 'Ctrl/Cmd + L' },
-      ]
-    }
-  ]
+  // Key names that read differently per language; everything else is shown as-is.
+  const localiseKeys = (keys: string) =>
+    displayKeys(keys, isMac)
+      .replace('Space', t('help.shortcuts.space'))
+      .replace('Esc', t('help.shortcuts.escape'))
+      .replace('Home', t('help.shortcuts.home'))
+
+  // One table per category, straight from the registry the menu and the key
+  // handler are built from, so this list is always what actually works.
+  const categories = SHORTCUT_CATEGORIES.map(category => ({
+    title: t(`help.categories.${category}`),
+    shortcuts: SHORTCUTS.filter(s => s.category === category && s.keys).map(s => ({
+      action: t(s.labelKey),
+      keys: localiseKeys(s.keys as string)
+    }))
+  })).filter(category => category.shortcuts.length > 0)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black bg-opacity-50"
         onClick={onClose}
       />
-      
+
       {/* Dialog */}
       <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-3xl w-full mx-4 max-h-[80vh] overflow-hidden flex flex-col">
         {/* Header */}
@@ -136,6 +98,7 @@ export function HelpDialog({ isOpen, onClose }: HelpDialogProps) {
               <li>{t('help.tips.tip3')}</li>
               <li>{t('help.tips.tip4')}</li>
             </ul>
+            <p className="mt-2 text-xs text-blue-700 dark:text-blue-300">{t('help.inputNote')}</p>
           </div>
         </div>
       </div>

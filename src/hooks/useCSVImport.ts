@@ -72,7 +72,7 @@ export function useCSVImport() {
         
         toast({
           title: t('toolbar.importCSV'),
-          description: `Successfully imported ${result.data.length} modules`
+          description: t('toolbar.importSuccess', { count: result.data.length })
         })
       } else {
         // Show error

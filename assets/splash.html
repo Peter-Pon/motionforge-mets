@@ -5,11 +5,11 @@
 <meta http-equiv="Content-Security-Policy"
       content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';
                img-src data:; font-src 'self';" />
-<title>DynMech CycleView</title>
+<title>DYNMECH CycleView</title>
 <style>
   /* ── Wordmark face ──────────────────────────────────────────────────────
      The Dynmech VI lockups specify Archivo ExtraBold, but the shipped splash
-     artwork for DynMech Motion is NOT set in Archivo — measured against
+     artwork for DYNMECH Motion is NOT set in Archivo — measured against
      dynmech-splash-*.png, its wordmark matches the Helvetica/Arial fallback
      (same 62px cap height, wider tracking). The guide and the artwork
      disagree; we match the sibling product, because a splash that differs
@@ -55,7 +55,7 @@
 </head>
 <body>
 <!--
-  Splash card for DynMech CycleView. Geometry is lifted from the Dynmech
+  Splash card for DYNMECH CycleView. Geometry is lifted from the Dynmech
   splash artwork (Dynmech 软件开机画面设计): 1120x600 authored at 2x, shown in a
   560x300 frameless window, ink ground, 96px margins, wordmark baseline y=351,
   product line y=406, tagline y=478, divider y=515, footer baseline y=558.
@@ -63,7 +63,7 @@
   chart. One drive-blue accent per card, per the VI icon discipline.
 -->
 <svg viewBox="0 0 1120 600" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="DynMech CycleView">
+     aria-label="DYNMECH CycleView">
   <rect width="1120" height="600" fill="#12161B"></rect>
 
   <!-- ── Right-hand motif: motion timing chart ───────────────────────── -->
@@ -115,12 +115,13 @@
 
 <script>
   // Language comes in as a location hash from the main process
-  // (#zh-CN / #zh-TW / #en / #ja); anything else falls back to English,
+  // (#zh-CN / #zh-TW / #en / #ja / #ko); anything else falls back to English,
   // mirroring how Motion picks its splash artwork.
   var COPY = {
     'zh-CN': { tagline: '设备动作节拍可视化 · 免费工具',  status: '正在启动...',  lang: 'zh-CN' },
     'zh-TW': { tagline: '設備動作節拍視覺化 · 免費工具',  status: '正在啟動...',  lang: 'zh-TW' },
     'ja':    { tagline: '設備動作タクト可視化 · 無償ツール', status: '起動中...',   lang: 'ja'    },
+    'ko':    { tagline: '설비 동작 택트 시각화 · 무료 도구', status: '시작하는 중...', lang: 'ko' },
     'en':    { tagline: 'Equipment motion timing visualisation · Free tool',
                status: 'Starting…', lang: 'en' }
   };

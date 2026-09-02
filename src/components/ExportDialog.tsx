@@ -2,13 +2,9 @@ import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProjectStore } from '@/stores/useProjectStore'
 import { usePreferencesStore } from '@/stores/usePreferencesStore'
-import {
-  downloadBlob,
-  exportToCSV,
-  exportToExcel,
-  exportToPNG,
-  exportProjectData
-} from '@/services/exportService'
+import { downloadBlob, exportToCSV } from '@/services/exportService'
+import { useUIStore } from '@/stores/useUIStore'
+import { useAnimationStore } from '@/stores/useAnimationStore'
 import { buildPdfReport } from '@/services/pdfExport'
 import {
   exportToMP4,
@@ -18,9 +14,7 @@ import {
 import { RenderConfig } from '@/lib/canvasRenderer'
 import {
   FaDownload,
-  FaFileExcel,
   FaFilePdf,
-  FaFileImage,
   FaFileCode,
   FaFileVideo
 } from 'react-icons/fa'
@@ -31,6 +25,12 @@ interface ExportDialogProps {
 }
 
 const FPS_CHOICES = [24, 30, 60]
+const SPEED_CHOICES = [0.25, 0.5, 1, 2, 4]
+const RESOLUTION_CHOICES: { label: string; width: number; height: number }[] = [
+  { label: '1280 × 720', width: 1280, height: 720 },
+  { label: '1920 × 1080', width: 1920, height: 1080 },
+  { label: '2560 × 1440', width: 2560, height: 1440 }
+]
 
 /** Strip characters that are illegal in filenames on Windows and macOS. */
 function safeFileStem(name: string | undefined): string {
@@ -42,9 +42,15 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
   const { t } = useTranslation()
   const { project } = useProjectStore()
   const { grid, animation, ui } = usePreferencesStore()
+  // The video camera starts from the zoom on screen and the rate defaults to
+  // the one being played, so the file matches what the user has been watching.
+  const { zoom, followPlayback, followBaseZoom } = useUIStore()
+  const playbackSpeed = useAnimationStore(state => state.speed)
   const [isExporting, setIsExporting] = useState(false)
   const [includeCalculatedPositions, setIncludeCalculatedPositions] = useState(true)
   const [fps, setFps] = useState(30)
+  const [resolution, setResolution] = useState(1)
+  const [speed, setSpeed] = useState<number | null>(null)
   const [videoProgress, setVideoProgress] = useState<number | null>(null)
   const abortRef = useRef<AbortController | null>(null)
 
@@ -63,7 +69,10 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
 
   if (!isOpen) return null
 
-  const handleExport = async (format: 'csv' | 'excel' | 'png' | 'json') => {
+  const videoSpeed = speed ?? (SPEED_CHOICES.includes(playbackSpeed) ? playbackSpeed : 1)
+  const videoBaseZoom = followPlayback ? followBaseZoom : zoom
+
+  const handleExportCsv = async () => {
     if (!project || !project.modules.length) {
       alert(t('export.noData'))
       return
@@ -71,23 +80,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
 
     setIsExporting(true)
     try {
-      switch (format) {
-        case 'csv':
-          exportToCSV(project.modules, { format: 'csv', includeCalculatedPositions })
-          break
-        case 'excel':
-          await exportToExcel(project.modules)
-          break
-        case 'png': {
-          const canvas = document.querySelector('canvas') as HTMLCanvasElement
-          if (!canvas) throw new Error('Canvas not found')
-          exportToPNG(canvas)
-          break
-        }
-        case 'json':
-          exportProjectData(project)
-          break
-      }
+      exportToCSV(project.modules, { format: 'csv', includeCalculatedPositions })
       onClose()
     } catch (error) {
       console.error('Export failed:', error)
@@ -157,8 +150,13 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
     setVideoProgress(0)
 
     try {
+      const { width, height } = RESOLUTION_CHOICES[resolution]
       const result = await exportToMP4(project.modules, renderConfig(), {
+        width,
+        height,
         fps,
+        speed: videoSpeed,
+        baseZoom: videoBaseZoom,
         coloringMode: animation.coloringMode,
         signal: controller.signal,
         onProgress: setVideoProgress
@@ -202,7 +200,7 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
                 <span className="font-medium">CSV</span>
               </div>
               <button
-                onClick={() => handleExport('csv')}
+                onClick={handleExportCsv}
                 disabled={isExporting}
                 className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 flex items-center gap-1"
               >
@@ -224,44 +222,6 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
             </div>
           </div>
 
-          {/* Excel Export */}
-          <div className="border rounded-lg p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FaFileExcel className="text-green-600" />
-                <span className="font-medium">{t('menu.file.export.excel')}</span>
-              </div>
-              <button
-                onClick={() => handleExport('excel')}
-                disabled={isExporting}
-                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
-              >
-                <FaDownload className="text-xs" />
-                {t('export.action')}
-              </button>
-            </div>
-            <p className="text-sm text-gray-600 mt-1">{t('export.excel.description')}</p>
-          </div>
-
-          {/* PNG Export */}
-          <div className="border rounded-lg p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FaFileImage className="text-purple-600" />
-                <span className="font-medium">{t('menu.file.export.png')}</span>
-              </div>
-              <button
-                onClick={() => handleExport('png')}
-                disabled={isExporting}
-                className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 flex items-center gap-1"
-              >
-                <FaDownload className="text-xs" />
-                {t('export.action')}
-              </button>
-            </div>
-            <p className="text-sm text-gray-600 mt-1">{t('export.png.description')}</p>
-          </div>
-
           {/* MP4 Export */}
           <div className="border rounded-lg p-3">
             <div className="flex items-center justify-between">
@@ -281,21 +241,54 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
             <p className="text-sm text-gray-600 mt-1">{t('export.mp4.description')}</p>
 
             {videoSupported ? (
-              <div className="mt-2 flex items-center gap-2 text-sm">
-                <label htmlFor="cycleview-fps" className="text-gray-700">
-                  {t('export.mp4.fps')}
-                </label>
-                <select
-                  id="cycleview-fps"
-                  value={fps}
-                  onChange={(e) => setFps(Number(e.target.value))}
-                  disabled={isExporting}
-                  className="border rounded px-2 py-1 disabled:opacity-50"
-                >
-                  {FPS_CHOICES.map(choice => (
-                    <option key={choice} value={choice}>{choice}</option>
-                  ))}
-                </select>
+              <div className="mt-2 space-y-2 text-sm">
+                <div className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2">
+                  <label htmlFor="cycleview-resolution" className="text-gray-700">
+                    {t('export.mp4.resolution')}
+                  </label>
+                  <select
+                    id="cycleview-resolution"
+                    value={resolution}
+                    onChange={(e) => setResolution(Number(e.target.value))}
+                    disabled={isExporting}
+                    className="border rounded px-2 py-1 disabled:opacity-50"
+                  >
+                    {RESOLUTION_CHOICES.map((choice, index) => (
+                      <option key={choice.label} value={index}>{choice.label}</option>
+                    ))}
+                  </select>
+                  <label htmlFor="cycleview-speed" className="text-gray-700">
+                    {t('export.mp4.speed')}
+                  </label>
+                  <select
+                    id="cycleview-speed"
+                    value={videoSpeed}
+                    onChange={(e) => setSpeed(Number(e.target.value))}
+                    disabled={isExporting}
+                    className="border rounded px-2 py-1 disabled:opacity-50"
+                  >
+                    {SPEED_CHOICES.map(choice => (
+                      <option key={choice} value={choice}>{choice}x</option>
+                    ))}
+                  </select>
+                  <label htmlFor="cycleview-fps" className="text-gray-700">
+                    {t('export.mp4.fps')}
+                  </label>
+                  <select
+                    id="cycleview-fps"
+                    value={fps}
+                    onChange={(e) => setFps(Number(e.target.value))}
+                    disabled={isExporting}
+                    className="border rounded px-2 py-1 disabled:opacity-50"
+                  >
+                    {FPS_CHOICES.map(choice => (
+                      <option key={choice} value={choice}>{choice}</option>
+                    ))}
+                  </select>
+                </div>
+                <p className="text-xs text-gray-500">
+                  {t('export.mp4.zoomNote', { zoom: Math.round(videoBaseZoom * 100) })}
+                </p>
               </div>
             ) : (
               <p className="mt-2 text-sm text-red-600">{t('export.mp4.unsupported')}</p>
@@ -342,24 +335,6 @@ export const ExportDialog: React.FC<ExportDialogProps> = ({ isOpen, onClose }) =
             <p className="text-sm text-gray-600 mt-1">{t('export.pdf.description')}</p>
           </div>
 
-          {/* Project JSON Export */}
-          <div className="border rounded-lg p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FaFileCode className="text-gray-600" />
-                <span className="font-medium">{t('export.project.title')}</span>
-              </div>
-              <button
-                onClick={() => handleExport('json')}
-                disabled={isExporting}
-                className="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 disabled:opacity-50 flex items-center gap-1"
-              >
-                <FaDownload className="text-xs" />
-                {t('export.action')}
-              </button>
-            </div>
-            <p className="text-sm text-gray-600 mt-1">{t('export.project.description')}</p>
-          </div>
         </div>
 
         <div className="flex justify-end gap-2 mt-4 pt-4 border-t">

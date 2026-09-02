@@ -49,7 +49,7 @@ curl --noproxy '*' http://192.168.1.100:8080/status
 ### Development Standards
 - **All UI text** must use i18n functions - never hardcode text
 - **Default language**: Traditional Chinese (zh-TW)
-- **Supported languages**: zh-TW, zh-CN, en, ja
+- **Supported languages**: zh-TW, zh-CN, en, ja, ko
 - **Translation keys**: Use semantic naming (e.g., `menu.file.import` not `btn_1`)
 - **Dynamic content**: Support variable interpolation and pluralization
 
@@ -59,7 +59,8 @@ src/locales/
 ├── zh-TW/   # Traditional Chinese (default)
 ├── zh-CN/   # Simplified Chinese
 ├── en/      # English
-└── ja/      # Japanese
+├── ja/      # Japanese
+└── ko/      # Korean
 ```
 
 ### Best Practices
@@ -68,18 +69,22 @@ src/locales/
 - Test all languages during development
 - Handle missing translations gracefully with fallback
 
-## 5. Branding (DynMech CycleView)
+## 5. Branding (DYNMECH CycleView)
 
-This project ships as **DynMech CycleView** — a free, no-licence-key tool in the
-DynMech product family alongside DynMech Motion and SolidPilot AI. It was
+This project ships as **DYNMECH CycleView** — a free, no-licence-key tool in the
+DYNMECH product family alongside DYNMECH Motion and SolidPilot AI. It was
 originally published as METS (Mechanism Timing Simulation) by Motionforge; the
 derivation is recorded in `NOTICE` and must stay there.
 
 ### Names
-- Product: **DynMech CycleView** (short form **CycleView**; never "METS")
-- Company in prose: **DynMech**. The splash card footer reads "Dynmech" because
+- Product: **DYNMECH CycleView** (short form **CycleView**; never "METS")
+- Spelling: the company name is always upper-case **DYNMECH** in prose and UI,
+  matching the wordmark in the VI lockup; never "DynMech". Lower-case stays in
+  identifiers only (`com.dynmech.cycleview`, `dynmech-cycleview`, dynmech.com).
+- Company in prose: **DYNMECH**. The splash card footer reads "Dynmech" because
   that is verbatim what the Motion splash artwork uses — leave it alone.
-- Chinese product name: 节拍视图 / 節拍視圖; Japanese: タクトビュー
+- Chinese product name: 节拍视图 / 節拍視圖; Japanese: タクトビュー; Korean keeps
+  the Latin name "CycleView"
 - appId `com.dynmech.cycleview`, npm name `dynmech-cycleview`
 
 ### Visual identity
@@ -91,7 +96,7 @@ at 2x, shown in a 560x300 frameless window); the PNGs under
 `assets/brand/splash/` are exports of it, re-render them if the card changes.
 
 The splash wordmark is set in the Helvetica/Arial stack, **not** Archivo, even
-though the VI lockups specify Archivo — because the shipped DynMech Motion
+though the VI lockups specify Archivo — because the shipped DYNMECH Motion
 splash artwork is not Archivo either (measured: 465x62 ink at 1120x600, which
 Arial Bold matches exactly and Archivo does not, at either weight). Matching the
 sibling product beats matching the guide. Do not "fix" this to Archivo unless
@@ -130,7 +135,9 @@ Three modules, and the invariant is that nothing duplicates them:
 ### Compatibility invariants (do not "clean these up")
 1. `usePreferencesStore` reads `cycleview-preferences`, falling back **read-only**
    to the legacy `mets-preferences` key.
-2. The project open dialog offers `.cvp` and still lists legacy `.mts`.
+2. Project files (`.cvp` / legacy `.mts`) are no longer opened or saved: the
+   New / Open / Save / Save As commands were removed on 2026-09-02 at the
+   owner's request. CSV import is the only way data enters the app.
 3. `electron-builder.files` must keep `assets/**/*` — the splash and the runtime
    window icon are loaded from there at `join(__dirname, '../assets/...')`.
 
@@ -146,4 +153,4 @@ check, cloud export) requires the EULA and privacy wording to change first.
 3. Git commits: No AI markers, require explicit permission
 4. curl usage: Always use `--noproxy '*'` for internal network access
 5. i18n: All UI text must be internationalized, default language is zh-TW
-6. Branding: product is DynMech CycleView; keep the compat invariants in §5
+6. Branding: product is DYNMECH CycleView; keep the compat invariants in §5

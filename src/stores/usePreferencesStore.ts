@@ -40,7 +40,10 @@ export const usePreferencesStore = create<PreferencesStore>()(
     ...loadInitialPreferences(),
 
     // Actions
-    updateGridPreferences: (updates) => set((state) => {
+    // savePreferences runs after set(): inside the updater, get() still returns
+    // the previous state, which used to persist every change one step late.
+    updateGridPreferences: (updates) => {
+      set((state) => {
       // Validate constraints
       if (updates.cellWidth !== undefined) {
         state.grid.cellWidth = Math.max(state.grid.minWidth, Math.min(state.grid.maxWidth, updates.cellWidth))
@@ -52,27 +55,33 @@ export const usePreferencesStore = create<PreferencesStore>()(
       // Apply other updates
       Object.assign(state.grid, updates)
       
-      // Save to localStorage
+      })
       get().savePreferences()
-    }),
+    },
 
-    updateAnimationPreferences: (updates) => set((state) => {
-      Object.assign(state.animation, updates)
+    updateAnimationPreferences: (updates) => {
+      set((state) => {
+        Object.assign(state.animation, updates)
+      })
       get().savePreferences()
-    }),
+    },
 
-    updateUIPreferences: (updates) => set((state) => {
-      Object.assign(state.ui, updates)
+    updateUIPreferences: (updates) => {
+      set((state) => {
+        Object.assign(state.ui, updates)
+      })
       get().savePreferences()
-    }),
+    },
 
-    resetToDefaults: () => set((state) => {
+    resetToDefaults: () => {
+      set((state) => {
       // Deep copy to ensure all nested properties are reset
       state.grid = { ...DEFAULT_PREFERENCES.grid }
       state.animation = { ...DEFAULT_PREFERENCES.animation }
       state.ui = { ...DEFAULT_PREFERENCES.ui }
+      })
       get().savePreferences()
-    }),
+    },
 
     loadPreferences: () => {
       try {

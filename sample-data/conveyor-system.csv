@@ -1,4 +1,4 @@
-module,action,startPosition,moveCount,intervalTime
+module,action,startPosition,moveCount,duration
 輸送帶A,物料傳送,0,80,50
 升降機B,垂直提升,15,20,150
 推桿C,橫向推送,35,15,100

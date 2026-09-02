@@ -76,3 +76,50 @@ export function computeTotalDurationMs(modules: ModuleData[]): number {
 
   return total
 }
+
+/** Bounding box, in grid cells and row indices, of the cells being painted right now. */
+export interface ActiveRegion {
+  minCol: number
+  maxCol: number
+  minRow: number
+  maxRow: number
+}
+
+/**
+ * Which cells are in progress at `currentFrame`: for every action that has
+ * started and not yet finished, the cell its fill is currently advancing
+ * through. Rows are indices into `modules` (the on-screen row order). Returns
+ * null when nothing is moving — between actions, or after the cycle ends —
+ * so a follow camera can hold its last position instead of jumping.
+ */
+export function computeActiveRegion(modules: ModuleData[], currentFrame: number): ActiveRegion | null {
+  const rowOf = new Map<ModuleData, number>()
+  modules.forEach((module, index) => rowOf.set(module, index))
+
+  let region: ActiveRegion | null = null
+
+  groupModulesByName(modules).forEach(group => {
+    const startTimes = computeActionStartTimes(group.modules)
+    group.modules.forEach((module, index) => {
+      if (module.moveCount <= 0 || module.duration <= 0) return
+      const start = startTimes[index]
+      const end = start + module.moveCount * module.duration
+      if (currentFrame < start || currentFrame >= end) return
+
+      const cellIndex = Math.min(module.moveCount - 1, Math.floor((currentFrame - start) / module.duration))
+      const col = (module.calculatedStartX ?? module.startX) + cellIndex
+      const row = rowOf.get(module) ?? 0
+
+      region = region
+        ? {
+            minCol: Math.min(region.minCol, col),
+            maxCol: Math.max(region.maxCol, col),
+            minRow: Math.min(region.minRow, row),
+            maxRow: Math.max(region.maxRow, row)
+          }
+        : { minCol: col, maxCol: col, minRow: row, maxRow: row }
+    })
+  })
+
+  return region
+}

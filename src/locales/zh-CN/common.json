@@ -1,21 +1,16 @@
 {
   "app": {
-    "title": "DynMech CycleView - 设备动作节拍可视化",
+    "title": "DYNMECH CycleView - 设备动作节拍可视化",
     "description": "设备动作节拍可视化工具"
   },
   "menu": {
     "file": {
       "title": "文件",
-      "new": "新建项目",
-      "open": "打开项目",
-      "save": "保存项目",
-      "saveAs": "另存为",
       "import": "导入CSV",
       "export": {
         "title": "导出",
-        "excel": "导出为Excel",
+        "csv": "导出为CSV",
         "pdf": "导出为PDF",
-        "png": "导出为PNG",
         "mp4": "导出为MP4"
       },
       "quit": "退出"
@@ -24,29 +19,31 @@
       "title": "编辑",
       "undo": "撤销",
       "redo": "重做",
-      "editParams": "编辑参数",
-      "clearCanvas": "清空画布",
-      "resetAnimation": "重置动画"
+      "preferences": "偏好设置"
     },
     "view": {
       "title": "查看",
       "zoomIn": "放大",
       "zoomOut": "缩小",
       "fitWindow": "适应窗口",
-      "showGrid": "显示网格",
-      "showRuler": "显示标尺",
-      "fullscreen": "全屏"
+      "actualSize": "实际大小",
+      "fullscreen": "全屏",
+      "crosshair": "十字线"
     },
     "animation": {
       "title": "动画",
       "playPause": "播放/暂停",
       "stop": "停止",
+      "reset": "重置动画",
       "nextFrame": "下一帧",
       "prevFrame": "上一帧",
+      "speedUp": "加速",
+      "speedDown": "减速",
       "speedSettings": "速度设置",
       "speedSettingsDescription": "调整动画播放速度",
       "currentSpeed": "当前速度",
-      "loopPlayback": "循环播放"
+      "loopPlayback": "循环播放",
+      "followPlayback": "跟随播放"
     },
     "help": {
       "title": "帮助",
@@ -54,7 +51,10 @@
       "userGuide": "使用指南",
       "shortcuts": "快捷键"
     },
-    "more": "更多选项"
+    "more": "更多选项",
+    "window": {
+      "title": "窗口"
+    }
   },
   "sidebar": {
     "parameters": "参数",
@@ -68,7 +68,8 @@
     "items": "项目"
   },
   "toolbar": {
-    "importCSV": "导入CSV"
+    "importCSV": "导入CSV",
+    "importSuccess": "已导入 {{count}} 条数据"
   },
   "timeline": {
     "play": "播放",
@@ -81,17 +82,21 @@
   },
   "shortcuts": {
     "playPause": "播放/暂停 (空格)",
-    "stop": "停止 (S)",
-    "reset": "重置 (R)",
+    "stop": "停止 (S / Esc)",
+    "reset": "重置 (R / Home)",
     "importCSV": "导入CSV (Ctrl+I)",
     "export": "导出 (Ctrl+E)",
     "preferences": "偏好设置 (Ctrl+,)",
     "speedUp": "加速 (+)",
     "speedDown": "减速 (-)",
-    "loadTestData": "加载测试数据 (Ctrl+T)",
     "toggleCrosshair": "切换十字线 (C)",
     "toggleLoop": "切换循环播放 (Ctrl+L)",
-    "changeLanguage": "切换语言"
+    "changeLanguage": "切换语言",
+    "zoomIn": "放大 (Ctrl++)",
+    "zoomOut": "缩小 (Ctrl+-)",
+    "fitWindow": "适应窗口 (Ctrl+0)",
+    "actualSize": "实际大小 (Ctrl+1)",
+    "followPlayback": "跟随播放 (F)"
   },
   "canvas": {
     "placeholder": "画布将显示在这里"
@@ -99,10 +104,7 @@
   "dialog": {
     "confirm": "确认",
     "cancel": "取消",
-    "ok": "确定",
-    "save": "保存",
-    "discard": "放弃",
-    "unsavedChanges": "您有未保存的更改，是否要保存？"
+    "ok": "确定"
   },
   "error": {
     "fileNotFound": "文件未找到",
@@ -155,11 +157,11 @@
     "cells": "格"
   },
   "about": {
-    "title": "关于 DynMech CycleView",
+    "title": "关于 DYNMECH CycleView",
     "version": "版本 {{version}}",
-    "description": "DynMech CycleView 是一款免费的设备动作节拍可视化工具，用于设计、核对和演示机械设备各机构的动作时序与整机节拍。",
-    "copyright": "版权所有 © 2026 DynMech",
-    "developedBy": "由 DynMech 开发",
+    "description": "DYNMECH CycleView 是一款免费的设备动作节拍可视化工具，用于设计、核对和演示机械设备各机构的动作时序与整机节拍。",
+    "copyright": "版权所有 © 2026 DYNMECH",
+    "developedBy": "由 DYNMECH 开发",
     "license": "本软件为免费软件，无需授权码即可使用；源代码以 Apache License 2.0 授权。"
   },
   "export": {
@@ -169,12 +171,6 @@
     "csv": {
       "description": "导出模块数据为 CSV 格式",
       "includeCalculated": "包含计算位置信息"
-    },
-    "excel": {
-      "description": "导出详细模块数据"
-    },
-    "png": {
-      "description": "导出当前画布视图"
     },
     "pdf": {
       "description": "导出节拍图 + 参数表的 PDF 报告,可直接发给没装本软件的人",
@@ -199,15 +195,14 @@
       }
     },
     "mp4": {
-      "description": "把节拍动画导出为 MP4 视频",
+      "description": "跟随播放的画布视频，不含侧边栏",
+      "resolution": "分辨率",
+      "speed": "速率",
+      "zoomNote": "镜头以当前缩放 {{zoom}}% 为基准，只在需要时缩小",
       "fps": "帧率",
+      "unsupported": "当前系统不支持 H.264 编码，无法导出 MP4",
       "rendering": "正在渲染视频",
-      "cancel": "取消导出",
-      "unsupported": "当前系统不支持 H.264 编码，无法导出 MP4"
-    },
-    "project": {
-      "title": "项目文件",
-      "description": "导出完整项目配置"
+      "cancel": "取消导出"
     }
   },
   "help": {
@@ -217,7 +212,8 @@
       "file": "文件操作",
       "edit": "编辑操作",
       "view": "查看操作",
-      "animation": "动画控制"
+      "animation": "动画控制",
+      "help": "帮助"
     },
     "shortcuts": {
       "space": "空格键",
@@ -225,24 +221,26 @@
       "rightArrow": "→",
       "leftArrow": "←",
       "speedUp": "加速",
-      "speedDown": "减速"
+      "speedDown": "减速",
+      "home": "Home"
     },
     "tips": {
       "title": "使用提示",
       "tip1": "双击工具栏可切换全屏模式",
-      "tip2": "拖拽 CSV 文件到窗口可快速导入",
-      "tip3": "使用鼠标滚轮可缩放画布",
-      "tip4": "按住 Shift 拖拽可多选模块"
-    }
+      "tip2": "双击参数表中的单元格即可编辑",
+      "tip3": "按住 Ctrl/Cmd 并滚动鼠标滚轮可缩放图表",
+      "tip4": "大图上开启跟随播放 (F)，正在动作的模块会始终留在视窗内"
+    },
+    "inputNote": "在表格输入框中输入时快捷键不生效"
   },
   "userGuide": {
     "title": "使用指南",
     "introduction": "CycleView 是一个专业的机构运动时序可视化工具，用于模拟和分析机械设备的运动时序。此指南将帮助您快速上手并充分使用 CycleView 的功能。",
     "quickStart": {
       "title": "快速开始",
-      "step1": "点击\"加载测试数据\"按钮或导入 CSV 文件",
-      "step2": "使用播放控制按钮开始动画",
-      "step3": "调整速度和查看设置以获得最佳体验"
+      "step1": "点击导入图标 (Ctrl+I) 选择 CSV 文件",
+      "step2": "按空格播放；大图可开启跟随播放 (F)",
+      "step3": "导出 PDF 报告或跟随播放的 MP4 视频 (Ctrl+E)"
     },
     "sections": {
       "gettingStarted": {
@@ -250,35 +248,36 @@
         "step1": "启动 CycleView 应用程序后，您将看到主要的工作界面，包含参数表、画布和工具栏。",
         "step2": "左侧的参数表将显示所有模块的详细信息，包括模块名称、动作说明、时序参数等。",
         "step3": "右侧的画布区域将以可视化方式展示机构运动的时序关系。",
-        "step4": "工具栏提供所有主要功能的快速访问，包括导入、播放控制、导出和设置。"
+        "step4": "工具栏依次是导入与导出、播放控制（含倍速与跟随）、视图缩放；右侧是设置、帮助和语言。"
       },
       "importingData": {
         "title": "数据导入",
-        "csvFormat": "支持 CSV 格式的数据导入，文件应包含模块名称、动作说明、起始位置、格数和持续时间等列位。",
-        "requiredColumns": "必要列位：模块名称、动作说明、起始位置、格数、持续时间、阶段。",
-        "dragDrop": "您可以直接拖拽 CSV 文件到应用程序窗口中进行快速导入。",
-        "testData": "点击\"加载测试数据\"按钮可以加载范例数据，用于测试和学习功能。"
+        "csvFormat": "通过工具栏图标或 Ctrl+I 导入 CSV。列：module、action、startPosition、moveCount、duration；stage 可选。",
+        "requiredColumns": "startPosition 是起始格，moveCount 是格数，duration 是每格毫秒；旧表头 intervalTime 仍可识别。",
+        "sequential": "同一模块内，startPosition 为 0 的动作紧接上一动作结束处开始，串行动作无需手工填偏移。"
       },
       "animationControls": {
         "title": "动画控制",
         "playPause": "使用播放/暂停按钮或空格键来控制动画播放。",
-        "stop": "停止按钮会停止动画并保持当前位置。",
-        "reset": "重置按钮会将动画回到起始位置。",
-        "speed": "使用速度控制可以调整动画播放的快慢，支持 0.1x 到 4x 的速度范围。"
+        "stop": "停止 (S 或 Esc) 会终止播放并回到起点。",
+        "reset": "重置 (R 或 Home) 回到第一帧；← 和 → 逐帧步进。",
+        "speed": "速度 0.1x 到 4x，可用工具栏选择器或 + / - 调整；循环 (Ctrl+L) 会连续重播。",
+        "follow": "跟随播放 (F) 让画布自动滚动和缩放，正在动作的模块始终在视窗内；阶段列同步显示每个动作的进度。",
+        "view": "用 Ctrl++ / Ctrl+- 或 Ctrl+滚轮缩放，Ctrl+0 适应窗口，Ctrl+1 恢复实际大小；表格行高随图表同步缩放。"
       },
       "visualization": {
         "title": "可视化功能",
         "modules": "每个模块以不同颜色的条状图表示，长度代表执行时间。",
-        "stages": "不同阶段的动作会以不同的色调显示，方便区分。",
+        "stages": "表格的阶段列实时填充：每个动作一条进度条，动作结束时填满。",
         "timing": "时序关系通过水平位置和长度来表示，清楚显示动作的执行顺序和重叠关系。",
         "colors": "颜色编码帮助快速识别不同模块和阶段的动作。"
       },
       "exporting": {
         "title": "导出功能",
-        "formats": "支持多种导出格式：Excel、PDF、PNG 和 MP4。",
-        "excel": "Excel 导出包含完整的参数表和计算结果。",
+        "formats": "导出格式：CSV、PDF 和 MP4。",
+        "csv": "CSV 导出会写回参数表，可选择一并输出串行动作的计算起始位置。",
         "pdf": "PDF 导出提供高品质的报告格式。",
-        "images": "PNG 导出可生成静态图片，MP4 导出可生成动画影片。"
+        "video": "MP4 导出把跟随播放录成视频：镜头自动滚动与缩放，让每个进行中的模块都留在画面内。"
       }
     },
     "additionalHelp": {

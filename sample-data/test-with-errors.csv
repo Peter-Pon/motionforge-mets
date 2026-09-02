@@ -1,4 +1,4 @@
-module,action,startPosition,moveCount,intervalTime
+module,action,startPosition,moveCount,duration
 正常模組A,正常動作,10,20,100
 錯誤模組B,缺少動作,,30,150
 錯誤模組C,負數起始,-5,20,100

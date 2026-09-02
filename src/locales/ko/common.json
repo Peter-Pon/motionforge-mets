@@ -1,0 +1,290 @@
+{
+  "app": {
+    "title": "DYNMECH CycleView - 설비 동작 택트",
+    "description": "설비 동작 택트 시각화 도구"
+  },
+  "menu": {
+    "file": {
+      "title": "파일",
+      "import": "CSV 가져오기",
+      "export": {
+        "title": "내보내기",
+        "csv": "CSV로 내보내기",
+        "pdf": "PDF로 내보내기",
+        "mp4": "MP4로 내보내기"
+      },
+      "quit": "종료"
+    },
+    "edit": {
+      "title": "편집",
+      "undo": "실행 취소",
+      "redo": "다시 실행",
+      "preferences": "환경설정"
+    },
+    "view": {
+      "title": "보기",
+      "zoomIn": "확대",
+      "zoomOut": "축소",
+      "fitWindow": "창에 맞추기",
+      "actualSize": "실제 크기",
+      "crosshair": "십자선",
+      "fullscreen": "전체 화면"
+    },
+    "animation": {
+      "title": "애니메이션",
+      "playPause": "재생/일시정지",
+      "stop": "정지",
+      "reset": "애니메이션 초기화",
+      "nextFrame": "다음 프레임",
+      "prevFrame": "이전 프레임",
+      "speedUp": "속도 올리기",
+      "speedDown": "속도 내리기",
+      "speedSettings": "속도 설정",
+      "speedSettingsDescription": "애니메이션 재생 속도를 조정합니다",
+      "currentSpeed": "현재 속도",
+      "loopPlayback": "반복 재생",
+      "followPlayback": "재생 따라가기"
+    },
+    "help": {
+      "title": "도움말",
+      "about": "CycleView 정보",
+      "userGuide": "사용 설명서",
+      "shortcuts": "키보드 단축키"
+    },
+    "more": "더 보기",
+    "window": {
+      "title": "창"
+    }
+  },
+  "sidebar": {
+    "parameters": "파라미터",
+    "noData": "불러온 데이터가 없습니다",
+    "module": "모듈",
+    "stage": "단계",
+    "action": "동작 설명",
+    "startPosition": "시작",
+    "moveCount": "셀 수",
+    "duration": "지속 시간",
+    "items": "개"
+  },
+  "toolbar": {
+    "importCSV": "CSV 가져오기",
+    "importSuccess": "{{count}}개 행을 가져왔습니다"
+  },
+  "timeline": {
+    "play": "재생",
+    "pause": "일시정지",
+    "stop": "정지",
+    "speed": "속도",
+    "reset": "초기화",
+    "scrub": "클릭하거나 드래그하여 타임라인을 이동합니다",
+    "loop": "반복"
+  },
+  "shortcuts": {
+    "playPause": "재생/일시정지 (Space)",
+    "stop": "정지 (S / Esc)",
+    "reset": "초기화 (R / Home)",
+    "importCSV": "CSV 가져오기 (Ctrl+I)",
+    "export": "내보내기 (Ctrl+E)",
+    "preferences": "환경설정 (Ctrl+,)",
+    "speedUp": "속도 올리기 (+)",
+    "speedDown": "속도 내리기 (-)",
+    "toggleCrosshair": "십자선 전환 (C)",
+    "toggleLoop": "반복 전환 (Ctrl+L)",
+    "changeLanguage": "언어 변경",
+    "zoomIn": "확대 (Ctrl++)",
+    "zoomOut": "축소 (Ctrl+-)",
+    "fitWindow": "창에 맞추기 (Ctrl+0)",
+    "actualSize": "실제 크기 (Ctrl+1)",
+    "followPlayback": "재생 따라가기 (F)"
+  },
+  "canvas": {
+    "placeholder": "여기에 캔버스가 표시됩니다"
+  },
+  "dialog": {
+    "confirm": "확인",
+    "cancel": "취소",
+    "ok": "확인"
+  },
+  "error": {
+    "fileNotFound": "파일을 찾을 수 없습니다",
+    "invalidFormat": "잘못된 파일 형식입니다",
+    "importFailed": "가져오기 실패",
+    "exportFailed": "내보내기 실패",
+    "unknown": "알 수 없는 오류"
+  },
+  "settings": {
+    "title": "설정",
+    "language": "언어",
+    "theme": "테마",
+    "light": "밝게",
+    "dark": "어둡게",
+    "auto": "자동"
+  },
+  "preferences": {
+    "title": "환경설정",
+    "grid": {
+      "title": "그리드 설정",
+      "cellWidth": "셀 너비",
+      "cellHeight": "셀 높이"
+    },
+    "animation": {
+      "title": "애니메이션 설정",
+      "coloringMode": "채색 방식",
+      "gradual": "점진적으로 채색",
+      "instant": "즉시 채색 후 대기"
+    },
+    "view": {
+      "title": "보기 설정",
+      "crosshairEnabled": "십자선 커서 표시",
+      "panEnabled": "드래그 이동 사용",
+      "canvasTextDisplay": "캔버스 텍스트 표시",
+      "displayModule": "모듈 이름 표시",
+      "displayStage": "단계 표시",
+      "displayAction": "동작 설명 표시"
+    },
+    "resetDefaults": "기본값으로 초기화",
+    "save": "저장",
+    "cancel": "취소"
+  },
+  "common": {
+    "cancel": "취소",
+    "apply": "적용"
+  },
+  "units": {
+    "ms": "ms",
+    "pixel": "픽셀",
+    "cells": "셀"
+  },
+  "about": {
+    "title": "DYNMECH CycleView 정보",
+    "version": "버전 {{version}}",
+    "description": "DYNMECH CycleView는 설비 동작 택트를 시각화하는 무료 도구입니다. 기계의 각 기구가 어떤 순서로 움직이는지 설계하고 검토하며, 그 합인 사이클 타임을 발표할 수 있습니다.",
+    "copyright": "Copyright © 2026 DYNMECH",
+    "developedBy": "DYNMECH 개발",
+    "license": "무료 소프트웨어이며 라이선스 키가 필요 없습니다. 소스 코드는 Apache License 2.0으로 공개됩니다."
+  },
+  "export": {
+    "action": "내보내기",
+    "exporting": "내보내는 중...",
+    "noData": "내보낼 데이터가 없습니다",
+    "csv": {
+      "description": "모듈 데이터를 CSV로 내보냅니다",
+      "includeCalculated": "계산된 위치 포함"
+    },
+    "pdf": {
+      "description": "CycleView가 없는 사람에게 전달할 수 있는 PDF 보고서(차트 + 파라미터 표)",
+      "unsupported": "PDF 보고서 내보내기는 데스크톱 앱에서만 가능합니다",
+      "report": {
+        "chartPage": "택트 차트",
+        "tablePage": "파라미터",
+        "totalCycle": "사이클 타임",
+        "moduleCount": "모듈 수",
+        "exportedAt": "내보낸 시각",
+        "untitledProject": "제목 없는 프로젝트",
+        "columns": {
+          "module": "모듈",
+          "action": "동작",
+          "stage": "단계",
+          "startPosition": "시작 셀",
+          "moveCount": "셀 수",
+          "intervalTime": "ms/셀",
+          "startTime": "시작 ms",
+          "endTime": "종료 ms"
+        }
+      }
+    },
+    "mp4": {
+      "description": "사이드바 없이 차트를 재생 따라가기로 녹화한 동영상",
+      "resolution": "해상도",
+      "speed": "속도",
+      "zoomNote": "카메라는 현재 확대율 {{zoom}}%를 기준으로 필요할 때만 축소합니다",
+      "fps": "프레임 레이트",
+      "unsupported": "이 시스템에서는 H.264 인코딩을 사용할 수 없어 MP4 내보내기가 비활성화되었습니다",
+      "rendering": "동영상 렌더링 중",
+      "cancel": "내보내기 취소"
+    }
+  },
+  "help": {
+    "title": "키보드 단축키",
+    "description": "다음 단축키로 CycleView를 더 빠르게 다룰 수 있습니다",
+    "categories": {
+      "file": "파일",
+      "edit": "편집",
+      "view": "보기",
+      "animation": "애니메이션",
+      "help": "도움말"
+    },
+    "shortcuts": {
+      "space": "Space",
+      "escape": "Esc",
+      "rightArrow": "→",
+      "leftArrow": "←",
+      "home": "Home",
+      "speedUp": "속도 올리기",
+      "speedDown": "속도 내리기"
+    },
+    "tips": {
+      "title": "사용 팁",
+      "tip1": "툴바를 더블클릭하면 전체 화면을 전환합니다",
+      "tip2": "파라미터 표의 셀을 더블클릭하면 편집할 수 있습니다",
+      "tip3": "Ctrl/Cmd를 누른 채 스크롤하면 차트를 확대/축소합니다",
+      "tip4": "큰 차트에서는 재생 따라가기 (F)를 켜면 동작 중인 모듈이 항상 화면에 보입니다"
+    },
+    "inputNote": "표 셀을 입력하는 동안에는 단축키가 동작하지 않습니다"
+  },
+  "userGuide": {
+    "title": "사용 설명서",
+    "introduction": "CycleView는 기계 설비의 동작 택트를 시뮬레이션하고 분석하는 기구 동작 시각화 도구입니다. 이 설명서는 빠르게 시작하고 기능을 충분히 활용하도록 돕습니다.",
+    "quickStart": {
+      "title": "빠른 시작",
+      "step1": "가져오기 아이콘(Ctrl+I)을 클릭해 CSV 파일을 선택하세요",
+      "step2": "스페이스로 재생하고, 큰 차트는 재생 따라가기(F)를 켜세요",
+      "step3": "PDF 보고서 또는 재생 따라가기 MP4를 내보내세요(Ctrl+E)"
+    },
+    "sections": {
+      "gettingStarted": {
+        "title": "시작하기",
+        "step1": "CycleView를 실행하면 파라미터 표, 캔버스, 툴바로 구성된 메인 화면이 나타납니다.",
+        "step2": "왼쪽 파라미터 표에는 모듈 이름, 동작 설명, 타이밍 파라미터 등 모든 모듈의 상세 정보가 표시됩니다.",
+        "step3": "오른쪽 캔버스에는 기구 동작의 타이밍 관계가 그림으로 표시됩니다.",
+        "step4": "툴바에는 가져오기/내보내기, 재생(속도와 따라가기 포함), 보기 확대/축소가 있고 오른쪽에 설정, 도움말, 언어가 있습니다."
+      },
+      "importingData": {
+        "title": "데이터 가져오기",
+        "csvFormat": "툴바 아이콘 또는 Ctrl+I로 CSV를 가져옵니다. 열: module, action, startPosition, moveCount, duration. stage는 선택입니다.",
+        "requiredColumns": "startPosition은 시작 셀, moveCount는 셀 수, duration은 셀당 밀리초입니다. 이전 헤더 intervalTime도 인식합니다.",
+        "sequential": "같은 모듈 안에서 startPosition이 0인 동작은 이전 동작이 끝난 위치에서 바로 시작하므로 연속 동작에 오프셋을 직접 입력할 필요가 없습니다."
+      },
+      "animationControls": {
+        "title": "애니메이션 제어",
+        "playPause": "재생/일시정지 버튼 또는 스페이스로 애니메이션 재생을 제어합니다.",
+        "stop": "정지(S 또는 Esc)는 재생을 멈추고 처음으로 되돌립니다.",
+        "reset": "초기화(R 또는 Home)는 첫 프레임으로 돌아갑니다. ←와 →로 한 프레임씩 이동합니다.",
+        "speed": "속도는 0.1x부터 4x까지 툴바 선택기 또는 +와 -로 조절합니다. 반복(Ctrl+L)은 연속 재생합니다.",
+        "follow": "재생 따라가기(F)는 캔버스를 자동으로 스크롤하고 축소해 동작 중인 모듈이 항상 화면에 보이게 합니다. 단계 열은 각 동작의 진행률을 보여줍니다.",
+        "view": "Ctrl++ / Ctrl+- 또는 Ctrl+휠로 확대/축소하고, Ctrl+0으로 창에 맞추며, Ctrl+1로 실제 크기로 돌아갑니다. 표의 행 높이는 차트와 함께 조정됩니다."
+      },
+      "visualization": {
+        "title": "시각화 기능",
+        "modules": "각 모듈은 색상 막대로 표시되며 길이는 실행 시간을 나타냅니다.",
+        "stages": "표의 단계 열은 실시간으로 채워집니다. 동작마다 막대가 하나씩 있고 그 동작이 끝나면 가득 찹니다.",
+        "timing": "타이밍 관계는 가로 위치와 길이로 표현되어 동작의 실행 순서와 겹침을 한눈에 볼 수 있습니다.",
+        "colors": "색상 구분으로 서로 다른 모듈과 단계의 동작을 빠르게 식별할 수 있습니다."
+      },
+      "exporting": {
+        "title": "내보내기 기능",
+        "formats": "내보내기 형식: CSV, PDF, MP4.",
+        "csv": "CSV 내보내기는 파라미터 표를 다시 기록하며, 연속 동작의 계산된 시작 위치를 포함할 수 있습니다.",
+        "pdf": "PDF 내보내기는 고품질 보고서 형식을 제공합니다.",
+        "video": "MP4 내보내기는 재생 따라가기를 동영상으로 녹화합니다. 카메라가 스크롤하고 축소하여 동작 중인 모든 모듈을 화면에 담습니다."
+      }
+    },
+    "additionalHelp": {
+      "title": "추가 도움말",
+      "shortcuts": "키보드 단축키를 확인하면 작업 효율이 높아집니다.",
+      "about": "정보 페이지에는 애플리케이션 버전과 개발자 정보가 있습니다.",
+      "support": "CycleView는 무료 도구이며 1:1 기술 지원은 제공되지 않습니다. 이 설명서를 참고하거나 dynmech.com을 방문하세요."
+    }
+  }
+}

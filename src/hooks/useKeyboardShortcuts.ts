@@ -56,16 +56,3 @@ export function formatShortcut(shortcut: Omit<KeyboardShortcut, 'action' | 'desc
   return parts.join('+')
 }
 
-// Common shortcuts configuration
-export const COMMON_SHORTCUTS = {
-  PLAY_PAUSE: { key: ' ', description: 'Play/Pause' },
-  STOP: { key: 's', description: 'Stop' },
-  RESET: { key: 'r', description: 'Reset' },
-  IMPORT_CSV: { key: 'o', ctrl: true, shift: true, description: 'Import CSV' },
-  EXPORT: { key: 'e', ctrl: true, description: 'Export' },
-  PREFERENCES: { key: ',', ctrl: true, description: 'Preferences' },
-  SPEED_UP: { key: '=', description: 'Speed Up' },
-  SPEED_DOWN: { key: '-', description: 'Speed Down' },
-  LOAD_TEST_DATA: { key: 't', ctrl: true, description: 'Load Test Data' },
-  TOGGLE_CROSSHAIR: { key: 'c', description: 'Toggle Crosshair' }
-} as const

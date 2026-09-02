@@ -17,9 +17,28 @@ export const HEADER_HEIGHT = 40
 /** Width of the row-number ruler down the right edge. */
 const RULER_WIDTH = 30
 
-const LABEL_FONT_FAMILY = 'sans-serif'
 const RULER_FONT_FAMILY = 'monospace'
-const LABEL_FONT_SIZE = 10
+const RULER_FONT_SIZE = 10
+
+// Same stack the PDF report uses, so a CJK action name looks the same on
+// screen, in the MP4 and on paper instead of falling back to whatever the
+// platform picks for a bare "sans-serif".
+const LABEL_FONT_FAMILY =
+  '"Segoe UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans CJK SC", "Noto Sans CJK KR", system-ui, sans-serif'
+const LABEL_INK = '#12161B'
+const LABEL_HALO = 'rgba(255, 255, 255, 0.92)'
+const LABEL_HALO_WIDTH = 3
+
+/**
+ * Label size follows the row height, so a taller grid — or a zoomed-in view,
+ * which arrives here as a taller row — gets proportionally larger text.
+ */
+function labelFontSize(cellHeight: number): number {
+  return Math.round(Math.min(22, cellHeight * 0.42))
+}
+
+/** Below this the label is noise: it cannot be read and it spills onto neighbouring rows. */
+const MIN_LABEL_FONT_SIZE = 6
 
 export interface RenderConfig {
   cellWidth: number
@@ -129,12 +148,15 @@ export function drawRuler(
 
   const rulerText = {
     fill: '#6b7280',
-    fontSize: LABEL_FONT_SIZE,
+    fontSize: RULER_FONT_SIZE,
     fontFamily: RULER_FONT_FAMILY,
     align: 'center' as const
   }
 
-  for (let i = 0; i < width / config.cellWidth; i += 5) {
+  // Label every 5th column, or a coarser multiple of 5 once the cells are
+  // narrow enough (zoomed out) that adjacent numbers would collide.
+  const columnStep = 5 * Math.max(1, Math.ceil(40 / (5 * config.cellWidth)))
+  for (let i = 0; i < width / config.cellWidth; i += columnStep) {
     surface.text(
       String(i),
       i * config.cellWidth + config.cellWidth / 2,
@@ -143,14 +165,18 @@ export function drawRuler(
     )
   }
 
+  // Same for row numbers: skip rows shorter than the digits are tall.
+  const rowStep = Math.max(1, Math.ceil(RULER_FONT_SIZE / config.cellHeight))
   let rowIndex = 0
   for (let y = headerHeight + config.cellHeight; y < height; y += config.cellHeight) {
-    surface.text(
-      String(rowIndex + 1),
-      width - RULER_WIDTH / 2,
-      y - config.cellHeight / 2,
-      rulerText
-    )
+    if (rowIndex % rowStep === 0) {
+      surface.text(
+        String(rowIndex + 1),
+        width - RULER_WIDTH / 2,
+        y - config.cellHeight / 2,
+        rulerText
+      )
+    }
     rowIndex++
   }
 }
@@ -192,19 +218,43 @@ export function drawModuleTracksAligned(
       })
     }
 
-    const textX = actualStartX * config.cellWidth + 4
-    const textY = currentY + config.cellHeight / 2
+    currentY += config.cellHeight
+  })
+}
+
+/**
+ * Track labels, painted last so they sit on top of the animation fill.
+ *
+ * A label straddles cells in every state at once — the 20% tint of an idle
+ * track, the 80% fill of a finished one, and the half-filled cell in between —
+ * so no single text colour can win against the background. Ink text with a
+ * paper outline works on all of them: on the tint it is simply dark on light,
+ * on the fill the outline separates the glyphs from the colour.
+ */
+export function drawModuleLabels(
+  surface: DrawSurface,
+  modules: ModuleData[],
+  config: RenderConfig,
+  headerHeight: number
+) {
+  const fontSize = labelFontSize(config.cellHeight)
+  if (fontSize < MIN_LABEL_FONT_SIZE) return
+
+  modules.forEach((module, rowIndex) => {
     const label = moduleLabel(module, config.textDisplay)
+    if (!label) return
+
+    const actualStartX = module.calculatedStartX ?? module.startX
+    const textX = actualStartX * config.cellWidth + 4
+    const textY = headerHeight + rowIndex * config.cellHeight + config.cellHeight / 2
 
     surface.text(label, textX, textY, {
-      fill: '#ffffff',
-      fontSize: LABEL_FONT_SIZE,
+      fill: LABEL_INK,
+      fontSize,
       fontFamily: LABEL_FONT_FAMILY,
-      halo: 'rgba(0, 0, 0, 0.55)',
-      haloWidth: 2
+      halo: LABEL_HALO,
+      haloWidth: LABEL_HALO_WIDTH
     })
-
-    currentY += config.cellHeight
   })
 }
 
@@ -346,6 +396,7 @@ function paintFrame(surface: DrawSurface, options: RenderFrameOptions) {
     if (currentFrame > 0) {
       drawAnimationOverlay(surface, modules, config, currentFrame, headerHeight, coloringMode)
     }
+    drawModuleLabels(surface, modules, config, headerHeight)
   }
 }
 

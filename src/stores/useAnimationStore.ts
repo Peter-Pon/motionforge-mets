@@ -16,6 +16,9 @@ interface AnimationStore extends AnimationState {
   previousFrame: () => void
 }
 
+/** One step of the transport controls: a 60fps frame, in milliseconds. */
+export const FRAME_STEP_MS = 1000 / 60
+
 export const useAnimationStore = create<AnimationStore>()(
   immer((set) => ({
     // Initial state
@@ -64,7 +67,7 @@ export const useAnimationStore = create<AnimationStore>()(
 
     nextFrame: () => set((state) => {
       if (state.currentFrame < state.totalFrames) {
-        state.currentFrame += 16.67 // Advance by ~16.67ms (60fps)
+        state.currentFrame = Math.min(state.totalFrames, state.currentFrame + FRAME_STEP_MS)
       } else if (state.loop) {
         state.currentFrame = 0
       } else {
@@ -73,9 +76,7 @@ export const useAnimationStore = create<AnimationStore>()(
     }),
 
     previousFrame: () => set((state) => {
-      if (state.currentFrame > 0) {
-        state.currentFrame--
-      }
+      state.currentFrame = Math.max(0, state.currentFrame - FRAME_STEP_MS)
     })
   }))
 )

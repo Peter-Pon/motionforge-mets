@@ -1,4 +1,4 @@
-module,action,startPosition,moveCount,intervalTime
+module,action,startPosition,moveCount,duration
 進料輸送,產品輸入,0,40,60
 定位機構,產品對齊,35,10,100
 計數感測,數量檢測,40,5,50

@@ -1,4 +1,4 @@
-# DynMech CycleView — 設備動作節拍視覺化
+# DYNMECH CycleView — 設備動作節拍視覺化
 
 [简体中文](README.md) · **繁體中文** · [English](README.en.md)
 
@@ -11,7 +11,7 @@
 
 
 > 免費工具,無需授權碼,完全離線。
-> 前身為 METS(Mechanism Timing Simulation),自 DynMech 發行起更名為 CycleView。
+> 前身為 METS(Mechanism Timing Simulation),自 DYNMECH 發行起更名為 CycleView。
 
 **CycleView 把一台設備各機構的動作時序畫成一張會動的節拍圖。**
 X 軸是時間,Y 軸是機構模組;每個模組從自己的起始格開始,按自己的節拍逐格推進。
@@ -27,7 +27,7 @@ X 軸是時間,Y 軸是機構模組;每個模組從自己的起始格開始,按�
 |---|---|---|
 | 非標設備方案期估節拍 | Excel 手畫甘特圖 | 填 CSV → 播放 → 看最長那條帶子 |
 | 產線節拍平衡 | 憑經驗 + 現場計時 | 各工站並排看重疊與空等 |
-| 投標 / 方案簡報 | 3D 截圖 + 口頭說明 | 導出 MP4 或 PNG 直接進標書 |
+| 投標 / 方案簡報 | 3D 截圖 + 口頭說明 | 導出 MP4 或 PDF 直接進標書 |
 | 新人訓練 | 站在機器旁邊講 | 一張圖講清整機怎麼動 |
 
 ## 能力邊界(請先讀這一節)
@@ -38,18 +38,19 @@ CycleView **只處理時間維度**。它不做幾何干涉檢查,不做運動�
 > **時序圖上沒有重疊,不代表機構在空間上不會碰撞。**
 
 它是 3D 運動模擬的**上游**工具——先把「什麼時候動」排清楚,再去
-[DynMech Motion](https://dynmech.com) 裡算「具體怎麼動」。所有結論須由工程人員
+[DYNMECH Motion](https://dynmech.com) 裡算「具體怎麼動」。所有結論須由工程人員
 複核後方可用於生產,詳見 [EULA.md](EULA.md)。
 
 ## 功能
 
 - 📊 **CSV 匯入** — 五欄搞定一台設備的節拍描述
 - 🎬 **動畫播放** — 時間軸控制、逐格步進、變速、循環
+- 🎯 **跟隨播放** — 視窗自動捲動並按需縮放,始終把正在繪製的格子留在畫面裡
 - 🎨 **節拍網格** — 按階段(stage)分組,支援同一模組多段串行動作
-- 🌏 **四語介面** — 简体中文、繁體中文、English、日本語
-- 🎥 **MP4 導出** — 影格精確的 H.264 影片,可選 24 / 30 / 60 fps
+- 🌏 **五語介面** — 簡體中文、繁體中文、English、日本語、한국어
+- 🎥 **MP4 導出** — 把跟隨播放錄成 H.264 影片,不含側邊欄,可選解析度、速率與影格率
 - 📄 **PDF 報告** — 向量節拍圖 + 參數表,可直接發給沒裝本軟體的人
-- 💾 **其他導出** — Excel、PNG、CSV、專案 JSON
+- 💾 **CSV 導出** — 參數表寫回 CSV,可帶串行動作的計算起始格
 - ⚡ **快捷鍵** — 全功能鍵盤操作
 - 🔄 **復原 / 重做** — 完整編輯歷史
 - ⚙️ **偏好設定** — 介面與動畫參數可自訂
@@ -66,7 +67,7 @@ CycleView **只處理時間維度**。它不做幾何干涉檢查,不做運動�
 
 ### 關於 PDF 報告
 
-PDF 是唯一一個**成品**導出:CSV 和專案檔只有裝了 CycleView 的人能用,PNG 和 MP4
+PDF 是唯一一個**成品**導出:CSV 只有裝了 CycleView 的人能用,MP4
 是要貼進簡報的素材,而 PDF 可以直接發給客戶、主管、下游工廠。
 
 一份報告兩頁(參數多時表格自動續頁):
@@ -88,11 +89,11 @@ PDF 是唯一一個**成品**導出:CSV 和專案檔只有裝了 CycleView 的�
 | `action` | 動作說明 |
 | `startPosition` | 起始格(相位 / 延遲) |
 | `moveCount` | 移動格數(動作時長) |
-| `intervalTime` | 每格毫秒數(速度) |
+| `duration` | 每格毫秒數(速度)。舊欄位名 `intervalTime` 仍可識別 |
 | `stage` | 所屬階段(選填) |
 
 ```csv
-module,action,startPosition,moveCount,intervalTime,stage
+module,action,startPosition,moveCount,duration,stage
 Feeder_1,material_loading,0,25,100,A
 Feeder_1,vibration_control,0,20,120,A
 Conveyor_1,belt_operation,10,30,100,A
@@ -120,6 +121,9 @@ Conveyor_1,belt_operation,10,30,100,A
 npm install
 npm run dev
 ```
+
+也可以直接執行倉庫根目錄的啟動腳本:`start.cmd`(Windows)或 `./start.sh`(macOS / Linux)。
+不帶參數時先建置生產包再用 Electron 開啟,與發行版行為一致;`start dev` 走 Vite 熱更新並開啟 DevTools;`start build` 只建置不啟動。
 
 建置:
 
@@ -154,7 +158,7 @@ WebCodecs + mp4-muxer 做影片導出,Chromium 列印管線出 PDF。
 
 ## 品牌資源
 
-`assets/brand/` 下有 DynMech 標識、鎖定組合與四語開機畫面。
+`assets/brand/` 下有 DYNMECH 標識、鎖定組合與四語開機畫面。
 開機畫面原始檔是 [`assets/splash.html`](assets/splash.html)(SVG,1120×600 @2x),
 改文案或重新導出 PNG 都從它出發;字體選型的來龍去脈見
 [`assets/brand/fonts/README.md`](assets/brand/fonts/README.md)。
@@ -172,5 +176,5 @@ WebCodecs + mp4-muxer 做影片導出,Chromium 列印管線出 PDF。
 
 ---
 
-DynMech · [dynmech.com](https://dynmech.com)
+DYNMECH · [dynmech.com](https://dynmech.com)
 衍生自 Motionforge 發布的 METS(Mechanism Timing Simulation)。

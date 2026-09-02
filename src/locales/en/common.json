@@ -1,21 +1,16 @@
 {
   "app": {
-    "title": "DynMech CycleView - Equipment Motion Timing",
+    "title": "DYNMECH CycleView - Equipment Motion Timing",
     "description": "Equipment Motion Timing Visualisation Tool"
   },
   "menu": {
     "file": {
       "title": "File",
-      "new": "New Project",
-      "open": "Open Project",
-      "save": "Save Project",
-      "saveAs": "Save As",
       "import": "Import CSV",
       "export": {
         "title": "Export",
-        "excel": "Export as Excel",
+        "csv": "Export as CSV",
         "pdf": "Export as PDF",
-        "png": "Export as PNG",
         "mp4": "Export as MP4"
       },
       "quit": "Quit"
@@ -24,29 +19,31 @@
       "title": "Edit",
       "undo": "Undo",
       "redo": "Redo",
-      "editParams": "Edit Parameters",
-      "clearCanvas": "Clear Canvas",
-      "resetAnimation": "Reset Animation"
+      "preferences": "Preferences"
     },
     "view": {
       "title": "View",
       "zoomIn": "Zoom In",
       "zoomOut": "Zoom Out",
       "fitWindow": "Fit to Window",
-      "showGrid": "Show Grid",
-      "showRuler": "Show Ruler",
-      "fullscreen": "Fullscreen"
+      "actualSize": "Actual Size",
+      "fullscreen": "Fullscreen",
+      "crosshair": "Crosshair"
     },
     "animation": {
       "title": "Animation",
       "playPause": "Play/Pause",
       "stop": "Stop",
+      "reset": "Reset Animation",
       "nextFrame": "Next Frame",
       "prevFrame": "Previous Frame",
+      "speedUp": "Speed Up",
+      "speedDown": "Speed Down",
       "speedSettings": "Speed Settings",
       "speedSettingsDescription": "Adjust animation playback speed",
       "currentSpeed": "Current Speed",
-      "loopPlayback": "Loop Playback"
+      "loopPlayback": "Loop Playback",
+      "followPlayback": "Follow Playback"
     },
     "help": {
       "title": "Help",
@@ -54,7 +51,10 @@
       "userGuide": "User Guide",
       "shortcuts": "Keyboard Shortcuts"
     },
-    "more": "More Options"
+    "more": "More Options",
+    "window": {
+      "title": "Window"
+    }
   },
   "sidebar": {
     "parameters": "Parameters",
@@ -68,7 +68,8 @@
     "items": "items"
   },
   "toolbar": {
-    "importCSV": "Import CSV"
+    "importCSV": "Import CSV",
+    "importSuccess": "Imported {{count}} rows"
   },
   "timeline": {
     "play": "Play",
@@ -81,17 +82,21 @@
   },
   "shortcuts": {
     "playPause": "Play/Pause (Space)",
-    "stop": "Stop (S)",
-    "reset": "Reset (R)",
+    "stop": "Stop (S / Esc)",
+    "reset": "Reset (R / Home)",
     "importCSV": "Import CSV (Ctrl+I)",
     "export": "Export (Ctrl+E)",
     "preferences": "Preferences (Ctrl+,)",
     "speedUp": "Speed Up (+)",
     "speedDown": "Speed Down (-)",
-    "loadTestData": "Load Test Data (Ctrl+T)",
     "toggleCrosshair": "Toggle Crosshair (C)",
     "toggleLoop": "Toggle Loop (Ctrl+L)",
-    "changeLanguage": "Change Language"
+    "changeLanguage": "Change Language",
+    "zoomIn": "Zoom In (Ctrl++)",
+    "zoomOut": "Zoom Out (Ctrl+-)",
+    "fitWindow": "Fit to Window (Ctrl+0)",
+    "actualSize": "Actual Size (Ctrl+1)",
+    "followPlayback": "Follow Playback (F)"
   },
   "canvas": {
     "placeholder": "Canvas will appear here"
@@ -99,10 +104,7 @@
   "dialog": {
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "ok": "OK",
-    "save": "Save",
-    "discard": "Discard",
-    "unsavedChanges": "You have unsaved changes. Do you want to save?"
+    "ok": "OK"
   },
   "error": {
     "fileNotFound": "File not found",
@@ -155,11 +157,11 @@
     "cells": "cells"
   },
   "about": {
-    "title": "About DynMech CycleView",
+    "title": "About DYNMECH CycleView",
     "version": "Version {{version}}",
-    "description": "DynMech CycleView is a free tool for visualising equipment motion timing: design, check and present the action sequence of every mechanism on a machine and the cycle time they add up to.",
-    "copyright": "Copyright © 2026 DynMech",
-    "developedBy": "Developed by DynMech",
+    "description": "DYNMECH CycleView is a free tool for visualising equipment motion timing: design, check and present the action sequence of every mechanism on a machine and the cycle time they add up to.",
+    "copyright": "Copyright © 2026 DYNMECH",
+    "developedBy": "Developed by DYNMECH",
     "license": "Free software, no licence key required. Source code is released under the Apache License 2.0."
   },
   "export": {
@@ -169,12 +171,6 @@
     "csv": {
       "description": "Export module data as CSV",
       "includeCalculated": "Include calculated positions"
-    },
-    "excel": {
-      "description": "Export detailed module data"
-    },
-    "png": {
-      "description": "Export the current canvas view"
     },
     "pdf": {
       "description": "A PDF report — chart plus parameter table — to hand to someone without CycleView",
@@ -199,15 +195,14 @@
       }
     },
     "mp4": {
-      "description": "Export the timing animation as an MP4 video",
+      "description": "Follow-playback video of the chart, without the sidebar",
+      "resolution": "Resolution",
+      "speed": "Speed",
+      "zoomNote": "The camera starts at the current zoom ({{zoom}}%) and zooms out only as needed",
       "fps": "Frame rate",
+      "unsupported": "H.264 encoding is unavailable on this system, so MP4 export is disabled",
       "rendering": "Rendering video",
-      "cancel": "Cancel export",
-      "unsupported": "H.264 encoding is unavailable on this system, so MP4 export is disabled"
-    },
-    "project": {
-      "title": "Project file",
-      "description": "Export the full project configuration"
+      "cancel": "Cancel export"
     }
   },
   "help": {
@@ -217,7 +212,8 @@
       "file": "File Operations",
       "edit": "Edit Operations",
       "view": "View Operations",
-      "animation": "Animation Control"
+      "animation": "Animation Control",
+      "help": "Help"
     },
     "shortcuts": {
       "space": "Space",
@@ -225,24 +221,26 @@
       "rightArrow": "→",
       "leftArrow": "←",
       "speedUp": "Speed Up",
-      "speedDown": "Speed Down"
+      "speedDown": "Speed Down",
+      "home": "Home"
     },
     "tips": {
       "title": "Usage Tips",
       "tip1": "Double-click the toolbar to toggle fullscreen mode",
-      "tip2": "Drag and drop CSV files to the window for quick import",
-      "tip3": "Use mouse wheel to zoom the canvas",
-      "tip4": "Hold Shift while dragging to select multiple modules"
-    }
+      "tip2": "Double-click a cell in the parameter table to edit it",
+      "tip3": "Hold Ctrl/Cmd and scroll to zoom the chart",
+      "tip4": "Turn on Follow Playback (F) so large charts keep the moving modules in view"
+    },
+    "inputNote": "Shortcuts are paused while typing in a table cell"
   },
   "userGuide": {
     "title": "User Guide",
     "introduction": "CycleView is a professional mechanism motion timing visualization tool for simulating and analyzing the motion timing of mechanical equipment. This guide will help you get started quickly and make full use of CycleView features.",
     "quickStart": {
       "title": "Quick Start",
-      "step1": "Click the 'Load Test Data' button or import a CSV file",
-      "step2": "Use the playback controls to start the animation",
-      "step3": "Adjust speed and view settings for the best experience"
+      "step1": "Click the import icon (Ctrl+I) and choose a CSV file",
+      "step2": "Press Space to play; turn on Follow Playback (F) for large charts",
+      "step3": "Export a PDF report or a follow-playback MP4 (Ctrl+E)"
     },
     "sections": {
       "gettingStarted": {
@@ -250,35 +248,36 @@
         "step1": "After launching CycleView, you'll see the main interface with a parameter table, canvas, and toolbar.",
         "step2": "The parameter table on the left shows detailed information for all modules, including module names, action descriptions, and timing parameters.",
         "step3": "The canvas area on the right displays the mechanism motion timing relationships in a visual format.",
-        "step4": "The toolbar provides quick access to all main functions, including import, playback controls, export, and settings."
+        "step4": "The toolbar holds import and export, playback with speed and follow, and view zoom; settings, help and language are on the right."
       },
       "importingData": {
         "title": "Importing Data",
-        "csvFormat": "Supports CSV format data import. Files should contain columns for module name, action description, start position, cell count, and duration.",
-        "requiredColumns": "Required columns: Module Name, Action Description, Start Position, Cell Count, Duration, Stage.",
-        "dragDrop": "You can drag and drop CSV files directly into the application window for quick import.",
-        "testData": "Click the 'Load Test Data' button to load sample data for testing and learning functions."
+        "csvFormat": "Import a CSV via the toolbar icon or Ctrl+I. Columns: module, action, startPosition, moveCount, duration; stage is optional.",
+        "requiredColumns": "startPosition is the starting cell, moveCount the number of cells, duration the milliseconds per cell. The legacy header intervalTime is still accepted.",
+        "sequential": "Within a module, an action whose startPosition is 0 starts right where the previous action ended, so a sequence of actions needs no manual offsets."
       },
       "animationControls": {
         "title": "Animation Controls",
         "playPause": "Use the play/pause button or spacebar to control animation playback.",
-        "stop": "The stop button will halt the animation and maintain the current position.",
-        "reset": "The reset button will return the animation to the starting position.",
-        "speed": "Use speed controls to adjust animation playback speed, supporting 0.1x to 4x speed range."
+        "stop": "Stop (S or Esc) halts playback and rewinds to the start.",
+        "reset": "Reset (R or Home) returns to the first frame; ← and → step one frame at a time.",
+        "speed": "Speed runs from 0.1x to 4x via the toolbar selector or + and -; Loop (Ctrl+L) replays continuously.",
+        "follow": "Follow Playback (F) scrolls and zooms the canvas so every module in motion stays in view; the stage column mirrors each action's progress.",
+        "view": "Zoom with Ctrl++ and Ctrl+- or Ctrl+wheel, fit the chart to the window with Ctrl+0, return to actual size with Ctrl+1; table rows scale with the chart."
       },
       "visualization": {
         "title": "Visualization Features",
         "modules": "Each module is represented by colored bars, with length representing execution time.",
-        "stages": "Actions in different stages are displayed with different color tones for easy differentiation.",
+        "stages": "The stage column in the table fills in real time: one bar per action, complete when that action ends.",
         "timing": "Timing relationships are shown through horizontal position and length, clearly displaying action execution order and overlap relationships.",
         "colors": "Color coding helps quickly identify actions from different modules and stages."
       },
       "exporting": {
         "title": "Export Functions",
-        "formats": "Supports multiple export formats: Excel, PDF, PNG, and MP4.",
-        "excel": "Excel export includes complete parameter tables and calculation results.",
+        "formats": "Export formats: CSV, PDF and MP4.",
+        "csv": "CSV export writes the parameter table back out, optionally with the calculated start positions of sequential actions.",
         "pdf": "PDF export provides high-quality report format.",
-        "images": "PNG export can generate static images, MP4 export can generate animated videos."
+        "video": "MP4 export records follow playback as a video: the camera scrolls and zooms so every active module stays in frame."
       }
     },
     "additionalHelp": {

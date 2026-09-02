@@ -1,4 +1,4 @@
-module,action,startPosition,moveCount,intervalTime
+module,action,startPosition,moveCount,duration
 主軸系統,啟動加速,0,10,50
 主軸系統,恆速運轉,10,80,40
 主軸系統,減速停止,90,10,50

@@ -31,8 +31,7 @@ export function UserGuideDialog({ isOpen, onClose }: UserGuideDialogProps) {
       content: [
         t('userGuide.sections.importingData.csvFormat'),
         t('userGuide.sections.importingData.requiredColumns'),
-        t('userGuide.sections.importingData.dragDrop'),
-        t('userGuide.sections.importingData.testData')
+        t('userGuide.sections.importingData.sequential')
       ]
     },
     {
@@ -41,7 +40,9 @@ export function UserGuideDialog({ isOpen, onClose }: UserGuideDialogProps) {
         t('userGuide.sections.animationControls.playPause'),
         t('userGuide.sections.animationControls.stop'),
         t('userGuide.sections.animationControls.reset'),
-        t('userGuide.sections.animationControls.speed')
+        t('userGuide.sections.animationControls.speed'),
+        t('userGuide.sections.animationControls.follow'),
+        t('userGuide.sections.animationControls.view')
       ]
     },
     {
@@ -57,9 +58,9 @@ export function UserGuideDialog({ isOpen, onClose }: UserGuideDialogProps) {
       title: t('userGuide.sections.exporting.title'),
       content: [
         t('userGuide.sections.exporting.formats'),
-        t('userGuide.sections.exporting.excel'),
+        t('userGuide.sections.exporting.csv'),
         t('userGuide.sections.exporting.pdf'),
-        t('userGuide.sections.exporting.images')
+        t('userGuide.sections.exporting.video')
       ]
     }
   ]

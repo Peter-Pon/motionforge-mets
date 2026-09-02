@@ -1,4 +1,4 @@
-# DynMech CycleView — Equipment Motion Timing
+# DYNMECH CycleView — Equipment Motion Timing
 
 [简体中文](README.md) · [繁體中文](README.zh-TW.md) · **English**
 
@@ -11,7 +11,7 @@ Website & downloads: **[dynmech.com](https://www.dynmech.com/en/cycleview/)**
 
 
 > Free tool. No licence key. Fully offline.
-> Formerly METS (Mechanism Timing Simulation); renamed CycleView for the DynMech release.
+> Formerly METS (Mechanism Timing Simulation); renamed CycleView for the DYNMECH release.
 
 **CycleView turns a machine's mechanism timing into an animated chart.**
 Time runs along X, mechanisms down Y. Each module starts at its own column and
@@ -28,7 +28,7 @@ Fill in a CSV, hit space, export it into the bid. That's the whole tool.
 |---|---|---|
 | Estimating cycle time while quoting a machine | Hand-drawn Gantt chart in Excel | Fill the CSV, play it, look at the longest bar |
 | Balancing a line | Gut feel plus a stopwatch on the floor | Every station side by side — overlaps and idle gaps visible |
-| Bids and design reviews | 3D screenshots plus a verbal explanation | Export MP4 or PNG straight into the document |
+| Bids and design reviews | 3D screenshots plus a verbal explanation | Export MP4 or PDF straight into the document |
 | Training new engineers | Standing next to the machine, pointing | One chart that explains how the whole machine moves |
 
 ## Scope and limits (read this first)
@@ -40,7 +40,7 @@ of safety functions.
 > **Bars that don't overlap in time does not mean the mechanisms won't collide in space.**
 
 It sits **upstream** of 3D motion simulation: settle *when* things move here,
-then work out *how* they move in [DynMech Motion](https://dynmech.com). Every
+then work out *how* they move in [DYNMECH Motion](https://dynmech.com). Every
 conclusion must be reviewed by a qualified engineer before production use — see
 [EULA.md](EULA.md).
 
@@ -48,11 +48,12 @@ conclusion must be reviewed by a qualified engineer before production use — se
 
 - 📊 **CSV import** — five columns describe a machine's whole timing
 - 🎬 **Playback** — timeline scrubbing, frame stepping, speed control, looping
+- 🎯 **Follow playback** — the view scrolls and zooms as needed so the cells being painted always stay on screen
 - 🎨 **Timing grid** — grouped by stage, with multiple sequential actions per module
-- 🌏 **Four languages** — Simplified Chinese, Traditional Chinese, English, Japanese
-- 🎥 **MP4 export** — frame-accurate H.264 at 24 / 30 / 60 fps
+- 🌏 **Five languages** — Simplified Chinese, Traditional Chinese, English, Japanese, Korean
+- 🎥 **MP4 export** — follow playback recorded as H.264 video, no sidebar; choose resolution, rate and fps
 - 📄 **PDF report** — vector chart plus parameter table, ready to send to someone without CycleView
-- 💾 **Other exports** — Excel, PNG, CSV, project JSON
+- 💾 **CSV export** — the parameter table written back out, optionally with computed start cells
 - ⚡ **Keyboard shortcuts** — every action reachable without the mouse
 - 🔄 **Undo / redo** — full edit history
 - ⚙️ **Preferences** — configurable interface and animation parameters
@@ -74,7 +75,7 @@ exact millisecond offset and encoded to H.264 with WebCodecs. Which means:
 ### About the PDF report
 
 The PDF is the only export that is a **finished deliverable**. CSV and project
-files are only useful to someone running CycleView; PNG and MP4 are raw material
+is only useful to someone running CycleView; MP4 is raw material
 you paste into a deck. A PDF goes straight to the customer, the boss, or the
 downstream shop.
 
@@ -100,11 +101,11 @@ has to be embedded.
 | `action` | Description of the action |
 | `startPosition` | Starting cell (phase / delay) |
 | `moveCount` | Number of cells traversed (action duration) |
-| `intervalTime` | Milliseconds per cell (speed) |
+| `duration` | Milliseconds per cell (speed). The legacy name `intervalTime` is still accepted |
 | `stage` | Stage this action belongs to (optional) |
 
 ```csv
-module,action,startPosition,moveCount,intervalTime,stage
+module,action,startPosition,moveCount,duration,stage
 Feeder_1,material_loading,0,25,100,A
 Feeder_1,vibration_control,0,20,120,A
 Conveyor_1,belt_operation,10,30,100,A
@@ -133,6 +134,9 @@ Requires Node.js 18+.
 npm install
 npm run dev
 ```
+
+Or use the launcher in the repository root: `start.cmd` (Windows) or `./start.sh` (macOS / Linux).
+With no argument it builds the production bundle and opens it in Electron, exactly as shipped; `start dev` runs Vite with hot reload and DevTools; `start build` only builds.
 
 Build:
 
@@ -173,7 +177,7 @@ PDF.
 
 ## Brand assets
 
-`assets/brand/` holds the DynMech mark, the lockups, and the splash card in four
+`assets/brand/` holds the DYNMECH mark, the lockups, and the splash card in four
 languages. The splash source is [`assets/splash.html`](assets/splash.html) (SVG,
 1120×600 at 2x) — edit copy or re-export the PNGs from there. The reasoning
 behind the typeface choice is in
@@ -192,5 +196,5 @@ Runs fully offline. Makes no network requests and collects no data.
 
 ---
 
-DynMech · [dynmech.com](https://dynmech.com)
+DYNMECH · [dynmech.com](https://dynmech.com)
 Derived from METS (Mechanism Timing Simulation) published by Motionforge.

@@ -1,4 +1,4 @@
-module,action,startPosition,moveCount,intervalTime
+module,action,startPosition,moveCount,duration
 底座供料,零件輸送,0,25,80
 螺絲供料,螺絲排列,20,15,60
 取放機械手,零件組裝,30,20,120

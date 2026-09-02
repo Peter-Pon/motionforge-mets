@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProjectStore } from '@/stores/useProjectStore'
 import { usePreferencesStore } from '@/stores/usePreferencesStore'
+import { useUIStore } from '@/stores/useUIStore'
+import { useAnimationStore } from '@/stores/useAnimationStore'
+import { computeActionStartTimes } from '@/lib/timingModel'
+import { hexToRgba } from '@/lib/canvasRenderer'
 import { ModuleData } from '@/types'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
@@ -21,6 +25,33 @@ export function ParameterTable() {
   const { t } = useTranslation()
   const { project, updateModule } = useProjectStore()
   const { grid } = usePreferencesStore()
+  const { zoom } = useUIStore()
+  // Rows follow the canvas zoom so the table stays aligned with the chart;
+  // the cell text scales with them (see .parameter-scroll tbody in index.css).
+  const rowHeight = grid.cellHeight * zoom
+  const rowFontSize = Math.min(18, 12 * zoom)
+  const dotSize = Math.min(12, Math.max(2, rowHeight * 0.5))
+  // Bottom spacer so the table can scroll exactly as far as the canvas. The
+  // canvas pads its bottom and sits above the timeline, so without this the
+  // table runs out of travel first and the two drift apart on the last rows.
+  const [bottomSpacer, setBottomSpacer] = useState(0)
+  useEffect(() => {
+    const measure = () => {
+      const canvasBox = document.querySelector('[data-timing-canvas]')?.parentElement?.parentElement
+      const tableBox = document.querySelector('.parameter-scroll')
+      if (!canvasBox || !tableBox) return
+      const canvasTravel = canvasBox.scrollHeight - canvasBox.clientHeight
+      const tableTravel = tableBox.scrollHeight - tableBox.clientHeight
+      setBottomSpacer(prev => Math.max(0, Math.round(prev + canvasTravel - tableTravel)))
+    }
+    // After the canvas has re-laid out for the same change.
+    const timer = setTimeout(measure, 0)
+    window.addEventListener('resize', measure)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', measure)
+    }
+  }, [project, zoom, grid.cellHeight])
   const [editingCell, setEditingCell] = useState<EditingCell | null>(null)
   const [titleHeight, setTitleHeight] = useState(52) // Default height
 
@@ -147,18 +178,20 @@ export function ParameterTable() {
                   {t('sidebar.action').length > 6 ? t('sidebar.action').substring(0, 6) + '...' : t('sidebar.action')}
                 </th>
                 <th className="text-center font-medium border-r bg-muted w-12" style={{ padding: '0 1px', fontSize: '9px' }} title={t('sidebar.startPosition')}>
-                  起始
+                  {t('sidebar.startPosition')}
                 </th>
                 <th className="text-center font-medium border-r bg-muted w-12" style={{ padding: '0 1px', fontSize: '9px' }} title={t('sidebar.moveCount')}>
-                  格數
+                  {t('sidebar.moveCount')}
                 </th>
                 <th className="text-center font-medium bg-muted w-12" style={{ padding: '0 1px', fontSize: '9px' }} title={t('sidebar.duration')}>
-                  時長
+                  {t('sidebar.duration')}
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style={{ ['--row-font-size' as string]: `${rowFontSize}px` } as React.CSSProperties}>
           {groupedModules.map((group, groupIndex) => {
+            // When each action in this module starts, for the stage progress bars.
+            const startTimes = computeActionStartTimes(group.modules)
             // Create stage groups within each module group
             const stageGroups: { stage: string | undefined; startIndex: number; count: number }[] = []
             let currentStage = group.modules[0]?.stage
@@ -185,12 +218,12 @@ export function ParameterTable() {
                 const shouldRenderStage = stageGroup !== undefined
                 
                 return (
-                <tr key={module.id} className="border-b hover:bg-muted/30 group [&>td]:cursor-text" style={{ height: `${grid.cellHeight}px` }}>
+                <tr key={module.id} className="border-b hover:bg-muted/30 group [&>td]:cursor-text" style={{ height: `${rowHeight}px` }}>
                   {moduleIndex === 0 && (
                     <td 
                       className="px-1 border-r align-middle bg-background"
                       rowSpan={group.modules.length}
-                      style={{ height: `${grid.cellHeight}px`, padding: '0 4px' }}
+                      style={{ height: `${rowHeight}px`, padding: '0 4px' }}
                       onDoubleClick={() => handleCellDoubleClick(module.id, 'moduleName', module.moduleName)}
                     >
                       {editingCell?.moduleId === module.id && editingCell.field === 'moduleName' ? (
@@ -206,8 +239,8 @@ export function ParameterTable() {
                       ) : (
                         <div className="flex items-start gap-1.5">
                           <div 
-                            className="w-3 h-3 rounded-sm mt-0.5 flex-shrink-0"
-                            style={{ backgroundColor: module.color }}
+                            className="rounded-sm mt-0.5 flex-shrink-0"
+                            style={{ backgroundColor: module.color, width: dotSize, height: dotSize }}
                           />
                           {group.name.length > 6 ? (
                             <Tooltip>
@@ -230,12 +263,19 @@ export function ParameterTable() {
                     </td>
                   )}
                   {shouldRenderStage && (
-                    <td 
+                    <td
                       className="border-r text-center align-middle"
-                      style={{ height: `${grid.cellHeight}px`, padding: '0 4px' }}
+                      style={{ height: `${rowHeight}px`, padding: '0 4px', position: 'relative', overflow: 'hidden' }}
                       rowSpan={stageGroup.count}
                       onDoubleClick={() => handleCellDoubleClick(module.id, 'stage', module.stage || '')}
                     >
+                      <StageProgress
+                        actions={group.modules.slice(stageGroup.startIndex, stageGroup.startIndex + stageGroup.count)}
+                        startTimes={startTimes.slice(stageGroup.startIndex, stageGroup.startIndex + stageGroup.count)}
+                        rowHeight={rowHeight}
+                        color={module.color || '#3b82f6'}
+                      />
+                      <div className="relative z-10" style={{ textShadow: '0 0 2px #fff, 0 0 2px #fff' }}>
                       {editingCell?.moduleId === module.id && editingCell.field === 'stage' ? (
                         <input
                           type="text"
@@ -264,11 +304,12 @@ export function ParameterTable() {
                           </span>
                         )
                       )}
+                      </div>
                     </td>
                   )}
                   <td 
                     className="border-r text-muted-foreground align-middle overflow-hidden"
-                    style={{ height: `${grid.cellHeight}px`, padding: '0 4px', whiteSpace: 'nowrap' }}
+                    style={{ height: `${rowHeight}px`, padding: '0 4px', whiteSpace: 'nowrap' }}
                     onDoubleClick={() => handleCellDoubleClick(module.id, 'actionDescription', module.actionDescription)}
                   >
                     {editingCell?.moduleId === module.id && editingCell.field === 'actionDescription' ? (
@@ -302,7 +343,7 @@ export function ParameterTable() {
                   </td>
                   <td 
                     className="border-r text-center tabular-nums font-mono align-middle"
-                    style={{ height: `${grid.cellHeight}px`, padding: '0 4px' }}
+                    style={{ height: `${rowHeight}px`, padding: '0 4px' }}
                     onDoubleClick={() => handleCellDoubleClick(module.id, 'startX', module.startX)}
                   >
                     {editingCell?.moduleId === module.id && editingCell.field === 'startX' ? (
@@ -329,7 +370,7 @@ export function ParameterTable() {
                   </td>
                   <td 
                     className="border-r text-center tabular-nums font-mono align-middle"
-                    style={{ height: `${grid.cellHeight}px`, padding: '0 4px' }}
+                    style={{ height: `${rowHeight}px`, padding: '0 4px' }}
                     onDoubleClick={() => handleCellDoubleClick(module.id, 'moveCount', module.moveCount)}
                   >
                     {editingCell?.moduleId === module.id && editingCell.field === 'moveCount' ? (
@@ -349,7 +390,7 @@ export function ParameterTable() {
                   </td>
                   <td 
                     className="text-center tabular-nums font-mono align-middle"
-                    style={{ height: `${grid.cellHeight}px`, padding: '0 4px' }}
+                    style={{ height: `${rowHeight}px`, padding: '0 4px' }}
                     onDoubleClick={() => handleCellDoubleClick(module.id, 'duration', module.duration)}
                   >
                     {editingCell?.moduleId === module.id && editingCell.field === 'duration' ? (
@@ -376,9 +417,67 @@ export function ParameterTable() {
           })}
             </tbody>
           </table>
+          <div style={{ height: `${bottomSpacer}px` }} aria-hidden="true" />
         </TooltipProvider>
       </div>
     </div>
+  )
+}
+
+interface StageProgressProps {
+  /** The consecutive actions that share this stage cell, in row order. */
+  actions: ModuleData[]
+  /** Start time (ms) of each of those actions, from the timing model. */
+  startTimes: number[]
+  rowHeight: number
+  color: string
+}
+
+/**
+ * Live progress inside a stage cell: one bar per row the cell spans, filling
+ * left to right as that row's action advances and complete once it ends, so
+ * the stage column reads as a compact mirror of the chart. Subscribes to the
+ * playhead itself, so the rest of the table does not re-render every frame.
+ */
+function StageProgress({ actions, startTimes, rowHeight, color }: StageProgressProps) {
+  const currentFrame = useAnimationStore(state => state.currentFrame)
+  const coloringMode = usePreferencesStore(state => state.animation.coloringMode)
+  const fill = hexToRgba(color, 0.8)
+
+  return (
+    <>
+      {actions.map((action, index) => {
+        const total = action.moveCount * action.duration
+        if (total <= 0) return null
+        const elapsed = currentFrame - startTimes[index]
+        let progress = 0
+        if (elapsed >= total) {
+          progress = 1
+        } else if (elapsed > 0) {
+          // Same rule as the canvas overlay: 'instant' snaps a whole cell as
+          // soon as it starts, 'gradual' fills the current cell proportionally.
+          progress = coloringMode === 'instant'
+            ? Math.min(action.moveCount, Math.floor(elapsed / action.duration) + 1) / action.moveCount
+            : elapsed / total
+        }
+        if (progress <= 0) return null
+        return (
+          <div
+            key={action.id}
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: index * rowHeight,
+              height: rowHeight,
+              width: `${progress * 100}%`,
+              backgroundColor: fill,
+              pointerEvents: 'none'
+            }}
+          />
+        )
+      })}
+    </>
   )
 }
 

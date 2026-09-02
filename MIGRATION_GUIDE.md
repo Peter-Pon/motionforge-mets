@@ -80,6 +80,10 @@ Module B,Task 2,5,15,150,Production
 
 ## Migration Steps for Existing CSV Files
 
+> Since 1.0 the importer also accepts the old `intervalTime` header as an alias
+> for `duration`, so existing files import unchanged. Renaming is still
+> recommended so the file matches the documented format.
+
 1. Open your CSV file in a text editor or spreadsheet application
 2. Change the column header from `intervalTime` to `duration`
 3. (Optional) Add a `stage` column after `duration` if you want to categorize your actions

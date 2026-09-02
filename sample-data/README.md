@@ -51,13 +51,13 @@
 
 ### 標準格式（含階段）
 ```csv
-module,stage,action,startPosition,moveCount,intervalTime
+module,stage,action,startPosition,moveCount,duration
 模組名稱,階段,動作描述,開始位置(格),移動格數,每格時間(ms)
 ```
 
 ### 簡化格式（不含階段）
 ```csv
-module,action,startPosition,moveCount,intervalTime
+module,action,startPosition,moveCount,duration
 模組名稱,動作描述,開始位置(格),移動格數,每格時間(ms)
 ```
 
@@ -66,7 +66,7 @@ module,action,startPosition,moveCount,intervalTime
 - **action**：該模組執行的動作描述
 - **startPosition**：在時間軸上的起始位置（格數）
 - **moveCount**：需要移動的格數（動作持續時間）
-- **intervalTime**：每格的時間間隔（毫秒）
+- **duration**：每格的時間間隔（毫秒）。舊版欄位名 `intervalTime` 仍可匯入
 
 ### 關於 stage 欄位
 - stage 欄位是選填的，用於標示動作所屬的階段或工序

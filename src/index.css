@@ -87,3 +87,15 @@ table td, table th {
   -ms-user-select: text;
   user-select: text;
 }
+/* Parameter-table rows follow the chart zoom (see ParameterTable.tsx). The
+   row height is set inline; the text has to follow it or a zoomed-out row
+   would be forced taller than its canvas counterpart by its own content. */
+.parameter-scroll tbody,
+.parameter-scroll tbody td {
+  font-size: var(--row-font-size, 12px);
+  line-height: 1.2;
+}
+.parameter-scroll tbody .text-xs {
+  font-size: inherit;
+  line-height: 1.2;
+}

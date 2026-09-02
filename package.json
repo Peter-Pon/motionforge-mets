@@ -1,14 +1,15 @@
 {
   "name": "dynmech-cycleview",
   "version": "1.0.0",
-  "description": "DynMech CycleView - a free cross-platform desktop tool for visualising and analysing equipment motion timing (cycle time)",
+  "description": "DYNMECH CycleView - a free cross-platform desktop tool for visualising and analysing equipment motion timing (cycle time)",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
+    "start": "vite build && electron .",
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
     "electron": "electron .",
-    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5178 && electron .\"",
+    "electron:dev": "vite",
     "dist": "npm run build",
     "dist:mac": "npm run build -- --mac",
     "dist:win": "npm run build -- --win",
@@ -23,7 +24,7 @@
     "automation",
     "mechanism"
   ],
-  "author": "DynMech",
+  "author": "DYNMECH",
   "license": "Apache-2.0",
   "homepage": "https://dynmech.com",
   "devDependencies": {
@@ -62,7 +63,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.0.0",
     "electron-store": "^8.1.0",
-    "exceljs": "^4.4.0",
     "i18next": "^25.3.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-electron-fs-backend": "^3.0.3",
@@ -84,8 +84,8 @@
   },
   "build": {
     "appId": "com.dynmech.cycleview",
-    "productName": "DynMech CycleView",
-    "copyright": "Copyright © 2026 DynMech",
+    "productName": "DYNMECH CycleView",
+    "copyright": "Copyright © 2026 DYNMECH",
     "directories": {
       "output": "release"
     },
@@ -168,7 +168,7 @@
       "deleteAppDataOnUninstall": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "artifactName": "DynMech-CycleView-Setup-${version}.${ext}"
+      "artifactName": "DYNMECH-CycleView-Setup-${version}.${ext}"
     },
     "dmg": {
       "contents": [
@@ -184,10 +184,10 @@
           "type": "file"
         }
       ],
-      "artifactName": "DynMech-CycleView-${version}-${arch}.${ext}"
+      "artifactName": "DYNMECH-CycleView-${version}-${arch}.${ext}"
     },
     "portable": {
-      "artifactName": "DynMech-CycleView-Portable-${version}.${ext}"
+      "artifactName": "DYNMECH-CycleView-Portable-${version}.${ext}"
     }
   }
 }

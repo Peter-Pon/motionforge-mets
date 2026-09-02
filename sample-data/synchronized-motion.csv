@@ -1,4 +1,4 @@
-module,action,startPosition,moveCount,intervalTime
+module,action,startPosition,moveCount,duration
 主驅動軸,連續旋轉,0,100,40
 凸輪機構A,週期升降,10,20,80
 凸輪機構B,週期升降,30,20,80

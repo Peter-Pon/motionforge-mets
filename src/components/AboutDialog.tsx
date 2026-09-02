@@ -43,7 +43,7 @@ export function AboutDialog({ isOpen, onClose }: AboutDialogProps) {
           {/* Brand mark — Dynmech mark reversed on the ink ground, same
               artwork as the app icon and the splash card. */}
           <div className="w-20 h-20 mx-auto mb-4 rounded-lg overflow-hidden" style={{ backgroundColor: '#12161B' }}>
-            <svg viewBox="0 0 120 120" className="w-full h-full" role="img" aria-label="DynMech">
+            <svg viewBox="0 0 120 120" className="w-full h-full" role="img" aria-label="DYNMECH">
               <g transform="translate(60 60) scale(1.143) translate(-57.5 -74.95)">
                 <path d="M96 96 A72 72 0 0 0 86.4 60" fill="none" stroke="#1F5FE8" strokeWidth="14" />
                 <rect x="12" y="84" width="24" height="24" fill="#FAF9F7" />

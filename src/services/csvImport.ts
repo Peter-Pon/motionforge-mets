@@ -8,6 +8,8 @@ export interface CSVRow {
   startPosition: string | number
   moveCount: string | number
   duration: string | number
+  /** Pre-1.0 name for `duration`; still accepted so old CSVs keep importing. */
+  intervalTime?: string | number
   stage?: string
 }
 
@@ -74,11 +76,15 @@ function validateAndTransformData(rows: CSVRow[]): CSVImportResult {
     }
   }
   
-  // Check if required columns exist
+  // Check if required columns exist. `intervalTime` is the legacy name for
+  // `duration` (see MIGRATION_GUIDE.md); files written for METS still use it.
   const firstRow = rows[0]
-  const requiredColumns = ['module', 'action', 'startPosition', 'moveCount', 'duration']
+  const requiredColumns = ['module', 'action', 'startPosition', 'moveCount']
   const missingColumns = requiredColumns.filter(col => !(col in firstRow))
-  
+  if (!('duration' in firstRow) && !('intervalTime' in firstRow)) {
+    missingColumns.push('duration')
+  }
+
   if (missingColumns.length > 0) {
     return {
       success: false,
@@ -113,7 +119,7 @@ function validateAndTransformData(rows: CSVRow[]): CSVImportResult {
     // Parse numeric values
     const startX = parseFloat(String(row.startPosition || '0'))
     const moveCount = parseFloat(String(row.moveCount || '0'))
-    const duration = parseFloat(String(row.duration || '100'))
+    const duration = parseFloat(String(row.duration ?? row.intervalTime ?? '100'))
     
     // Validate numeric values
     if (isNaN(startX) || startX < 0) {

@@ -6,7 +6,7 @@ Licensed under the SIL Open Font License 1.1, see [OFL.txt](OFL.txt).
 ## Why it ships but is not used
 
 The Dynmech VI lockup SVGs set the wordmark in Archivo ExtraBold. The shipped
-splash artwork does not: measured against `dynmech-splash-*.png`, DynMech
+splash artwork does not: measured against `dynmech-splash-*.png`, DYNMECH
 Motion's wordmark is the Helvetica/Arial fallback — 465x62 at 1120x600, where
 real Archivo at the same cap height comes out ~5% narrower with visibly rounder
 bowls.
@@ -24,7 +24,7 @@ Worth doing — but do it for every product at once, not just this one:
 2. Re-derive `--wordmark-size` / `--wordmark-tracking` and the two
    `--productline-*` values so the ink still measures 465x62 and 246x26.
 3. Re-render the four PNGs under `../splash/`.
-4. Re-render DynMech Motion's splash card the same way, or CycleView becomes
+4. Re-render DYNMECH Motion's splash card the same way, or CycleView becomes
    the odd one out — which is exactly the problem this file exists to prevent.
 
 Motion already carries `Archivo-Variable.ttf` and `ArchivoBlack-Regular.ttf`
