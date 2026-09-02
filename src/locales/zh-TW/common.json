@@ -300,6 +300,14 @@
     "exportBody": "MP4 跟隨播放影片、PDF 報告和 CSV 匯出都在免費的桌面版中提供，無需授權碼，完全離線。",
     "banner": "想把這段演示放進方案裡？桌面版可匯出跟隨播放的 MP4 和 PDF 報告。",
     "sharedFooter": "這是用 DYNMECH CycleView 分享的節拍圖。下載桌面版即可編輯並匯出。",
-    "dismiss": "關閉"
+    "dismiss": "關閉",
+    "editionBadge": "線上版",
+    "navLimit": "最多 {{limit}} 列",
+    "qrTitle": "QR Code",
+    "qrHint": "掃碼即可在手機上開啟這張節拍圖。資料就在連結裡，不經過伺服器。",
+    "qrDownload": "下載 PNG",
+    "qrAlt": "分享連結的 QR Code",
+    "qrFailed": "QR Code 產生失敗。",
+    "qrTooLong": "這張圖太大，裝不進 QR Code。請改用複製的連結。"
   }
 }

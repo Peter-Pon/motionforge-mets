@@ -28,12 +28,12 @@ import { SpeedSettingsDialog } from '@/components/SpeedSettingsDialog'
 import { IS_ONLINE, ONLINE_DISABLED_COMMANDS } from '@/lib/platform'
 import { readSharedCsv } from '@/lib/shareLink'
 import {
-  DownloadDesktopButton,
   PlaybackEndBanner,
   SampleGalleryButton,
   ShareButton,
   SharedFooter
 } from '@/components/OnlineExtras'
+import { OnlineNavbar } from '@/components/OnlineNavbar'
 
 function App() {
   const { t } = useTranslation()
@@ -302,6 +302,13 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col bg-background">
+      {IS_ONLINE && (
+        <OnlineNavbar
+          onAbout={() => setAboutOpen(true)}
+          onShortcuts={() => setHelpOpen(true)}
+          onUserGuide={() => setUserGuideOpen(true)}
+        />
+      )}
       <div className="flex-1 flex min-h-0">
         {/* Sidebar - Fixed width, always visible */}
         <div className="w-80 border-r bg-muted/50 overflow-hidden flex flex-col flex-shrink-0">
@@ -435,10 +442,10 @@ function App() {
                   </TooltipButton>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                {IS_ONLINE ? (
-                  <DownloadDesktopButton placement="toolbar" />
-                ) : (
+              {/* Desktop keeps these in the toolbar; online moves identity,
+                  download, help and language up into the navbar. */}
+              {!IS_ONLINE && (
+                <div className="flex items-center gap-2">
                   <TooltipButton
                     className="p-2 text-sm border rounded hover:bg-accent transition-colors"
                     onClick={() => setPreferencesOpen(true)}
@@ -446,14 +453,14 @@ function App() {
                   >
                     <FaCog />
                   </TooltipButton>
-                )}
-                <DropdownMenu 
-                  onAbout={() => setAboutOpen(true)}
-                  onShortcuts={() => setHelpOpen(true)}
-                  onUserGuide={() => setUserGuideOpen(true)}
-                />
-                <LanguageSelector />
-              </div>
+                  <DropdownMenu
+                    onAbout={() => setAboutOpen(true)}
+                    onShortcuts={() => setHelpOpen(true)}
+                    onUserGuide={() => setUserGuideOpen(true)}
+                  />
+                  <LanguageSelector />
+                </div>
+              )}
             </div>
           </div>
           

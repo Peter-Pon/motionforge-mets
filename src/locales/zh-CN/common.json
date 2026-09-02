@@ -300,6 +300,14 @@
     "exportBody": "MP4 跟随播放视频、PDF 报告和 CSV 导出都在免费的桌面版中提供，无需授权码，完全离线。",
     "banner": "想把这段演示放进方案里？桌面版可导出跟随播放的 MP4 和 PDF 报告。",
     "sharedFooter": "这是用 DYNMECH CycleView 分享的节拍图。下载桌面版即可编辑并导出。",
-    "dismiss": "关闭"
+    "dismiss": "关闭",
+    "editionBadge": "在线版",
+    "navLimit": "最多 {{limit}} 行",
+    "qrTitle": "二维码",
+    "qrHint": "扫码即可在手机上打开这张节拍图。数据就在链接里，不经过服务器。",
+    "qrDownload": "下载 PNG",
+    "qrAlt": "分享链接的二维码",
+    "qrFailed": "二维码生成失败。",
+    "qrTooLong": "这张图太大，装不进二维码。请改用复制的链接。"
   }
 }

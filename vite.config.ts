@@ -39,6 +39,13 @@ export default defineConfig({
     ]),
     renderer()
   ],
+  // Fold the online switch to a literal in the desktop build. Without this,
+  // IS_ONLINE stays `import.meta.env.VITE_CYCLEVIEW_ONLINE === '1'` — a runtime
+  // comparison the bundler cannot see through, so every online-only component
+  // (and the QR library behind it) ships inside the Electron app unreachable.
+  define: {
+    'import.meta.env.VITE_CYCLEVIEW_ONLINE': 'undefined'
+  },
   server: {
     port: 5178,
     strictPort: true
