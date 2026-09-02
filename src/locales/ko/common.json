@@ -300,6 +300,14 @@
     "exportBody": "재생 따라가기 MP4, PDF 보고서, CSV 내보내기는 모두 무료 데스크톱 앱에 있습니다. 라이선스 키 없이 완전 오프라인으로 동작합니다.",
     "banner": "이 데모를 제안서에 넣고 싶으신가요? 데스크톱 앱에서 재생 따라가기 MP4와 PDF 보고서를 내보낼 수 있습니다.",
     "sharedFooter": "이 차트는 DYNMECH CycleView에서 공유되었습니다. 편집과 내보내기는 데스크톱 앱을 다운로드하세요.",
-    "dismiss": "닫기"
+    "dismiss": "닫기",
+    "editionBadge": "온라인 버전",
+    "navLimit": "최대 {{limit}}행",
+    "qrTitle": "QR 코드",
+    "qrHint": "스캔하면 휴대폰에서 이 차트를 열 수 있습니다. 데이터는 링크 자체에 담겨 있습니다.",
+    "qrDownload": "PNG 다운로드",
+    "qrAlt": "공유 링크 QR 코드",
+    "qrFailed": "QR 코드를 생성하지 못했습니다.",
+    "qrTooLong": "이 차트는 QR 코드에 담기에 너무 큽니다. 복사한 링크를 사용하십시오."
   }
 }

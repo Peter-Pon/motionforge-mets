@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Download, Link2, FolderOpen, X } from 'lucide-react'
+import { Download, Link2, FolderOpen, X, QrCode } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { useAnimationStore } from '@/stores/useAnimationStore'
 import { desktopDownloadUrl, ONLINE_ROW_LIMIT } from '@/lib/platform'
 import { buildShareUrl } from '@/lib/shareLink'
 import { ModuleData } from '@/types'
+import { QrPopover } from '@/components/QrPopover'
 
 /**
  * Everything that exists only in the online edition, in one place.
@@ -25,7 +26,7 @@ export function DownloadDesktopButton({ placement, className = '' }: { placement
     <a
       href={desktopDownloadUrl(placement)}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       className={`${TOOLBAR_BUTTON} bg-primary text-primary-foreground border-primary hover:bg-primary/90 ${className}`}
     >
       <Download className="h-3.5 w-3.5" />
@@ -37,8 +38,11 @@ export function DownloadDesktopButton({ placement, className = '' }: { placement
 export function ShareButton({ modules }: { modules: ModuleData[] }) {
   const { t } = useTranslation()
   const disabled = modules.length === 0
+  // Anchored to the click, so the code appears where the pointer already is.
+  const [qrAt, setQrAt] = useState<{ x: number; y: number } | null>(null)
+  const [qrUrl, setQrUrl] = useState('')
 
-  const share = async () => {
+  const copy = async () => {
     const url = buildShareUrl(modules)
     try {
       await navigator.clipboard.writeText(url)
@@ -51,16 +55,37 @@ export function ShareButton({ modules }: { modules: ModuleData[] }) {
     }
   }
 
+  const showQr = (e: React.MouseEvent) => {
+    setQrUrl(buildShareUrl(modules))
+    setQrAt({ x: e.clientX, y: e.clientY })
+  }
+
   return (
-    <button
-      onClick={share}
-      disabled={disabled}
-      className={`${TOOLBAR_BUTTON} hover:bg-accent disabled:opacity-50`}
-      title={t('online.share')}
-    >
-      <Link2 className="h-3.5 w-3.5" />
-      <span className="hidden xl:inline">{t('online.share')}</span>
-    </button>
+    <>
+      {/* One control, two actions: copy is the common case, the QR is for
+          getting the chart onto a phone standing at the machine. */}
+      <div className="inline-flex">
+        <button
+          onClick={copy}
+          disabled={disabled}
+          className={`${TOOLBAR_BUTTON} rounded-r-none border-r-0 hover:bg-accent disabled:opacity-50`}
+          title={t('online.share')}
+        >
+          <Link2 className="h-3.5 w-3.5" />
+          <span className="hidden xl:inline">{t('online.share')}</span>
+        </button>
+        <button
+          onClick={showQr}
+          disabled={disabled}
+          className={`${TOOLBAR_BUTTON} rounded-l-none px-2 hover:bg-accent disabled:opacity-50`}
+          title={t('online.qrTitle')}
+          aria-label={t('online.qrTitle')}
+        >
+          <QrCode className="h-3.5 w-3.5" />
+        </button>
+      </div>
+      {qrAt && <QrPopover url={qrUrl} anchor={qrAt} onClose={() => setQrAt(null)} />}
+    </>
   )
 }
 

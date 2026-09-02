@@ -300,6 +300,14 @@
     "exportBody": "The follow-playback MP4, the PDF report and CSV export are all in the free desktop app: no licence key, fully offline.",
     "banner": "Want this in your proposal? The desktop app exports the follow-playback MP4 and a PDF report.",
     "sharedFooter": "This chart was shared from DYNMECH CycleView. Download the desktop app to edit and export it.",
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "editionBadge": "Online",
+    "navLimit": "Up to {{limit}} rows",
+    "qrTitle": "QR code",
+    "qrHint": "Scan to open this chart on a phone. The data travels in the link itself.",
+    "qrDownload": "Download PNG",
+    "qrAlt": "QR code for the share link",
+    "qrFailed": "Could not generate the code.",
+    "qrTooLong": "This chart is too large for a QR code. Use the copied link instead."
   }
 }
